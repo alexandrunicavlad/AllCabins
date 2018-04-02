@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">AllCabins</string>
+    <string name="sharePreference">allPreference</string>
+    <string name="empty_string" />
+    <string name="no_internet_message">Nu există conexiune la internet.</string>
+</resources>

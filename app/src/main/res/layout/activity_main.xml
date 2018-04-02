@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:fitsSystemWindows="true"
+    >
+
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/main_toolbar" />
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main_screen_pager"
+        android:layout_above="@+id/main_screen_tabs"
+        android:layout_below="@id/main_toolbar" />
+
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        android:id="@+id/main_screen_tabs"
+        android:layout_alignParentBottom="true"
+        android:background="@color/background_tabs_color"
+        app:tabIndicatorHeight="0dp"
+        android:elevation="10dp"
+        app:tabSelectedTextColor="@color/selected_tab"
+        app:tabTextColor="@color/unselected_tab"
+        app:tabTextAppearance="@style/TabLayoutStyle">
+
+    </android.support.design.widget.TabLayout>
+
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@color/foreground"
+        android:visibility="gone"
+        android:id="@+id/no_data_message_layout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No data"
+            android:padding="15dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@color/no_data_message_color"
+            android:textSize="20sp" />
+    </FrameLayout>
+
+</RelativeLayout>

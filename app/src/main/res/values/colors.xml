@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#3B7CEC</color>
+    <color name="colorAccent">#ffffff</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="ripple_color">#3F51B5</color>
+    <color name="app_background_color">#ffffff</color>
+
+    <!--HelpScreen-->
+    <color name="helpSelectedTab">#3B7CEC</color>
+    <color name="helpDefaultTab">#E3E9F2</color>
+    <color name="help_text_color">#5F5F5F</color>
+    <color name="help_title_color">#3B7CEC</color>
+
+    <!--PermissionScreen-->
+    <color name="permission_text_color">#5F5F5F</color>
+    <color name="permission_revoke_text_color">#5F5F5F</color>
+    <color name="btn_color_permission">#3B7CEC</color>
+
+    <!--Map-->
+    <color name="button_background_blue">#3B7CEC</color>
+    <color name="close_color">#808080</color>
+    <color name="no_data_message_color">#3B7CEC</color>
+    <color name="foreground">#80000000</color>
+    <color name="progress_color">#3B7CEC</color>
+
+    <!--Tabs-->
+    <color name="selected_tab">#3B7CEC</color>
+    <color name="unselected_tab">#BABABA</color>
+    <color name="background_tabs_color">#ffffff</color>
+
+
+    <!--Edit resort/trail-->
+
+    <color name="trail_check_color">#3B7CEC</color>
+    <color name="trail_check_background">#ffffff</color>
+
+    <color name="save_review_text_color">#ffffff</color>
+    <color name="close_review_text_color">#5F5F5F</color>
+    <color name="close_review_btn_color">#E3E9F2</color>
+    <color name="save_review_btn_color">#3B7CEC</color>
+
+    <color name="review_rating_text_color">#5F5F5F</color>
+    <color name="review_title_text_color">#5F5F5F</color>
+    <color name="review_box_text_color">#5F5F5F</color>
+
+
+    <!--Toolbar-->
+
+    <color name="toolbar_background">#ffffff</color>
+    <color name="toolbar_text_color">#030303</color>
+    <color name="toolbar_news_color">#80030303</color>
+    <color name="toolbar_color">#ffffff</color>
+
+
+    <!--News-->
+    <color name="news_text_color">#5F5F5F</color>
+    <color name="news_date_color">#805F5F5F</color>
+    <color name="news_card_color">#FBFDFF</color>
+    <color name="news_card_space_color">#E3FDFF</color>
+
+    <!--Badges-->
+    <color name="badge_background">#FFEC65</color>
+    <color name="badge_text_color">#5F5F5F</color>
+
+    <!--Account-->
+    <color name="account_title_color">#5f5f5f</color>
+    <color name="account_description_color">#805f5f5f</color>
+    <color name="account_edit_color">#805f5f5f</color>
+    <color name="account_edit_underline">#e7e7e7</color>
+    <color name="account_score_text">#805f5f5f</color>
+    <color name="hyperlink_color">#0000ee</color>
+    <color name="send_feedback_color">#5F5F5F</color>
+
+
+    <!--Map-->
+    <!--Resort card-->
+
+    <color name="resort_card_color">#ffffff</color>
+    <color name="resort_name_color">#374551</color>
+    <color name="view_details_color">#5F5F5F</color>
+    <color name="extra_info_color">#5F5F5F</color>
+    <color name="price_schedule_color">#374551</color>
+    <color name="schedule_text_color">#000000</color>
+    <color name="price_text_color">#808080</color>
+    <color name="resort_state_text_color">#5F5F5F</color>
+    <color name="distance_to_resort_color">#C0C0C0</color>
+    <color name="close_info_marker_layout_color">#fafafa</color>
+
+    <!--View Resort-->
+    <color name="progress_bar_color">#3B7CEC</color>
+    <color name="no_url_btn_color">#BABABA</color>
+
+    <!--Now-->
+    <color name="now_background">#3B7CEC</color>
+    <color name="now_icons">#ffffff</color>
+    <color name="now_icons_empty">#5f5f5f</color>
+    <color name="now_text">#ffffff</color>
+
+    <!--Weather-->
+    <color name="weather_background">#586570</color>
+    <color name="weather_text_color">#ffffff</color>
+    <color name="weather_max_color">#ffffff</color>
+    <color name="weather_min_color">#80ffffff</color>
+
+    <!--Expandable trail-->
+    <color name="trail_name_color">#374551</color>
+    <color name="trail_expandable_divider_color">#E0E0E0</color>
+    <color name="trail_atr_color">#374551</color>
+    <color name="trail_value_color">#805F5F5F</color>
+    <color name="expandable_list_arrow">#805F5F5F</color>
+    <color name="open_state_text">#4caf50</color>
+    <color name="close_state_text">#9e9e9e</color>
+
+    <color name="like_color">#3B7CEC</color>
+    <color name="dislike_color">#E41F1F</color>
+
+    <color name="difficulty_beginner">#3B7CEC</color>
+    <color name="difficulty_advanced">#E41F1F</color>
+    <color name="difficulty_experienced">#000000</color>
+    <color name="difficulty_unknown">#805F5F5F</color>
+    <color name="difficulty_length_text_color">#000000</color>
+
+    <!--Map/list button-->
+    <color name="selected_resorts_view_color">#3B7CEC</color>
+    <color name="unselected_resorts_view_color">#ffffff</color>
+    <color name="unselected_resorts_view_text_color">#3B7CEC</color>
+    <color name="selected_resorts_view_text_color">#ffffff</color>
+    <color name="round_button_stroke_color">#E3E9F2</color>
+
+    <!--Error message-->
+    <color name="error_message_text_color">#000000</color>
+    <color name="error_message_ok_color">#3B7CEC</color>
+    <color name="error_message_line">#5f5f5f</color>
+</resources>

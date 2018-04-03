@@ -67,7 +67,7 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)
                 .build();
-
+        
         getMapAsync(this);
     }
 

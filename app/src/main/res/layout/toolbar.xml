@@ -27,6 +27,16 @@
                 android:textColor="@color/toolbar_text_color"
                 android:textStyle="bold"
                 android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/toolbar_filter"
+                android:visibility="gone"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_filter" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 

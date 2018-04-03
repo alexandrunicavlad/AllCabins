@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:toggle="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    android:paddingBottom="10dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp">
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/filter_close"
+            android:src="@drawable/ic_exit"/>
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/filter_apply"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_check"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="FILTERS"
+            android:textSize="22sp"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginBottom="15dp">
+        <com.zcw.togglebutton.ToggleButton
+            android:id="@+id/filter_distance_check"
+            android:layout_width="54dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            toggle:tbOffBorderColor="@color/unselected_tab"
+            toggle:tbOffColor="@color/unselected_tab"
+            toggle:tbOnColor="@color/seekbar_color"
+
+            toggle:tbSpotColor="@color/white"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="DISTANCE"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+
+    <com.alexandrunica.allcabins.widget.Slidr
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/slidr_distance"
+        android:layout_marginBottom="15dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginBottom="15dp">
+        <com.zcw.togglebutton.ToggleButton
+            android:id="@+id/filter_price_check"
+            android:layout_width="54dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            toggle:tbOffBorderColor="@color/unselected_tab"
+            toggle:tbOffColor="@color/unselected_tab"
+            toggle:tbOnColor="@color/seekbar_color"
+            toggle:tbSpotColor="@color/white"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="PRICE"
+            android:textSize="22sp" />
+    </RelativeLayout>
+    <com.alexandrunica.allcabins.widget.Slidr
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/slidr_price" />
+</LinearLayout>

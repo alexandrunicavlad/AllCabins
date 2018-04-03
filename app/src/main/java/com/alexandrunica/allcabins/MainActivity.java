@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private TabLayout tabLayout;
     private TextView toolbarTitle;
     private RelativeLayout toolbarLayout;
+    private ImageView toolbarFilter;
     private Toolbar toolbar;
     private MainPageAdapter adapter;
     private GoogleApiClient mGoogleApiClient;
@@ -37,12 +39,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbarLayout = findViewById(R.id.toolbar_layout);
         toolbarTitle = findViewById(R.id.toolbar_title);
         toolbarLayout.setBackground(new ColorDrawable(getResources().getColor(R.color.toolbar_background)));
         toolbar.setBackground(new ColorDrawable(getResources().getColor(R.color.toolbar_color)));
-        toolbar.setTitle(getResources().getString(R.string.empty_string));
-        setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+        toolbarFilter = findViewById(R.id.toolbar_filter);
+
 
         viewPager = findViewById(R.id.main_screen_pager);
         tabLayout = findViewById(R.id.main_screen_tabs);
@@ -142,19 +146,23 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 hideStatus();
                 break;
             case 1:
-                toolbarTitle.setText("List");
+                toolbarTitle.setText("Recomended");
+                toolbarFilter.setVisibility(View.VISIBLE);
                 showStatus();
                 break;
             case 2:
                 toolbarTitle.setText("Map");
+                toolbarFilter.setVisibility(View.GONE);
                 showStatus();
                 break;
             case 3:
                 toolbarTitle.setText("Favorite");
+                toolbarFilter.setVisibility(View.GONE);
                 showStatus();
                 break;
             case 4:
                 toolbarTitle.setText("Profile");
+                toolbarFilter.setVisibility(View.GONE);
                 showStatus();
                 break;
         }

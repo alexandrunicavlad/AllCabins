@@ -48,11 +48,10 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
             }
         });
 
-        holder.favoriteButton.setOnClickListener(new View.OnClickListener() {
+        holder.heartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.favoriteButton.setImageResource(R.drawable.ic_star);
-                holder.favoriteButton.getDrawable().setColorFilter(ContextCompat.getColor(context, R.color.yellow_color), PorterDuff.Mode.SRC_IN);
+                holder.heartButton.getDrawable().setColorFilter(ContextCompat.getColor(context, R.color.red_color), PorterDuff.Mode.SRC_IN);
             }
         });
 

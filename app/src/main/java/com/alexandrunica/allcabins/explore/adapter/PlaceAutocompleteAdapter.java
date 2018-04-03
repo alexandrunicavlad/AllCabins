@@ -14,7 +14,10 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alexandrunica.allcabins.R;
+import com.google.android.gms.common.data.DataBuffer;
 import com.google.android.gms.common.data.DataBufferUtils;
+import com.google.android.gms.common.data.Freezable;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.AutocompletePredictionBufferResponse;
@@ -65,7 +68,7 @@ public class PlaceAutocompleteAdapter
      */
     public PlaceAutocompleteAdapter(Context context, GeoDataClient geoDataClient,
                                     LatLngBounds bounds, AutocompleteFilter filter) {
-        super(context, android.R.layout.simple_expandable_list_item_2, android.R.id.text1);
+        super(context, R.layout.search_row, android.R.id.text1);
         mGeoDataClient = geoDataClient;
         mBounds = bounds;
         mPlaceFilter = filter;
@@ -105,9 +108,9 @@ public class PlaceAutocompleteAdapter
         AutocompletePrediction item = getItem(position);
 
         TextView textView1 = (TextView) row.findViewById(android.R.id.text1);
-        TextView textView2 = (TextView) row.findViewById(android.R.id.text2);
+//        TextView textView2 = (TextView) row.findViewById(android.R.id.text2);
         textView1.setText(item.getPrimaryText(STYLE_BOLD));
-        textView2.setText(item.getSecondaryText(STYLE_BOLD));
+        //textView2.setText(item.getSecondaryText(STYLE_BOLD));
 
         return row;
     }
@@ -168,8 +171,21 @@ public class PlaceAutocompleteAdapter
         };
     }
 
-
-    @SuppressLint({"RestrictedApi", "LongLogTag"})
+    /**
+     * Submits an autocomplete query to the Places Geo Data Autocomplete API.
+     * Results are returned as frozen AutocompletePrediction objects, ready to be cached.
+     * Returns an empty list if no results were found.
+     * Returns null if the API client is not available or the query did not complete
+     * successfully.
+     * This method MUST be called off the main UI thread, as it will block until data is returned
+     * from the API, which may include a network request.
+     *
+     * @param constraint Autocomplete query string
+     * @return Results from the autocomplete API or null if the query was not successful.
+     * @see GeoDataClient#getAutocompletePredictions(String, LatLngBounds, AutocompleteFilter)
+     * @see AutocompletePrediction#freeze()
+     */
+    @SuppressLint("LongLogTag")
     private ArrayList<AutocompletePrediction> getAutocomplete(CharSequence constraint) {
         Log.i(TAG, "Starting autocomplete query for: " + constraint);
 
@@ -190,8 +206,8 @@ public class PlaceAutocompleteAdapter
         try {
             AutocompletePredictionBufferResponse autocompletePredictions = results.getResult();
 
-            Log.i(TAG, "Query completed. Received " + autocompletePredictions.getCount()
-                    + " predictions.");
+            Log.i(TAG, "Query completed. Received " + (autocompletePredictions.getCount()
+                    + " predictions."));
 
             // Freeze the results immutable representation that can be stored safely.
             return DataBufferUtils.freezeAndClose(autocompletePredictions);

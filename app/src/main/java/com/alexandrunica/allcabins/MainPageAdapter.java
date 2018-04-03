@@ -32,7 +32,7 @@ public class MainPageAdapter extends FragmentPagerAdapter {
             case 1:
                 return CabinsFragment.newInstance();
             case 2:
-                return MapFragment.newInstance();
+                return new MapFragment();
             case 3:
                 return FavoriteFragment.newInstance();
             case 4:

@@ -3,6 +3,8 @@ package com.alexandrunica.allcabins;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -10,11 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener {
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Places;
+
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener, GoogleApiClient.OnConnectionFailedListener {
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -22,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private RelativeLayout toolbarLayout;
     private Toolbar toolbar;
     private MainPageAdapter adapter;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +54,40 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         tabLayout.addOnTabSelectedListener(this);
         viewPager.addOnPageChangeListener(this);
+        hideStatus();
         setupTabIcons();
+
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
     }
+
+    public void hideStatus() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        } else {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+    }
+
+    public void showStatus() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        } else {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+    }
+
+
 
     private void setupTabIcons() {
         TabLayout.Tab explore = tabLayout.getTabAt(0);
@@ -98,18 +139,23 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         switch (position) {
             case 0:
                 toolbar.setVisibility(View.GONE);
+                hideStatus();
                 break;
             case 1:
                 toolbarTitle.setText("List");
+                showStatus();
                 break;
             case 2:
                 toolbarTitle.setText("Map");
+                showStatus();
                 break;
             case 3:
                 toolbarTitle.setText("Favorite");
+                showStatus();
                 break;
             case 4:
                 toolbarTitle.setText("Profile");
+                showStatus();
                 break;
         }
     }
@@ -132,5 +178,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        String a = "";
     }
 }

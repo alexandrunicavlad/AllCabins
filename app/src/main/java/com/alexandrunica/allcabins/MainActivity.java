@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 showStatus();
                 break;
             case 4:
+                toolbar.setVisibility(View.GONE);
                 toolbarTitle.setText("Profile");
                 toolbarFilter.setVisibility(View.GONE);
                 showStatus();

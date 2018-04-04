@@ -9,6 +9,7 @@ import com.alexandrunica.allcabins.explore.ExploreFragment;
 import com.alexandrunica.allcabins.favorite.FavoriteFragment;
 import com.alexandrunica.allcabins.map.MapViewFragment;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
+import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 
 /**
  * Created by Nica on 4/2/2018.
@@ -34,7 +35,7 @@ public class MainPageAdapter extends FragmentPagerAdapter {
             case 3:
                 return FavoriteFragment.newInstance();
             case 4:
-                return ProfileFragment.newInstance();
+                return LoginFragment.newInstance();
             default:
                 return null;
         }

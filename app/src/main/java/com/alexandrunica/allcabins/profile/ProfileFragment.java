@@ -28,7 +28,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = (ViewGroup) inflater.inflate(
-                R.layout.profile_fragment, container, false);
+                R.layout.auth_layout, container, false);
         return view;
     }
 

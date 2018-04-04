@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.RelativeLayout;
 
 import com.alexandrunica.allcabins.cabins.adapter.CabinAdapter;
+import com.alexandrunica.allcabins.cabins.model.Cabin;
 
 import java.util.List;
 
@@ -13,8 +14,8 @@ import java.util.List;
 
 public class FavoriteAdapter extends CabinAdapter {
 
-    public FavoriteAdapter(Context context, List<String> tripList) {
-        super(context, tripList);
+    public FavoriteAdapter(Context context, List<Cabin> cabinList) {
+        super(context, cabinList);
     }
 
     @Override

@@ -16,20 +16,34 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.adapter.CabinAdapter;
+import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
+import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.dagger.AppDbComponent;
+import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.service.firebase.CabinOperations;
+import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.widget.Slidr;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import com.zcw.togglebutton.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by Nica on 4/2/2018.
  */
 
 public class CabinsFragment extends Fragment {
+
+    @Inject
+    Bus bus;
 
     private Activity activity;
     private boolean isDistanceSelected;
@@ -43,6 +57,15 @@ public class CabinsFragment extends Fragment {
         CabinsFragment cabinsFragment = new CabinsFragment();
         return cabinsFragment;
     }
+
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        DaggerDbApplication app = (DaggerDbApplication) activity.getApplicationContext();
+        AppDbComponent appDbComponent = app.getAppDbComponent();
+        appDbComponent.inject(this);
+    }
+
 
     @Nullable
     @Override
@@ -62,21 +85,34 @@ public class CabinsFragment extends Fragment {
                 }
             }
         });
-        List<String> list = new ArrayList<>();
-        list.add("Cabana Viscol mare peste noi s-a abatut");
-        list.add("Cabana Muierii");
-        list.add("Cabana Acolo");
-        list.add("Cabana Ce faci");
-
         recyclerView = view.findViewById(R.id.recycler);
+
+        setFilter(view);
+//        Cabin cabin = new Cabin();
+//        cabin.setName("Cabana Nica");
+//        cabin.setAddress("Cluj Napoca");
+//        cabin.setDetails("dadadada");
+//
+        CabinOperations cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, activity);
+        cabinOperations.getCabins();
+
+        return view;
+    }
+
+    private void setRecyclerView(List<Cabin> list) {
         CabinAdapter adapter = new CabinAdapter(activity, list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        setFilter(view);
+    }
 
-
-        return view;
+    @Subscribe
+    public void onGetCabins(OnGetCabinEvent event) {
+        if (event.getCabins() !=null) {
+            setRecyclerView(event.getCabins());
+        } else {
+            Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void expand(final View v) {
@@ -181,8 +217,21 @@ public class CabinsFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        bus.register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        bus.unregister(this);
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (Activity) context;
+
     }
 }

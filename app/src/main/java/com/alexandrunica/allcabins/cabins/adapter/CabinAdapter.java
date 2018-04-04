@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alexandrunica.allcabins.R;
+import com.alexandrunica.allcabins.cabins.model.Cabin;
 
 import java.util.List;
 
@@ -21,13 +22,13 @@ import java.util.List;
 public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>{
 
 
-    private List<String> tripList;
+    private List<Cabin> cabinList;
     private Context context;
 
 
-    public CabinAdapter(Context context, List<String> tripList) {
+    public CabinAdapter(Context context, List<Cabin> cabinList) {
         this.context = context;
-        this.tripList = tripList;
+        this.cabinList = cabinList;
     }
 
     @Override
@@ -38,9 +39,11 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
 
     @Override
     public void onBindViewHolder(final CabinHolder holder, int position) {
-        final String trip = tripList.get(position);
+        final Cabin cabin = cabinList.get(position);
 
-        holder.nameView.setText(trip);
+        holder.nameView.setText(cabin.getName());
+        holder.addressView.setText(cabin.getAddress());
+
         holder.phoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +63,7 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
 
     @Override
     public int getItemCount() {
-        return tripList.size();
+        return cabinList.size();
     }
 
     public static class CabinHolder extends RecyclerView.ViewHolder {

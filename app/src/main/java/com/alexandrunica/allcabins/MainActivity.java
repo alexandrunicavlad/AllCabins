@@ -19,9 +19,15 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.alexandrunica.allcabins.dagger.AppDbComponent;
+import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
+import com.google.firebase.FirebaseApp;
+import com.squareup.otto.Bus;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -34,10 +40,23 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private MainPageAdapter adapter;
     private GoogleApiClient mGoogleApiClient;
 
+    @Inject
+    Bus bus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DaggerDbApplication app = ((DaggerDbApplication) this.getApplicationContext());
+        AppDbComponent appDbComponent = app.getAppDbComponent();
+        appDbComponent.inject(this);
+
+
+        FirebaseApp.initializeApp(this);
+
+
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbarLayout = findViewById(R.id.toolbar_layout);
@@ -46,8 +65,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         toolbar.setBackground(new ColorDrawable(getResources().getColor(R.color.toolbar_color)));
         toolbar.setTitle("");
         toolbarFilter = findViewById(R.id.toolbar_filter);
-
-
         viewPager = findViewById(R.id.main_screen_pager);
         tabLayout = findViewById(R.id.main_screen_tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -187,6 +204,20 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bus.register(this);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        bus.unregister(this);
+    }
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

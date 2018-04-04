@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1088792018127",
+    "firebase_url": "https://allcabins-199914.firebaseio.com",
+    "project_id": "allcabins-199914",
+    "storage_bucket": "allcabins-199914.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088792018127:android:0593f577e3dc4152",
+        "android_client_info": {
+          "package_name": "com.alexandrunica.allcabins"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1088792018127-pr323f4lun86qt899946c1hjh1b2loqs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alexandrunica.allcabins",
+            "certificate_hash": "4c4466531b6b638717199bd28b78fbed5f56d5a8"
+          }
+        },
+        {
+          "client_id": "1088792018127-1sqeh2nn7673bf5lsv48r3cdv178mml4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBusG4CJMSotUjb8PdUmhdKCAzrcPyNyEA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1088792018127-1sqeh2nn7673bf5lsv48r3cdv178mml4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

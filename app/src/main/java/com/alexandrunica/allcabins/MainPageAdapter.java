@@ -7,10 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.alexandrunica.allcabins.cabins.CabinsFragment;
 import com.alexandrunica.allcabins.explore.ExploreFragment;
 import com.alexandrunica.allcabins.favorite.FavoriteFragment;
-import com.alexandrunica.allcabins.map.MapFragment;
+import com.alexandrunica.allcabins.map.MapViewFragment;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
-
-import java.util.Map;
 
 /**
  * Created by Nica on 4/2/2018.
@@ -32,7 +30,7 @@ public class MainPageAdapter extends FragmentPagerAdapter {
             case 1:
                 return CabinsFragment.newInstance();
             case 2:
-                return new MapFragment();
+                return new MapViewFragment();
             case 3:
                 return FavoriteFragment.newInstance();
             case 4:

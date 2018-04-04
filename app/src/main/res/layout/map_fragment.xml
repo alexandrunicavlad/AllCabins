@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.alexandrunica.allcabins.map.MapViewFragment">
 
     <fragment
         android:id="@+id/map_fragment"
-        android:name="com.alexandrunica.allcabins.map.MapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="map_fragment"
@@ -14,15 +16,25 @@
         map:uiCompass="false"
         map:uiRotateGestures="false"
         map:uiTiltGestures="false"
-        map:uiZoomControls="true">
+        map:uiZoomControls="true"/>
 
-
-    </fragment>
     <ImageView
         android:id="@+id/initial_location_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_gravity="end|bottom"
+        android:layout_gravity="end|top"
+        android:layout_margin="15dp"
+        android:tint="@color/close_color"
         android:padding="5dp"
         android:src="@drawable/ic_location" />
-</RelativeLayout>
+
+    <include
+        layout="@layout/info_cabin_bottom"
+        android:layout_gravity="bottom"
+        android:id="@+id/info_bottom_layout"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_width="match_parent"/>
+
+
+</FrameLayout>

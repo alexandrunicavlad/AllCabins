@@ -12,9 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexandrunica.allcabins.R;
-import com.alexandrunica.allcabins.cabins.adapter.CabinAdapter;
 import com.alexandrunica.allcabins.favorite.adapter.FavoriteAdapter;
-import com.alexandrunica.allcabins.map.MapFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +43,10 @@ public class FavoriteFragment extends Fragment {
         list.add("Cabana Ce faci");
 
         recyclerView = view.findViewById(R.id.recycler_favorite);
-        FavoriteAdapter adapter = new FavoriteAdapter(activity, list);
+        //FavoriteAdapter adapter = new FavoriteAdapter(activity, list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        //ecyclerView.setAdapter(adapter);
         return view;
     }
 

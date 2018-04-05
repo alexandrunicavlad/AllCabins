@@ -1,12 +1,16 @@
 package com.alexandrunica.allcabins;
 
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,11 +25,15 @@ import android.widget.TextView;
 
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.profile.ProfileFragment;
+import com.alexandrunica.allcabins.profile.event.OnLoginEvent;
+import com.alexandrunica.allcabins.service.firebase.auth.FirebaseAuthentication;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
 import com.google.firebase.FirebaseApp;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 
@@ -39,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private Toolbar toolbar;
     private MainPageAdapter adapter;
     private GoogleApiClient mGoogleApiClient;
+
+    @Inject
+    FirebaseAuthentication authentication;
 
     @Inject
     Bus bus;

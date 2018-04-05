@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
@@ -18,24 +18,27 @@ import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 
 /**
- * Created by Nica on 4/2/2018.
+ * Created by Nica on 4/5/2018.
  */
 
-public class ProfileFragment extends Fragment {
+public class ProfileAuthFragment extends Fragment {
 
     private Activity activity;
 
-    public static ProfileFragment newInstance() {
-        ProfileFragment profileFragment = new ProfileFragment();
-        return profileFragment;
-    }
-
     @Inject
     Bus bus;
+
+
+
+    public static ProfileAuthFragment newInstance() {
+        ProfileAuthFragment profileFragment = new ProfileAuthFragment();
+        return profileFragment;
+    }
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -49,19 +52,28 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = (ViewGroup) inflater.inflate(
-                R.layout.profile_fragment, container, false);
-        TextView logout = view.findViewById(R.id.logout_account);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString("email", "");
-                editor.apply();
-                bus.post(new OnOpenAccount(LoginFragment.newInstance()));
-            }
-        });
+                R.layout.profilelogin_layout, container, false);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        String id = preferences.getString("email", "");
+        Fragment fragment;
+        if (!id.equals(""))
+            fragment = ProfileFragment.newInstance();
+        else
+            fragment = LoginFragment.newInstance();
+
+        getFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, fragment).commit();
+
         return view;
+    }
+
+    @Subscribe
+    public void replaceFragment(OnOpenAccount event) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, event.getFragment());
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -81,5 +93,4 @@ public class ProfileFragment extends Fragment {
         super.onStop();
         bus.unregister(this);
     }
-
 }

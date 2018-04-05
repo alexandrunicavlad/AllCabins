@@ -3,6 +3,9 @@ package com.alexandrunica.allcabins.dagger;
 import com.alexandrunica.allcabins.MainActivity;
 import com.alexandrunica.allcabins.cabins.CabinsFragment;
 import com.alexandrunica.allcabins.map.MapViewFragment;
+import com.alexandrunica.allcabins.profile.ProfileAuthFragment;
+import com.alexandrunica.allcabins.profile.ProfileFragment;
+import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.auth.FirebaseAuthentication;
@@ -32,4 +35,10 @@ public interface AppDbComponent {
     void inject(CabinOperations cabinOperations);
 
     void inject(CabinsFragment cabinsFragment);
+
+    void inject(LoginFragment loginFragment);
+
+    void inject(ProfileAuthFragment profileAuthFragment);
+
+    void inject(ProfileFragment profileFragment);
 }

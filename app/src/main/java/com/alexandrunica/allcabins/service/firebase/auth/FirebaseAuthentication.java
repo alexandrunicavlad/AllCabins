@@ -3,17 +3,24 @@ package com.alexandrunica.allcabins.service.firebase.auth;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.event.OnLoginEvent;
 import com.alexandrunica.allcabins.profile.event.OnRegisterDoneEvent;
+import com.facebook.AccessToken;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.otto.Bus;
+
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
@@ -50,6 +57,22 @@ public class FirebaseAuthentication {
                         }
                     }
                 });
+    }
+
+    public void handleFacebookAccessToken(AccessToken token) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    bus.post(new OnRegisterDoneEvent(true, user.getEmail(), user.getDisplayName()));
+                } else {
+                    bus.post(new OnRegisterDoneEvent(false, "", ""));
+                }
+            }
+        });
     }
 
     public void register(final String name, final String email, String password, Activity activity) {

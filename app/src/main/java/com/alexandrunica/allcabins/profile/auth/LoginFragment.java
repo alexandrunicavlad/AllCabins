@@ -2,6 +2,7 @@ package com.alexandrunica.allcabins.profile.auth;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +32,27 @@ import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.event.OnRegisterDoneEvent;
 import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.firebase.auth.FirebaseAuthentication;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.w3c.dom.Text;
 
+import java.util.Arrays;
+
 import javax.inject.Inject;
+
+import static com.facebook.GraphRequest.TAG;
 
 /**
  * Created by Nica on 4/4/2018.
@@ -51,6 +68,8 @@ public class LoginFragment extends Fragment {
 
     private Activity activity;
     private Toolbar toolbar;
+    private CallbackManager mCallbackManager;
+    private FirebaseAuth mAuth;
 
     public static LoginFragment newInstance() {
         LoginFragment loginFragment = new LoginFragment();
@@ -86,7 +105,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        TextView facebookButton = view.findViewById(R.id.facebook_button);
+
         TextView createButton = view.findViewById(R.id.create_account);
 
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -249,7 +268,7 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
-
+        facebookLogin(view);
 
         return view;
     }
@@ -271,6 +290,43 @@ public class LoginFragment extends Fragment {
         else{
             //error
         }
+    }
+
+    private void facebookLogin(View view) {
+        mCallbackManager = CallbackManager.Factory.create();
+        TextView facebookButton = view.findViewById(R.id.facebook_button);
+        facebookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logInWithReadPermissions(activity, Arrays.asList("email", "public_profile"));
+            }
+        });
+
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                authentication.handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                // ...
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Subscribe

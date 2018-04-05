@@ -1,6 +1,9 @@
 package com.alexandrunica.allcabins;
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,6 +18,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,6 +39,9 @@ import com.google.android.gms.location.places.Places;
 import com.google.firebase.FirebaseApp;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.inject.Inject;
 
@@ -63,7 +71,20 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         AppDbComponent appDbComponent = app.getAppDbComponent();
         appDbComponent.inject(this);
 
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.alexandrunica.allcabins",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
 
+        } catch (NoSuchAlgorithmException e) {
+
+        }
         FirebaseApp.initializeApp(this);
 
 

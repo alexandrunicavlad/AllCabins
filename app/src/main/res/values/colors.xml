@@ -18,7 +18,7 @@
     <color name="progress_color">#3B7CEC</color>
 
     <!--Tabs-->
-    <color name="selected_tab">#3B7CEC</color>
+    <color name="selected_tab">#007E90</color>
     <color name="unselected_tab">#BABABA</color>
     <color name="background_tabs_color">#ffffff</color>
 

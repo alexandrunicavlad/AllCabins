@@ -4,20 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,22 +27,18 @@ import com.alexandrunica.allcabins.profile.event.OnLoginEvent;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.event.OnRegisterDoneEvent;
 import com.alexandrunica.allcabins.profile.model.User;
+import com.alexandrunica.allcabins.service.firebase.FirebaseService;
+import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.alexandrunica.allcabins.service.firebase.auth.FirebaseAuthentication;
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 
@@ -276,16 +268,25 @@ public class LoginFragment extends Fragment {
     @Subscribe
     public void onUserLogin(OnLoginEvent event){
         if(event.isLogged()){
+            User user = new User();
             String id = authentication.getUserUid();
             if(id == null){
                 //showMessage(activity.getString(R.string.ok_btn),activity.getString(R.string.error_string));
                 return;
             }
+            FirebaseUser userFirebase = FirebaseAuth.getInstance().getCurrentUser();
+            user.setId(id);
+            user.setEmail(event.getEmail());
+            user.setUsername(userFirebase.getDisplayName());
+            ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, activity);
+            profileOperations.checkandInsertProfileExists(user);
+
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("email", event.getEmail());
+            editor.putString("uid", id);
             editor.apply();
-            openAccount();
+            profileOperations.getUser(id);
+            //openAccount();
         }
         else{
             //error
@@ -341,11 +342,14 @@ public class LoginFragment extends Fragment {
             user.setId(id);
             user.setEmail(event.getEmail());
             user.setUsername(event.getName());
+            ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, activity);
+            profileOperations.checkandInsertProfileExists(user);
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("email", event.getEmail());
+            editor.putString("uid", id);
             editor.apply();
-            openAccount();
+            profileOperations.getUser(id);
+            //openAccount();
         } else {
             if (event.isExistEmail()) {
                 Toast.makeText(activity, "User exists", Toast.LENGTH_SHORT).show();
@@ -354,9 +358,9 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void openAccount() {
-        bus.post(new OnOpenAccount(ProfileFragment.newInstance()));
-    }
+//   private void openAccount() {
+//       bus.post(new OnOpenAccount(ProfileFragment.newInstance(user)));
+//    }
 
     @Override
     public void onStart() {

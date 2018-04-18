@@ -10,6 +10,7 @@ import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.model.User;
+import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,9 @@ public class ProfileOperations extends FirebaseOperation {
     @Inject
     protected Bus bus;
 
+    @Inject
+    protected DatabaseService databaseService;
+
     public ProfileOperations(Context context) {
         super(FirebaseService.TableNames.USERS_TABLE);
         DaggerDbApplication app = (DaggerDbApplication) context.getApplicationContext();
@@ -41,6 +45,7 @@ public class ProfileOperations extends FirebaseOperation {
                 if (user==null) {
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(null)));
                 } else {
+                    databaseService.writeUser(user);
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(user)));
                 }
             }

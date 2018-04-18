@@ -17,6 +17,8 @@ import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
+import com.alexandrunica.allcabins.profile.model.User;
+import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -32,6 +34,9 @@ public class ProfileAuthFragment extends Fragment {
 
     @Inject
     Bus bus;
+
+    @Inject
+    DatabaseService databaseService;
 
 
     public static ProfileAuthFragment newInstance() {
@@ -56,10 +61,14 @@ public class ProfileAuthFragment extends Fragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         String id = preferences.getString("uid", "");
         Fragment fragment;
-        if (!id.equals(""))
-            //fragment = ProfileFragment.newInstance(user);
-            fragment = ProfileFragment.newInstance(null);
-        else
+        if (!id.equals("")) {
+            User user = databaseService.getUser();
+            if (user != null) {
+                fragment = ProfileFragment.newInstance(user);
+            } else {
+                fragment = ProfileFragment.newInstance(null);
+            }
+        } else
             fragment = LoginFragment.newInstance();
 
         getFragmentManager().beginTransaction()

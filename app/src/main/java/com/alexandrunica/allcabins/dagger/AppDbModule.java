@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.provider.SyncStateContract;
 
+import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.auth.FirebaseAuthentication;
 import com.google.firebase.auth.FirebaseAuth;
@@ -74,6 +75,12 @@ public class AppDbModule {
     @Singleton
     public FirebaseService provideFirebaseService() {
         return new FirebaseService(app);
+    }
+
+    @Provides
+    @Singleton
+    public DatabaseService provideDatabaseService() {
+        return new DatabaseService(app);
     }
 
 

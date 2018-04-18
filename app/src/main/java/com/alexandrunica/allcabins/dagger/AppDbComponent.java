@@ -6,6 +6,7 @@ import com.alexandrunica.allcabins.map.MapViewFragment;
 import com.alexandrunica.allcabins.profile.ProfileAuthFragment;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
+import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
@@ -44,4 +45,6 @@ public interface AppDbComponent {
     void inject(ProfileAuthFragment profileAuthFragment);
 
     void inject(ProfileFragment profileFragment);
+
+    void inject(DatabaseService databaseService);
 }

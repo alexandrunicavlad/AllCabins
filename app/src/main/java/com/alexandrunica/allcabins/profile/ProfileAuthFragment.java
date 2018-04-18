@@ -55,10 +55,10 @@ public class ProfileAuthFragment extends Fragment {
                 R.layout.profilelogin_layout, container, false);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        String id = preferences.getString("email", "");
+        String id = preferences.getString("uid", "");
         Fragment fragment;
         if (!id.equals(""))
-            fragment = ProfileFragment.newInstance();
+            fragment = ProfileFragment.newInstance(user);
         else
             fragment = LoginFragment.newInstance();
 

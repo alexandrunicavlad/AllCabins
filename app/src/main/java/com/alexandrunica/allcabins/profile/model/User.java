@@ -1,5 +1,7 @@
 package com.alexandrunica.allcabins.profile.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,7 +9,7 @@ import java.util.List;
  * Created by Nica on 4/5/2018.
  */
 
-public class User {
+public class User implements Serializable {
 
     public String id;
 
@@ -17,18 +19,18 @@ public class User {
 
     public String profilePhoto;
 
-    public HashMap<String, List<String>> favoriteList;
+    public HashMap<String, String> favorites;
 
     public User () {
 
     }
 
-    public User (String id, String email, String username, String profilePhoto, HashMap<String, List<String>>  favoriteList) {
+    public User (String id, String email, String username, String profilePhoto, HashMap<String, String>  favoriteList) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.profilePhoto = profilePhoto;
-        this.favoriteList = favoriteList;
+        this.favorites = favoriteList;
     }
 
     public String getId () {
@@ -63,11 +65,11 @@ public class User {
         this.profilePhoto = profilePhoto;
     }
 
-    public HashMap<String, List<String>>  getFavoriteList () {
-        return favoriteList;
+    public HashMap<String, String>  getFavoriteList () {
+        return favorites;
     }
 
-    public void setFavoriteList (HashMap<String, List<String>>  favoriteList) {
-        this.favoriteList = favoriteList;
+    public void setFavoriteList (HashMap<String, String>  favoriteList) {
+        this.favorites = favoriteList;
     }
 }

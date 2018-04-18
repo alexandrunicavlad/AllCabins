@@ -8,6 +8,7 @@ import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
+import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.alexandrunica.allcabins.service.firebase.auth.FirebaseAuthentication;
 
 import javax.inject.Singleton;
@@ -33,6 +34,8 @@ public interface AppDbComponent {
     void inject(FirebaseAuthentication firebaseAuthentication);
 
     void inject(CabinOperations cabinOperations);
+
+    void inject(ProfileOperations profileOperations);
 
     void inject(CabinsFragment cabinsFragment);
 

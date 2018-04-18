@@ -1,7 +1,9 @@
 package com.alexandrunica.allcabins.cabins.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.service.firebase.FirebaseService;
+import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 
 import java.util.List;
 
@@ -41,6 +45,7 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
     public void onBindViewHolder(final CabinHolder holder, int position) {
         final Cabin cabin = cabinList.get(position);
 
+
         holder.nameView.setText(cabin.getName());
         holder.addressView.setText(cabin.getAddress());
 
@@ -54,7 +59,11 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
         holder.heartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, context);
                 holder.heartButton.getDrawable().setColorFilter(ContextCompat.getColor(context, R.color.red_color), PorterDuff.Mode.SRC_IN);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                final String id = preferences.getString("uid", "");
+                profileOperations.addFavorite(id, cabin.getId());
             }
         });
 

@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alexandrunica.allcabins.R;
@@ -17,7 +18,9 @@ import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
+import com.alexandrunica.allcabins.profile.model.User;
 import com.squareup.otto.Bus;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -29,8 +32,14 @@ public class ProfileFragment extends Fragment {
 
     private Activity activity;
 
-    public static ProfileFragment newInstance() {
+
+    public static ProfileFragment newInstance(User user) {
         ProfileFragment profileFragment = new ProfileFragment();
+        if (user != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", user);
+            profileFragment.setArguments(bundle);
+        }
         return profileFragment;
     }
 
@@ -50,7 +59,11 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = (ViewGroup) inflater.inflate(
                 R.layout.profile_fragment, container, false);
+
+        User user = (User) getArguments().getSerializable("user");
+
         TextView logout = view.findViewById(R.id.logout_account);
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +74,24 @@ public class ProfileFragment extends Fragment {
                 bus.post(new OnOpenAccount(LoginFragment.newInstance()));
             }
         });
+
+        TextView nameText = view.findViewById(R.id.profile_name);
+        TextView emailText = view.findViewById(R.id.profile_email);
+        ImageView image = view.findViewById(R.id.profile_image);
+
+        if (user.getEmail() != null) {
+            emailText.setText(user.getEmail());
+        }
+
+        if (user.getUsername() != null) {
+            nameText.setText(user.getUsername());
+        }
+
+        if (user.getProfilePhoto() != null) {
+            Picasso.with(activity).load(user.getProfilePhoto()).into(image);
+        }
+
+
         return view;
     }
 

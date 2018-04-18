@@ -40,8 +40,8 @@ public class FirebaseService {
             case CABINS_TABLE:
                 return new CabinOperations(context);
 
-//            case Constants.TableNames.DEVICES_TABLE:
-//                return new DeviceOperations(context);
+            case USERS_TABLE:
+                return new ProfileOperations(context);
             default:
                 return null;
         }

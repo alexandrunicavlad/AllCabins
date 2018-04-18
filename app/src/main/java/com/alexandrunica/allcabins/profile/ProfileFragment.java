@@ -60,35 +60,37 @@ public class ProfileFragment extends Fragment {
         View view = (ViewGroup) inflater.inflate(
                 R.layout.profile_fragment, container, false);
 
-        User user = (User) getArguments().getSerializable("user");
+        if (getArguments()!= null) {
+            User user = (User) getArguments().getSerializable("user");
 
-        TextView logout = view.findViewById(R.id.logout_account);
+            TextView logout = view.findViewById(R.id.logout_account);
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString("email", "");
-                editor.apply();
-                bus.post(new OnOpenAccount(LoginFragment.newInstance()));
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("email", "");
+                    editor.apply();
+                    bus.post(new OnOpenAccount(LoginFragment.newInstance()));
+                }
+            });
+
+            TextView nameText = view.findViewById(R.id.profile_name);
+            TextView emailText = view.findViewById(R.id.profile_email);
+            ImageView image = view.findViewById(R.id.profile_image);
+
+            if (user.getEmail() != null) {
+                emailText.setText(user.getEmail());
             }
-        });
 
-        TextView nameText = view.findViewById(R.id.profile_name);
-        TextView emailText = view.findViewById(R.id.profile_email);
-        ImageView image = view.findViewById(R.id.profile_image);
+            if (user.getUsername() != null) {
+                nameText.setText(user.getUsername());
+            }
 
-        if (user.getEmail() != null) {
-            emailText.setText(user.getEmail());
-        }
-
-        if (user.getUsername() != null) {
-            nameText.setText(user.getUsername());
-        }
-
-        if (user.getProfilePhoto() != null) {
-            Picasso.with(activity).load(user.getProfilePhoto()).into(image);
+            if (user.getProfilePhoto() != null) {
+                Picasso.with(activity).load(user.getProfilePhoto()).into(image);
+            }
         }
 
 

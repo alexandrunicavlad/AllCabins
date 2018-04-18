@@ -34,7 +34,6 @@ public class ProfileAuthFragment extends Fragment {
     Bus bus;
 
 
-
     public static ProfileAuthFragment newInstance() {
         ProfileAuthFragment profileFragment = new ProfileAuthFragment();
         return profileFragment;
@@ -58,7 +57,8 @@ public class ProfileAuthFragment extends Fragment {
         String id = preferences.getString("uid", "");
         Fragment fragment;
         if (!id.equals(""))
-            fragment = ProfileFragment.newInstance(user);
+            //fragment = ProfileFragment.newInstance(user);
+            fragment = ProfileFragment.newInstance(null);
         else
             fragment = LoginFragment.newInstance();
 

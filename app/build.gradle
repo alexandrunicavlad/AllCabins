@@ -44,6 +44,7 @@ dependencies {
     compile 'com.google.dagger:dagger-android-support:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

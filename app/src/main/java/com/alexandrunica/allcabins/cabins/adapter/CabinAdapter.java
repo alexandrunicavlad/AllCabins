@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
@@ -23,7 +24,7 @@ import java.util.List;
  * Created by Nica on 4/3/2018.
  */
 
-public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>{
+public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder> {
 
 
     private List<Cabin> cabinList;
@@ -60,10 +61,13 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
             @Override
             public void onClick(View v) {
                 final ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, context);
-                holder.heartButton.getDrawable().setColorFilter(ContextCompat.getColor(context, R.color.red_color), PorterDuff.Mode.SRC_IN);
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                 final String id = preferences.getString("uid", "");
-                profileOperations.addFavorite(id, cabin.getId());
+                if (holder.heartButton.isChecked()) {
+                    profileOperations.addFavorite(id, cabin.getId());
+                } else {
+                    profileOperations.removeFavorite(id, cabin.getId());
+                }
             }
         });
 
@@ -77,7 +81,8 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
 
     public static class CabinHolder extends RecyclerView.ViewHolder {
         public TextView priceView, nameView, addressView;
-        public ImageView mainImage, phoneButton, favoriteButton, heartButton, locationButton ;
+        public ImageView mainImage, phoneButton, favoriteButton, locationButton;
+        public ToggleButton heartButton;
 
         public CabinHolder(View view) {
             super(view);

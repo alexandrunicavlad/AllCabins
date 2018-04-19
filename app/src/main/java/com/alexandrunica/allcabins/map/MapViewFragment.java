@@ -65,8 +65,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = (ViewGroup) inflater.inflate(
-                R.layout.map_fragment, container, false);
+        View view = (ViewGroup) inflater.inflate(R.layout.map_fragment, container, false);
         mGoogleApiClient = new GoogleApiClient.Builder(activity)
                 .addConnectionCallbacks(this)
                 .addApi(LocationServices.API)

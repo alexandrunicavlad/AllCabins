@@ -2,6 +2,7 @@ package com.alexandrunica.allcabins.dagger;
 
 import com.alexandrunica.allcabins.MainActivity;
 import com.alexandrunica.allcabins.cabins.CabinsFragment;
+import com.alexandrunica.allcabins.favorite.FavoriteFragment;
 import com.alexandrunica.allcabins.map.MapViewFragment;
 import com.alexandrunica.allcabins.profile.ProfileAuthFragment;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
@@ -45,6 +46,8 @@ public interface AppDbComponent {
     void inject(ProfileAuthFragment profileAuthFragment);
 
     void inject(ProfileFragment profileFragment);
+
+    void inject(FavoriteFragment favoriteFragment);
 
     void inject(DatabaseService databaseService);
 }

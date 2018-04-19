@@ -118,6 +118,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 .build();
     }
 
+    public void changeViewpager(int position) {
+        viewPager.setCurrentItem(position);
+    }
+
     public void hideStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
@@ -207,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             case 3:
                 toolbarTitle.setText("Favorite");
                 toolbarFilter.setVisibility(View.GONE);
+                toolbar.setVisibility(View.GONE);
                 showStatus();
                 break;
             case 4:

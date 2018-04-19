@@ -46,6 +46,7 @@ public class ProfileOperations extends FirebaseOperation {
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(null)));
                 } else {
                     databaseService.writeUser(user);
+                    User da = databaseService.getUser();
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(user)));
                 }
             }
@@ -90,8 +91,7 @@ public class ProfileOperations extends FirebaseOperation {
     }
 
     public void addFavorite(String id, String cabinId) {
-        String favoritesPush = mRef.push().getKey();
-        mRef.child(id).child("favorites").setValue(cabinId).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mRef.child(id).child("favorites").child(cabinId).setValue(cabinId).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -101,6 +101,10 @@ public class ProfileOperations extends FirebaseOperation {
                 }
             }
         });
+    }
+
+    public void removeFavorite(String id, String cabinId) {
+        mRef.child(id).child("favorites").child(cabinId).removeValue();
     }
 }
 

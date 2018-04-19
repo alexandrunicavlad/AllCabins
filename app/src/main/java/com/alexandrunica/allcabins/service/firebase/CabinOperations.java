@@ -7,6 +7,10 @@ import android.util.Log;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.favorite.event.OnFavDone;
+import com.alexandrunica.allcabins.profile.ProfileFragment;
+import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
+import com.alexandrunica.allcabins.profile.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +36,26 @@ public class CabinOperations extends FirebaseOperation {
         DaggerDbApplication app = (DaggerDbApplication) context.getApplicationContext();
         app.getAppDbComponent().inject(this);
 
+    }
+
+    public void getCabinFromId(String id) {
+        mRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Cabin cabin = dataSnapshot.getValue(Cabin.class);
+                if (cabin != null) {
+                    bus.post(new OnFavDone(cabin));
+                } else {
+                    bus.post(new OnFavDone(null));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("Debug", "Error retrieving data: " + databaseError.getMessage());
+                bus.post(new OnFavDone(null));
+            }
+        });
     }
 
     public void getCabins() {

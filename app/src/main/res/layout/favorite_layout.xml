@@ -8,12 +8,13 @@
         android:id="@+id/recycler_favorite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:visibility="gone">
 
     </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
-        android:id="@+id/forgot_main_layout"
+        android:id="@+id/favorite_main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="10dp"
@@ -24,8 +25,9 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/forgot_submit"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/explore_submit"
+            android:layout_alignParentTop="true"
             android:gravity="center_vertical"
             android:text="Favorites"
             android:textColor="@color/white"
@@ -35,8 +37,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_centerInParent="true"
+            android:layout_marginBottom="30dp"
+            android:layout_above="@id/explore_submit"
             android:text="When you see something you like, tap on the heart and save it to favorite."
             android:textColor="@color/white"
             android:id="@+id/fav_hint"
@@ -44,10 +46,10 @@
 
 
         <TextView
-            android:id="@+id/forgot_submit"
+            android:id="@+id/explore_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:layout_below="@id/fav_hint"
+            android:layout_centerInParent="true"
             android:background="@drawable/border_white"
             android:gravity="center"
             android:padding="10dp"

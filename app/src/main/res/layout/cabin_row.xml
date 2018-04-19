@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="15dp">
+    android:layout_height="wrap_content">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="175dp"
@@ -41,6 +40,17 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="-25dp"
         android:id="@+id/cabin_phone"/>
+
+    <ToggleButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/toggle_selector"
+        android:textOn=""
+        android:textOff=""
+        android:text=""
+        android:id="@+id/cabin_heart"/>
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -53,13 +63,12 @@
         android:layout_below="@id/cabin_image"
         android:layout_marginTop="-25dp"
         android:visibility="invisible"
-        android:id="@+id/cabin_favorite"/>
-
+        android:id="@+id/cabin_location"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/cabin_phone"
-        android:layout_toStartOf="@id/cabin_favorite"
+        android:layout_toStartOf="@id/cabin_location"
         android:layout_below="@id/cabin_image"
         android:minHeight="90dp"
         android:id="@+id/cabin_info"
@@ -78,29 +87,31 @@
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/cabin_address"
             android:textSize="20sp"
             android:text="STR. PRINCIAPA"
             android:gravity="center"
             android:textColor="@color/unselected_tab"/>
     </LinearLayout>
+
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:tint="@color/unselected_tab"
-        android:layout_marginStart="20dp"
-        android:layout_alignBottom="@id/cabin_info"
-        android:src="@drawable/ic_favorite"
-        android:id="@+id/cabin_heart"/>
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignBottom="@id/cabin_info"
-        android:tint="@color/unselected_tab"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_unstar"
+        android:background="@drawable/round_background"
+        android:padding="5dp"
+        android:tint="@color/yellow_color"
         android:layout_marginEnd="20dp"
-        android:src="@drawable/ic_place"
-        android:id="@+id/cabin_location"/>
+        android:layout_below="@id/cabin_image"
+        android:layout_marginTop="-25dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/unselected_tab"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/cabin_info"/>
 
 </RelativeLayout>

@@ -81,7 +81,7 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
 
     public static class CabinHolder extends RecyclerView.ViewHolder {
         public TextView priceView, nameView, addressView;
-        public ImageView mainImage, phoneButton, favoriteButton, locationButton;
+        public ImageView mainImage, phoneButton, locationButton;
         public ToggleButton heartButton;
 
         public CabinHolder(View view) {
@@ -91,7 +91,6 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
             addressView = view.findViewById(R.id.cabin_address);
             mainImage = view.findViewById(R.id.cabin_image);
             phoneButton = view.findViewById(R.id.cabin_phone);
-            favoriteButton = view.findViewById(R.id.cabin_favorite);
             heartButton = view.findViewById(R.id.cabin_heart);
             locationButton = view.findViewById(R.id.cabin_location);
         }

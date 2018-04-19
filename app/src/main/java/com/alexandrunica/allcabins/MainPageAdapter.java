@@ -20,9 +20,16 @@ public class MainPageAdapter extends FragmentPagerAdapter {
 
     private final int num_fragment = 5;
 
+    private String[] tabTitles = new String[]{"Explore", "Cabins", "Map", "Favorite", "Profile"};
+
     public MainPageAdapter(FragmentManager fm) {
         super(fm);
     }
+
+//    @Override
+//    public CharSequence getPageTitle(int position) {
+//        return tabTitles[position];
+//    }
 
     @Override
     public Fragment getItem(int position) {

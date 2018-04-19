@@ -32,6 +32,8 @@ import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.event.OnLoginEvent;
+import com.alexandrunica.allcabins.service.firebase.FirebaseService;
+import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.alexandrunica.allcabins.service.firebase.auth.FirebaseAuthentication;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -116,6 +118,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build();
+        sync();
+    }
+
+    private void sync() {
+        ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, this);
     }
 
     public void changeViewpager(int position) {

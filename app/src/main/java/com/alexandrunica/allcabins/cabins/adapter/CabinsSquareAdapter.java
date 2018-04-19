@@ -5,9 +5,7 @@ import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,43 +22,34 @@ import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 
 import java.util.List;
 
-/**
- * Created by Nica on 4/3/2018.
- */
-
-public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder> {
+public class CabinsSquareAdapter extends RecyclerView.Adapter<CabinsSquareAdapter.CabinSquareHolder> {
 
 
     private List<Cabin> cabinList;
     private Context context;
 
 
-    public CabinAdapter(Context context, List<Cabin> cabinList) {
+    public CabinsSquareAdapter(Context context, List<Cabin> cabinList) {
         this.context = context;
         this.cabinList = cabinList;
     }
 
     @Override
-    public CabinHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cabin_row, parent, false);
-        return new CabinHolder(v);
+    public CabinsSquareAdapter.CabinSquareHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cabin_sqare_row, parent, false);
+        return new CabinsSquareAdapter.CabinSquareHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final CabinHolder holder, int position) {
+    public void onBindViewHolder(final CabinsSquareAdapter.CabinSquareHolder holder, int position) {
         final Cabin cabin = cabinList.get(position);
-
-
         holder.nameView.setText(cabin.getName());
-        holder.addressView.setText(cabin.getAddress());
-
         holder.phoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //call
             }
         });
-
         holder.heartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,23 +81,22 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
         return cabinList.size();
     }
 
-    public static class CabinHolder extends RecyclerView.ViewHolder {
-        public TextView priceView, nameView, addressView;
-        public ImageView mainImage, phoneButton, locationButton;
+    public static class CabinSquareHolder extends RecyclerView.ViewHolder {
+        public TextView priceView, nameView,phoneButton;
+        public ImageView mainImage;
         public ToggleButton heartButton;
 
-        public CabinHolder(View view) {
+        public CabinSquareHolder(View view) {
             super(view);
             priceView = view.findViewById(R.id.cabin_price);
             nameView = view.findViewById(R.id.cabin_name);
-            addressView = view.findViewById(R.id.cabin_address);
             mainImage = view.findViewById(R.id.cabin_image);
             phoneButton = view.findViewById(R.id.cabin_phone);
             heartButton = view.findViewById(R.id.cabin_heart);
-            locationButton = view.findViewById(R.id.cabin_location);
         }
 
 
     }
 }
+
 

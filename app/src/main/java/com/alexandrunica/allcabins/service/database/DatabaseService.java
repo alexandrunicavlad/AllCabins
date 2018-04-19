@@ -142,7 +142,7 @@ public class DatabaseService extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteUserg() {
+    public void deleteUser() {
         getDatabase();
 
         boolean exists = isTableExists(DatabaseUserModel.UserEntity.TABLE_NAME, false);
@@ -152,22 +152,34 @@ public class DatabaseService extends SQLiteOpenHelper {
     }
 
     public void updateOrAdd(User user) {
-        if (checkUserExists(user.getId())) {
+        if (checkUser(user.getId())) {
             updateUser(user);
-        } else{
-            writeUser(user);
         }
     }
 
-    public boolean checkUserExists(String fieldValue) {
+    public boolean checkUser(String fieldValue) {
         getDatabase();
-        String Query = "Select * from " + DatabaseUserModel.UserEntity.TABLE_NAME + " where " + DatabaseUserModel.UserEntity.COLUMN_NAME_ID + " = " + fieldValue;
-        Cursor cursor = mDb.rawQuery(Query, null);
-        if (cursor.getCount() <= 0) {
-            cursor.close();
+        String[] projection = {
+                DatabaseUserModel.UserEntity.COLUMN_NAME_ID
+        };
+
+        String selection = DatabaseUserModel.UserEntity.COLUMN_NAME_ID + " LIKE ? ";
+
+        Cursor c = mDb.query(
+                DatabaseUserModel.UserEntity.TABLE_NAME,  // Your Table Name
+                projection,
+                selection,
+                new String[]{fieldValue},
+                null,
+                null,
+                null
+        );
+
+        if (c.getCount() <= 0) {
+            c.close();
             return false;
         }
-        cursor.close();
+        c.close();
         return true;
     }
 

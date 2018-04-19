@@ -55,14 +55,14 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_unstar"
+        android:src="@drawable/ic_navigation"
         android:background="@drawable/round_background"
         android:padding="5dp"
         android:tint="@color/yellow_color"
         android:layout_marginEnd="20dp"
         android:layout_below="@id/cabin_image"
         android:layout_marginTop="-25dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:id="@+id/cabin_location"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,18 +94,6 @@
             android:gravity="center"
             android:textColor="@color/unselected_tab"/>
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_unstar"
-        android:background="@drawable/round_background"
-        android:padding="5dp"
-        android:tint="@color/yellow_color"
-        android:layout_marginEnd="20dp"
-        android:layout_below="@id/cabin_image"
-        android:layout_marginTop="-25dp"/>
 
     <View
         android:layout_width="match_parent"

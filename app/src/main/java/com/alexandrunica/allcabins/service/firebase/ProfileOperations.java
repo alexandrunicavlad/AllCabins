@@ -13,6 +13,7 @@ import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -34,6 +35,35 @@ public class ProfileOperations extends FirebaseOperation {
         super(FirebaseService.TableNames.USERS_TABLE);
         DaggerDbApplication app = (DaggerDbApplication) context.getApplicationContext();
         app.getAppDbComponent().inject(this);
+        mRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null) {
+                    databaseService.updateOrAdd(user);
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -46,7 +76,6 @@ public class ProfileOperations extends FirebaseOperation {
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(null)));
                 } else {
                     databaseService.writeUser(user);
-                    User da = databaseService.getUser();
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(user)));
                 }
             }

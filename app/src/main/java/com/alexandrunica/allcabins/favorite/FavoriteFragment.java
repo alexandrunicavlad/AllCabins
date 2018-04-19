@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +47,7 @@ public class FavoriteFragment extends Fragment {
     private RelativeLayout mainLayout;
     private List<Cabin> list;
     private FavoriteAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public static FavoriteFragment newInstance() {
         FavoriteFragment favoriteFragment = new FavoriteFragment();
@@ -76,16 +78,19 @@ public class FavoriteFragment extends Fragment {
         toolbar.setVisibility(View.GONE);
         recyclerView = view.findViewById(R.id.recycler_favorite);
         mainLayout = view.findViewById(R.id.favorite_main_layout);
-        if (databaseService.getUser() != null) {
-            HashMap<String, String> mapList = databaseService.getUser().getFavoriteList();
-            if (mapList != null) {
-                for (Map.Entry<String, String> entry : mapList.entrySet()) {
-                    String value = entry.getValue();
-                    CabinOperations cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, activity);
-                    cabinOperations.getCabinFromId(value);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        addUserFav();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }
-            }
-        }
+        );
+
+        addUserFav();
 
 
         TextView explore = view.findViewById(R.id.explore_submit);
@@ -97,6 +102,24 @@ public class FavoriteFragment extends Fragment {
         });
         //ecyclerView.setAdapter(adapter);
         return view;
+    }
+
+    private void addUserFav() {
+
+        if (databaseService.getUser() != null) {
+            HashMap<String, String> mapList = databaseService.getUser().getFavoriteList();
+            if (mapList != null) {
+                list.clear();
+                for (Map.Entry<String, String> entry : mapList.entrySet()) {
+                    String value = entry.getValue();
+                    CabinOperations cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, activity);
+                    cabinOperations.getCabinFromId(value);
+                }
+            } else {
+                recyclerView.setVisibility(View.GONE);
+                mainLayout.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Subscribe

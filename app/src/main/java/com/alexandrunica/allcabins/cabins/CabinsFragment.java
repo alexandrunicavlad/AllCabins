@@ -7,6 +7,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.adapter.CabinAdapter;
+import com.alexandrunica.allcabins.cabins.adapter.CabinsSquareAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
@@ -100,8 +102,8 @@ public class CabinsFragment extends Fragment {
     }
 
     private void setRecyclerView(List<Cabin> list) {
-        CabinAdapter adapter = new CabinAdapter(activity, list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
+        CabinsSquareAdapter adapter = new CabinsSquareAdapter(activity, list);
+        GridLayoutManager layoutManager = new GridLayoutManager(activity, 2);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
     }

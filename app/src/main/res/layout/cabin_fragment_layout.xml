@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:id="@+id/cabin_info_image"
+        android:background="@color/unselected_tab"
+        />
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/cabin_no_image"
+        android:layout_centerInParent="true"
+        android:tint="@color/close_color"
+        android:layout_above="@id/cabin_info_price"
+        android:layout_alignTop="@id/cabin_info_image"
+        android:src="@drawable/ic_no_image"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:id="@+id/cabin_info_price"
+        android:textColor="@color/close_color"
+        android:layout_centerHorizontal="true"
+        android:text="130 LEI/Noapte"
+        android:background="#D9FFFFFF"
+        android:padding="5dp"
+        android:layout_alignBottom="@id/cabin_info_image"/>
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_phone"
+        android:background="@drawable/round_background"
+        android:padding="5dp"
+        android:tint="@color/seekbar_color"
+        android:layout_below="@id/cabin_info_image"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="-25dp"
+        android:id="@+id/cabin_info_phone"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        android:id="@+id/cabin_close"
+        android:src="@drawable/ic_exit"/>
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_navigation"
+        android:background="@drawable/round_background"
+        android:padding="5dp"
+        android:tint="@color/yellow_color"
+        android:layout_marginEnd="20dp"
+        android:layout_below="@id/cabin_info_image"
+        android:layout_marginTop="-25dp"
+        android:visibility="visible"
+        android:id="@+id/cabin_info_location"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/cabin_info_phone"
+        android:layout_toStartOf="@id/cabin_info_location"
+        android:layout_below="@id/cabin_info_image"
+        android:minHeight="90dp"
+        android:id="@+id/cabin_info"
+        android:gravity="center"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cabin_info_name"
+            android:textSize="22sp"
+            android:text="CABANA VISCOL"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/cabin_info_address"
+            android:textSize="20sp"
+            android:text="STR. PRINCIAPA"
+            android:gravity="center"
+            android:textColor="@color/unselected_tab"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cabin_info"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:id="@+id/cabin_info_description"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/unselected_tab"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Facilities"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:id="@+id/cabin_info_facilities"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/unselected_tab"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rating"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/black"/>
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.Widget.AppCompat.RatingBar.Small"
+            android:id="@+id/cabin_rating_star"
+            android:layout_marginBottom="5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cabin_info_rating"
+            />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cabin_add_fav"
+       android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="15dp"
+        app:fabSize="normal"
+        android:src="@drawable/ic_favorite"
+        android:tint="@color/white"
+
+        />
+</RelativeLayout>

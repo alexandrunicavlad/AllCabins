@@ -19,6 +19,7 @@ import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.model.User;
+import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.Picasso;
 
@@ -46,6 +47,9 @@ public class ProfileFragment extends Fragment {
     @Inject
     Bus bus;
 
+    @Inject
+    DatabaseService databaseService;
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -72,6 +76,7 @@ public class ProfileFragment extends Fragment {
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("email", "");
                     editor.apply();
+                    databaseService.deleteUser();
                     bus.post(new OnOpenAccount(LoginFragment.newInstance()));
                 }
             });

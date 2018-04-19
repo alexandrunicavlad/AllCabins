@@ -17,8 +17,14 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alexandrunica.allcabins.R;
+import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
+import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.cabins.model.LocationModel;
+import com.alexandrunica.allcabins.dagger.AppDbComponent;
+import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,6 +37,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+
+import java.util.HashMap;
+
+import javax.inject.Inject;
 
 /**
  * Created by Nica on 4/2/2018.
@@ -40,6 +54,9 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.CancelableCallback {
+
+    @Inject
+    Bus bus;
 
     private FragmentActivity activity;
 
@@ -60,6 +77,9 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        DaggerDbApplication app = (DaggerDbApplication) activity.getApplicationContext();
+        AppDbComponent appDbComponent = app.getAppDbComponent();
+        appDbComponent.inject(this);
     }
 
     @Nullable
@@ -77,7 +97,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         locateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (infoLayout.getVisibility()==View.VISIBLE) {
+                if (infoLayout.getVisibility() == View.VISIBLE) {
                     collapse(infoLayout);
                 } else {
                     expand(infoLayout);
@@ -218,23 +238,6 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
 
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    /**
-     * disconnect from google apo
-     * detach presenter
-     */
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
-            mGoogleApiClient.disconnect();
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (FragmentActivity) context;
@@ -261,6 +264,24 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
             googleMap.getUiSettings().setRotateGesturesEnabled(false);
         }
 
+    }
+
+    @Subscribe
+    public void onGetCabins(OnGetCabinEvent event) {
+        if (event.getCabins() != null) {
+            if (googleMap != null) {
+                for (Cabin cabin : event.getCabins()) {
+                    if (cabin.getLocation() != null && !cabin.getLocation().isEmpty()) {
+                        LocationModel locationModel = new Gson().fromJson(cabin.getLocation(), new TypeToken<LocationModel>() {}.getType());
+                        LatLng cabinLoc = new LatLng(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()));
+                        googleMap.addMarker(new MarkerOptions().position(cabinLoc)
+                                .title("Marker in Sydney"));
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -322,4 +343,26 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        bus.register(this);
+
+        mGoogleApiClient.connect();
+    }
+
+    /**
+     * disconnect from google apo
+     * detach presenter
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        bus.unregister(this);
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
+    }
+
 }

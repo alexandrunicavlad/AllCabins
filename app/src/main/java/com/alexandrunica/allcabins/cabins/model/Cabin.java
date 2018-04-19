@@ -13,36 +13,38 @@ public class Cabin implements Serializable {
     private String id;
     private String name;
     private String address;
-    public double latitude;
-    public double longitude;
+    private String location;
     public String phone;
     public String email;
     public String price;
     public float rating;
-    public List<String> photoUrl;
-    public String details;
+    public String thumbPhotoUrl;
+    public String description;
+    public String facilities;
     public String idAdded;
 
-    public HashMap<String, List<String>> reviews;
-    public HashMap<String, List<String>> pictures;
+    public HashMap<String, String> uploadedPictures;
+    public HashMap<String, String> reviews;
+    public HashMap<String, String> pictures;
 
     public Cabin() {
 
     }
 
-    public Cabin(String id, String name, String address, double latitude, double longitude, String phone, String email, String price, float rating, List<String> photoUrl, String details, String idAdded, HashMap<String, List<String>> reviews, HashMap<String, List<String>> pictures) {
+    public Cabin(String id, String name, String address, String location, String phone, String email, String price, float rating, String thumbPhotoUrl, String description, String facilities, String idAdded, HashMap<String, String> uploadedPictures, HashMap<String, String> reviews, HashMap<String, String> pictures) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.location = location;
         this.phone = phone;
         this.email = email;
         this.price = price;
         this.rating = rating;
-        this.photoUrl = photoUrl;
-        this.details = details;
+        this.thumbPhotoUrl = thumbPhotoUrl;
+        this.description = description;
+        this.facilities = facilities;
         this.idAdded = idAdded;
+        this.uploadedPictures = uploadedPictures;
         this.reviews = reviews;
         this.pictures = pictures;
     }
@@ -71,20 +73,12 @@ public class Cabin implements Serializable {
         this.address = address;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getPhone() {
@@ -119,20 +113,28 @@ public class Cabin implements Serializable {
         this.rating = rating;
     }
 
-    public List<String> getPhotoUrl() {
-        return photoUrl;
+    public String getThumbPhotoUrl() {
+        return thumbPhotoUrl;
     }
 
-    public void setPhotoUrl(List<String> photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setThumbPhotoUrl(String thumbPhotoUrl) {
+        this.thumbPhotoUrl = thumbPhotoUrl;
     }
 
-    public String getDetails() {
-        return details;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(String facilities) {
+        this.facilities = facilities;
     }
 
     public String getIdAdded() {
@@ -143,19 +145,27 @@ public class Cabin implements Serializable {
         this.idAdded = idAdded;
     }
 
-    public HashMap<String, List<String>> getReviews() {
+    public HashMap<String, String> getUploadedPictures() {
+        return uploadedPictures;
+    }
+
+    public void setUploadedPictures(HashMap<String, String> uploadedPictures) {
+        this.uploadedPictures = uploadedPictures;
+    }
+
+    public HashMap<String, String> getReviews() {
         return reviews;
     }
 
-    public void setReviews(HashMap<String, List<String>> reviews) {
+    public void setReviews(HashMap<String, String> reviews) {
         this.reviews = reviews;
     }
 
-    public HashMap<String, List<String>> getPictures() {
+    public HashMap<String, String> getPictures() {
         return pictures;
     }
 
-    public void setPictures(HashMap<String, List<String>> pictures) {
+    public void setPictures(HashMap<String, String> pictures) {
         this.pictures = pictures;
     }
 }

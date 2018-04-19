@@ -60,6 +60,11 @@ public class CabinInfoFragment extends DialogFragment {
             if (cabin != null) {
                 addressView.setText(cabin.getAddress());
                 nameView.setText(cabin.getName());
+                priceView.setText(cabin.getPrice()+"/Noapte");
+                descriptionView.setText(cabin.getDescription());
+                facilitiesView.setText(cabin.getFacilities());
+                rating.setRating(cabin.getRating());
+                ratingView.setText(String.valueOf(cabin.getRating())+"/5");
                 phoneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

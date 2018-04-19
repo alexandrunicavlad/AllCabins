@@ -44,6 +44,7 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<CabinsSquareAdapte
     public void onBindViewHolder(final CabinsSquareAdapter.CabinSquareHolder holder, int position) {
         final Cabin cabin = cabinList.get(position);
         holder.nameView.setText(cabin.getName());
+        holder.priceView.setText(cabin.getPrice()+"/Noapte");
         holder.phoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

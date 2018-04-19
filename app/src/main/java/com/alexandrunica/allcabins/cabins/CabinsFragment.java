@@ -24,11 +24,13 @@ import com.alexandrunica.allcabins.cabins.adapter.CabinAdapter;
 import com.alexandrunica.allcabins.cabins.adapter.CabinsSquareAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.widget.Slidr;
+import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.zcw.togglebutton.ToggleButton;
@@ -90,12 +92,23 @@ public class CabinsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler);
 
         setFilter(view);
-//        Cabin cabin = new Cabin();
-//        cabin.setName("Cabana Nica");
-//        cabin.setAddress("Cluj Napoca");
-//        cabin.setDetails("dadadada");
-//
+
         CabinOperations cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, activity);
+        LocationModel locationModel = new LocationModel("46.75817243758575","23.581339692866802");
+
+        Cabin cabin = new Cabin();
+        cabin.setName("La Cabana");
+        cabin.setAddress("");
+        cabin.setLocation( new Gson().toJson(locationModel));
+        cabin.setPhone("722369851");
+        cabin.setEmail("lacabana@lacabana.com");
+        cabin.setPrice("150 Lei");
+        cabin.setRating(3);
+        cabin.setThumbPhotoUrl("");
+        cabin.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec eros porta, dapibus lectus sit amet, ultricies diam. Sed egestas vestibulum porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus at ex lacinia, sodales risus sed, vehicula nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas nec lorem scelerisque, aliquet sem eu, porttitor ligula. Quisque euismod nec lorem sit amet consectetur. Mauris non egestas mi, ut sollicitudin odio. Aliquam tristique ante eget rutrum dapibus. Donec quis volutpat neque, a iaculis metus. Morbi cursus elit ac nulla aliquet sagittis.");
+        cabin.setFacilities("dapibus lectus sit amet, ultricies diam. Sed egestas vestibulum porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus at ex lacinia, sodales risus sed, vehicula nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas nec lorem scelerisque, aliquet sem eu, porttitor ligula. Quisque euismod nec lorem sit amet consectetur. Mauris non egestas mi, ut sollicitudin odio. Aliquam tristique ante eget rutrum dapibus. Donec quis volutpa");
+        cabin.setIdAdded("nika_yo_99@yahoo.com");
+        cabinOperations.insertCabin(cabin);
         cabinOperations.getCabins();
 
         return view;

@@ -3,6 +3,7 @@ package com.alexandrunica.allcabins.service.firebase;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
@@ -30,6 +31,7 @@ public class CabinOperations extends FirebaseOperation {
 
     @Inject
     protected Bus bus;
+
 
     public CabinOperations(Context context) {
         super(FirebaseService.TableNames.CABINS_TABLE);
@@ -74,6 +76,32 @@ public class CabinOperations extends FirebaseOperation {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("Debug", "Error retrieving data: " + databaseError.getMessage());
+                bus.post(new OnGetCabinEvent(null));
+            }
+        });
+    }
+
+    public void getPaginationCabins() {
+
+    }
+
+    public void loadMoreData(int totalItemEachLoad, int currentPage) {
+        final ArrayList<Cabin> cabins = new ArrayList<>();
+        mRef.limitToFirst(totalItemEachLoad).startAt(currentPage * totalItemEachLoad).orderByChild("name").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChildren()) {
+                }
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Cabin currentCabin = data.getValue(Cabin.class);
+                    currentCabin.setId(data.getKey());
+                    cabins.add(currentCabin);
+                }
+                bus.post(new OnGetCabinEvent(cabins));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
                 bus.post(new OnGetCabinEvent(null));
             }
         });

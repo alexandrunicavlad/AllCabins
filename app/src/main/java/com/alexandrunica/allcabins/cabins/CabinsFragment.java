@@ -23,6 +23,8 @@ import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.adapter.CabinAdapter;
 import com.alexandrunica.allcabins.cabins.adapter.CabinsSquareAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
+import com.alexandrunica.allcabins.cabins.helper.PaginationScrollListener;
+import com.alexandrunica.allcabins.cabins.helper.RecyclerEventOnScollListener;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
@@ -55,7 +57,16 @@ public class CabinsFragment extends Fragment {
     private ImageView toolbarFilter;
     private LinearLayout filterLayout;
     private RecyclerView recyclerView;
+    private CabinsSquareAdapter adapter;
+    private CabinOperations cabinOperations;
+    private List<Cabin> cabinList;
 
+    private static final int PAGE_START = 0;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    private int TOTAL_PAGES = 3;
+    private int currentPage = PAGE_START;
+    private int TOTAL_ITEM_EACH_LOAD = 10;
 
     public static CabinsFragment newInstance() {
         CabinsFragment cabinsFragment = new CabinsFragment();
@@ -89,41 +100,98 @@ public class CabinsFragment extends Fragment {
                 }
             }
         });
+
+        cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, activity);
+        cabinList = new ArrayList<>();
         recyclerView = view.findViewById(R.id.recycler);
+        GridLayoutManager layoutManager = new GridLayoutManager(activity, 2);
+        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+//            @Override
+//            protected void loadMoreItems() {
+//                isLoading = true;
+//                currentPage += 1;
+//                loadNextPage();
+//            }
+//
+//            @Override
+//            public int getTotalPageCount() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public boolean isLastPage() {
+//                return isLastPage;
+//            }
+//
+//            @Override
+//            public boolean isLoading() {
+//                return isLoading;
+//            }
+//        });
+
+        //loadFirstPage();
 
         setFilter(view);
 
-        CabinOperations cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, activity);
-        LocationModel locationModel = new LocationModel("46.75817243758575","23.581339692866802");
-
-        Cabin cabin = new Cabin();
-        cabin.setName("La Cabana");
-        cabin.setAddress("");
-        cabin.setLocation( new Gson().toJson(locationModel));
-        cabin.setPhone("722369851");
-        cabin.setEmail("lacabana@lacabana.com");
-        cabin.setPrice("150 Lei");
-        cabin.setRating(3);
-        cabin.setThumbPhotoUrl("");
-        cabin.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec eros porta, dapibus lectus sit amet, ultricies diam. Sed egestas vestibulum porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus at ex lacinia, sodales risus sed, vehicula nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas nec lorem scelerisque, aliquet sem eu, porttitor ligula. Quisque euismod nec lorem sit amet consectetur. Mauris non egestas mi, ut sollicitudin odio. Aliquam tristique ante eget rutrum dapibus. Donec quis volutpat neque, a iaculis metus. Morbi cursus elit ac nulla aliquet sagittis.");
-        cabin.setFacilities("dapibus lectus sit amet, ultricies diam. Sed egestas vestibulum porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus at ex lacinia, sodales risus sed, vehicula nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas nec lorem scelerisque, aliquet sem eu, porttitor ligula. Quisque euismod nec lorem sit amet consectetur. Mauris non egestas mi, ut sollicitudin odio. Aliquam tristique ante eget rutrum dapibus. Donec quis volutpa");
-        cabin.setIdAdded("nika_yo_99@yahoo.com");
-        cabinOperations.insertCabin(cabin);
-        cabinOperations.getCabins();
+//        for(int i=0;i<20;i++) {
+//            LocationModel locationModel = new LocationModel("46.75817243758575", "23.581339692866802");
+//
+//            Cabin cabin = new Cabin();
+//            cabin.setName("La Cabana" + String.valueOf(i));
+//            cabin.setAddress("");
+//            cabin.setLocation(new Gson().toJson(locationModel));
+//            cabin.setPhone("722369851");
+//            cabin.setEmail("lacabana@lacabana.com");
+//            cabin.setPrice("15" +String.valueOf(i) +" Lei");
+//            cabin.setRating(3);
+//            cabin.setThumbPhotoUrl("");
+//            cabin.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec eros porta, dapibus lectus sit amet, ultricies diam. Sed egestas vestibulum porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus at ex lacinia, sodales risus sed, vehicula nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas nec lorem scelerisque, aliquet sem eu, porttitor ligula. Quisque euismod nec lorem sit amet consectetur. Mauris non egestas mi, ut sollicitudin odio. Aliquam tristique ante eget rutrum dapibus. Donec quis volutpat neque, a iaculis metus. Morbi cursus elit ac nulla aliquet sagittis.");
+//            cabin.setFacilities("dapibus lectus sit amet, ultricies diam. Sed egestas vestibulum porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus at ex lacinia, sodales risus sed, vehicula nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas nec lorem scelerisque, aliquet sem eu, porttitor ligula. Quisque euismod nec lorem sit amet consectetur. Mauris non egestas mi, ut sollicitudin odio. Aliquam tristique ante eget rutrum dapibus. Donec quis volutpa");
+//            cabin.setIdAdded("nika_yo_99@yahoo.com");
+//            cabinOperations.insertCabin(cabin);
+//        }
 
         return view;
     }
 
+    private void loadFirstPage() {
+        if (cabinOperations != null) {
+            cabinOperations.loadMoreData(TOTAL_ITEM_EACH_LOAD, currentPage);
+        }
+    }
+
+    private void loadNextPage() {
+        if (cabinOperations != null) {
+            cabinOperations.loadMoreData(TOTAL_ITEM_EACH_LOAD, currentPage);
+        }
+
+        //isLoading = false;
+
+    }
+
+    private void loadMoreData() {
+        currentPage++;
+        if (cabinOperations != null) {
+            cabinOperations.loadMoreData(TOTAL_ITEM_EACH_LOAD, currentPage);
+        }
+    }
+
     private void setRecyclerView(List<Cabin> list) {
-        CabinsSquareAdapter adapter = new CabinsSquareAdapter(activity, list);
-        GridLayoutManager layoutManager = new GridLayoutManager(activity, 2);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        if (list != null) {
+            cabinList = list;
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            } else {
+                adapter = new CabinsSquareAdapter(activity, cabinList);
+                recyclerView.setAdapter(adapter);
+            }
+        }
     }
 
     @Subscribe
     public void onGetCabins(OnGetCabinEvent event) {
-        if (event.getCabins() !=null) {
+        if (event.getCabins() != null) {
             setRecyclerView(event.getCabins());
         } else {
             Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();

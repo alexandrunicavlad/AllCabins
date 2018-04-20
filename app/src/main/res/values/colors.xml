@@ -54,4 +54,5 @@
     <color name="seekbar_color">#007E90</color>
     <color name="yellow_color">#ceca0c</color>
     <color name="red_color">#cc0000</color>
+    <color name="gray_info">#32394B</color>
 </resources>

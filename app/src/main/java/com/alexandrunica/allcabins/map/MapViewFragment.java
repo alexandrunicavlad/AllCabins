@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.map.adapter.CustomInfoWindowMap;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +34,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -41,8 +44,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -64,6 +70,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
     private GoogleMap googleMap;
     private Location currentLocation;
     private boolean isInfoWindowShown;
+    private List<Cabin> cabins;
 
     private Marker currentMarker;
     private Marker popupMarker;
@@ -104,7 +111,8 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
                 }
             }
         });
-        initInfoBottom();
+        cabins = new ArrayList<>();
+
         return view;
     }
 
@@ -115,6 +123,22 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    public void setMarkers() {
+
+        for (Cabin cabin : cabins) {
+            if (cabin.getLocation() != null && !cabin.getLocation().isEmpty()) {
+                LocationModel locationModel = new Gson().fromJson(cabin.getLocation(), new TypeToken<LocationModel>() {
+                }.getType());
+                LatLng cabinLoc = new LatLng(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()));
+                Marker marker = googleMap.addMarker(new MarkerOptions().position(cabinLoc)
+                        .title(cabin.getId()));
+                marker.setTag(cabin);
+                //marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin));
+
+            }
+        }
     }
 
     private void setCurrentMarker() {
@@ -140,13 +164,21 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         initMap();
     }
 
-    private void initInfoBottom() {
+    private void initInfoBottom(Cabin cabin) {
         ImageView infoBottomImage = infoLayout.findViewById(R.id.bottom_image);
         ImageView infoBottomClose = infoLayout.findViewById(R.id.bottom_close);
         TextView infoBottomName = infoLayout.findViewById(R.id.bottom_name);
         TextView infoBottomAddress = infoLayout.findViewById(R.id.bottom_address);
         TextView infoBottomPrice = infoLayout.findViewById(R.id.bottom_price);
         TextView infoBottomDistance = infoLayout.findViewById(R.id.bottom_distance);
+
+        if (cabin.getThumbPhotoUrl() != null && !cabin.getThumbPhotoUrl().isEmpty()) {
+            Picasso.with(getContext()).load(cabin.getThumbPhotoUrl()).into(infoBottomImage);
+        }
+
+        infoBottomName.setText(cabin.getName());
+        infoBottomAddress.setText(cabin.getAddress());
+        infoBottomPrice.setText(cabin.getPrice() + "/Night");
 
         infoBottomClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,59 +208,21 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
 //
 //            }
 //        });
+
+        if (cabins != null) {
+            setMarkers();
+        }
     }
 
     public boolean onMarkerClick(final Marker marker) {
         if (marker.getTitle() != null && (currentLocation == null || !marker.getTitle().equals("Current marker"))) {
             popupMarker = marker;
+            initInfoBottom((Cabin) marker.getTag());
+            expand(infoLayout);
         }
         return true;
     }
 
-//    private void createPopupMarker(String resortId) {
-//        if (popupWindow != null) {
-//            popupWindow.dismiss();
-//        }
-//
-//        final View popup = new ResortCard(activity, (Resort) resorts.get(resortId)).getView();
-//        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,239,getResources().getDisplayMetrics());
-//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ScreenSize.getWidth(activity),height);
-//        popup.setLayoutParams(layoutParams);
-//        popupWindow = new PopupWindow(popup, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        popupWindow.setOutsideTouchable(true);
-//        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                if (motionEvent.getAction() == MotionEvent.ACTION_OUTSIDE) {
-//                    bus.post(new OnMarkerCloseEvent());
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-//        popupWindow.setAnimationStyle(R.style.Animation);
-//
-//    }
-
-//    /**
-//     * show selected marker's popup
-//     */
-//    private void showPopup() {
-//        Fragment account = activity.getSupportFragmentManager().findFragmentByTag(activity.getResources().getString(R.string.account_fragment_tag));
-//        if (isVisible() && getParentFragment().getUserVisibleHint() && account == null) {
-//            if (popupMarker != null && popupWindow != null) {
-//                int newHeight;
-//
-//                Point p = googleMap.getProjection().toScreenLocation(popupMarker.getPosition());
-//                newHeight = (int) (p.y -  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,239,getResources().getDisplayMetrics()));
-//
-//                popupWindow.showAtLocation(getView(), Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, newHeight);
-//                bus.post(new OnMarkerShowEvent());
-//                onInfoMarkerShow();
-//            }
-//        }
-//    }
 
 //    private void calcDistance(Marker marker) {
 //        Resort resort = (Resort) resorts.get(marker.getTitle());
@@ -243,10 +237,6 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         this.activity = (FragmentActivity) context;
     }
 
-    public void setMarkers() {
-    }
-
-
     public void refreshMarkers() {
         googleMap.clear();
         setMarkers();
@@ -255,29 +245,13 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         }
     }
 
-    public void onInfoMarkerShow() {
-        if (isInfoWindowShown) {
-            googleMap.getUiSettings().setAllGesturesEnabled(false);
-            isInfoWindowShown = false;
-        } else {
-            googleMap.getUiSettings().setAllGesturesEnabled(true);
-            googleMap.getUiSettings().setRotateGesturesEnabled(false);
-        }
-
-    }
-
     @Subscribe
     public void onGetCabins(OnGetCabinEvent event) {
         if (event.getCabins() != null) {
+            cabins = event.getCabins();
             if (googleMap != null) {
-                for (Cabin cabin : event.getCabins()) {
-                    if (cabin.getLocation() != null && !cabin.getLocation().isEmpty()) {
-                        LocationModel locationModel = new Gson().fromJson(cabin.getLocation(), new TypeToken<LocationModel>() {}.getType());
-                        LatLng cabinLoc = new LatLng(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()));
-                        googleMap.addMarker(new MarkerOptions().position(cabinLoc)
-                                .title("Marker in Sydney"));
-                    }
-                }
+                Log.d("aici","from onGetCabins");
+                setMarkers();
             }
         } else {
             Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();

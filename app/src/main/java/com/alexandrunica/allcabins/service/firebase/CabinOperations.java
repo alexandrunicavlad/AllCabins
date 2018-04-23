@@ -7,8 +7,10 @@ import android.widget.Toast;
 
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.cabins.model.ShortCabin;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.favorite.event.OnFavDone;
+import com.alexandrunica.allcabins.map.event.OnGetShortCabinEvent;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.model.User;
@@ -61,22 +63,22 @@ public class CabinOperations extends FirebaseOperation {
     }
 
     public void getCabins() {
-        final ArrayList<Cabin> cabins = new ArrayList<>();
+        final ArrayList<ShortCabin> cabins = new ArrayList<>();
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Cabin currentCabin = postSnapshot.getValue(Cabin.class);
+                    ShortCabin currentCabin = postSnapshot.getValue(ShortCabin.class);
                     currentCabin.setId(postSnapshot.getKey());
                     cabins.add(currentCabin);
                 }
-                bus.post(new OnGetCabinEvent(cabins));
+                bus.post(new OnGetShortCabinEvent(cabins));
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("Debug", "Error retrieving data: " + databaseError.getMessage());
-                bus.post(new OnGetCabinEvent(null));
+                bus.post(new OnGetShortCabinEvent(cabins));
             }
         });
     }

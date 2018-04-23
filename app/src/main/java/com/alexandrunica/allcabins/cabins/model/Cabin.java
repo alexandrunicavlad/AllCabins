@@ -14,6 +14,7 @@ public class Cabin implements Serializable {
     private String name;
     private String address;
     private String location;
+    private String region;
     public String phone;
     public String email;
     public String price;
@@ -28,14 +29,14 @@ public class Cabin implements Serializable {
     public HashMap<String, String> pictures;
 
     public Cabin() {
-
     }
 
-    public Cabin(String id, String name, String address, String location, String phone, String email, String price, float rating, String thumbPhotoUrl, String description, String facilities, String idAdded, HashMap<String, String> uploadedPictures, HashMap<String, String> reviews, HashMap<String, String> pictures) {
+    public Cabin(String id, String name, String address, String location, String region, String phone, String email, String price, float rating, String thumbPhotoUrl, String description, String facilities, String idAdded, HashMap<String, String> uploadedPictures, HashMap<String, String> reviews, HashMap<String, String> pictures) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.location = location;
+        this.region = region;
         this.phone = phone;
         this.email = email;
         this.price = price;
@@ -79,6 +80,14 @@ public class Cabin implements Serializable {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public String getPhone() {

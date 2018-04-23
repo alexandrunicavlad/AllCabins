@@ -124,12 +124,13 @@ public class CabinsFragment extends Fragment {
 
         setFilter(view);
 
-//        for(int i=0;i<53;i++) {
-//            LocationModel locationModel = new LocationModel("46.75817243758575", "23.581339692866802");
+//        for(int i=0;i<18;i++) {
+//            LocationModel locationModel = new LocationModel("46." + String.valueOf(i) + "17243758575", "23." + String.valueOf(i) + "339692866802");
 //
 //            Cabin cabin = new Cabin();
 //            cabin.setName("La Cabana" + String.valueOf(i));
 //            cabin.setAddress("");
+//            cabin.setRegion("Cluj");
 //            cabin.setLocation(new Gson().toJson(locationModel));
 //            cabin.setPhone("722369851");
 //            cabin.setEmail("lacabana@lacabana.com");

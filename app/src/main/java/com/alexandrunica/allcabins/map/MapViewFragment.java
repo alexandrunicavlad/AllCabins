@@ -24,9 +24,14 @@ import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.LocationModel;
+import com.alexandrunica.allcabins.cabins.model.ShortCabin;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.map.adapter.CustomInfoWindowMap;
+import com.alexandrunica.allcabins.map.event.OnGetShortCabinEvent;
+import com.alexandrunica.allcabins.map.model.Cluster;
+import com.alexandrunica.allcabins.service.firebase.CabinOperations;
+import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,6 +47,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -58,8 +65,8 @@ import javax.inject.Inject;
 
 public class MapViewFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener,
-        GoogleMap.CancelableCallback {
+        ClusterManager.OnClusterItemClickListener,
+        GoogleMap.CancelableCallback, ClusterManager.OnClusterClickListener<Cluster> {
 
     @Inject
     Bus bus;
@@ -70,16 +77,19 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
     private GoogleMap googleMap;
     private Location currentLocation;
     private boolean isInfoWindowShown;
-    private List<Cabin> cabins;
+    private List<ShortCabin> cabins;
 
     private Marker currentMarker;
     private Marker popupMarker;
     private PopupWindow popupWindow;
 
     private LatLngBounds romanianBounds;
+    private ClusterManager<Cluster> mClusterManager;
 
     private RelativeLayout infoLayout;
     private ImageView locateButton;
+
+    private CabinOperations cabinOperations;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -127,18 +137,20 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
 
     public void setMarkers() {
 
-        for (Cabin cabin : cabins) {
+        for (ShortCabin cabin : cabins) {
             if (cabin.getLocation() != null && !cabin.getLocation().isEmpty()) {
                 LocationModel locationModel = new Gson().fromJson(cabin.getLocation(), new TypeToken<LocationModel>() {
                 }.getType());
-                LatLng cabinLoc = new LatLng(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()));
-                Marker marker = googleMap.addMarker(new MarkerOptions().position(cabinLoc)
-                        .title(cabin.getId()));
-                marker.setTag(cabin);
+                //LatLng cabinLoc = new LatLng(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()));
+//                Marker marker = googleMap.addMarker(new MarkerOptions().position(cabinLoc)
+//                        .title(cabin.getId()));
+//                marker.setTag(cabin);
                 //marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin));
-
+                Cluster offsetItem = new Cluster(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()));
+                mClusterManager.addItem(offsetItem);
             }
         }
+        mClusterManager.cluster();
     }
 
     private void setCurrentMarker() {
@@ -161,7 +173,37 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, activity);
+        cabinOperations.getCabins();
+
         initMap();
+    }
+
+    private void startCluster() {
+        mClusterManager = new ClusterManager<Cluster>(activity, googleMap);
+        googleMap.setOnMarkerClickListener(mClusterManager);
+        googleMap.setOnInfoWindowClickListener(mClusterManager);
+        googleMap.setOnCameraIdleListener(mClusterManager);
+        mClusterManager.setOnClusterClickListener(this);
+        mClusterManager.setOnClusterItemClickListener(this);
+        mClusterManager.setAnimation(true);
+        setMarkers();
+        mClusterManager.cluster();
+    }
+
+    @Override
+    public boolean onClusterItemClick(ClusterItem clusterItem) {
+        String a = "21";
+        return false;
+    }
+
+    @Override
+    public boolean onClusterClick(com.google.maps.android.clustering.Cluster<Cluster> cluster) {
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                cluster.getPosition(), (float) Math.floor(googleMap
+                        .getCameraPosition().zoom + 1)), 300,
+                null);
+        return true;
     }
 
     private void initInfoBottom(Cabin cabin) {
@@ -197,7 +239,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(romanianBounds.getCenter(), 6));
         googleMap.setMinZoomPreference(6);
         googleMap.setLatLngBoundsForCameraTarget(romanianBounds);
-        googleMap.setOnMarkerClickListener(this);
+       // googleMap.setOnMarkerClickListener(this);
         googleMap.setTrafficEnabled(false);
 
 //        ImageView locationBtn = getView().findViewById(R.id.initial_location_btn);
@@ -209,9 +251,6 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
 //            }
 //        });
 
-        if (cabins != null) {
-            setMarkers();
-        }
     }
 
     public boolean onMarkerClick(final Marker marker) {
@@ -246,12 +285,11 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
     }
 
     @Subscribe
-    public void onGetCabins(OnGetCabinEvent event) {
+    public void onGetShortCabins(OnGetShortCabinEvent event) {
         if (event.getCabins() != null) {
             cabins = event.getCabins();
             if (googleMap != null) {
-                Log.d("aici","from onGetCabins");
-                setMarkers();
+                startCluster();
             }
         } else {
             Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();
@@ -338,5 +376,6 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
             mGoogleApiClient.disconnect();
     }
+
 
 }

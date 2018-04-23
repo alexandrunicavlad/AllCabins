@@ -23,6 +23,7 @@ import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.adapter.CabinAdapter;
 import com.alexandrunica.allcabins.cabins.adapter.CabinsSquareAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
+import com.alexandrunica.allcabins.cabins.events.OnMoreEvent;
 import com.alexandrunica.allcabins.cabins.helper.PaginationScrollListener;
 import com.alexandrunica.allcabins.cabins.helper.RecyclerEventOnScollListener;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
@@ -42,6 +43,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static com.alexandrunica.allcabins.cabins.adapter.CabinsSquareAdapter.FOOTER_VIEW;
+
 /**
  * Created by Nica on 4/2/2018.
  */
@@ -54,6 +57,8 @@ public class CabinsFragment extends Fragment {
     private Activity activity;
     private boolean isDistanceSelected;
     private boolean isPriceSelected;
+    private int price;
+    private int distance;
     private ImageView toolbarFilter;
     private LinearLayout filterLayout;
     private RecyclerView recyclerView;
@@ -61,10 +66,7 @@ public class CabinsFragment extends Fragment {
     private CabinOperations cabinOperations;
     private List<Cabin> cabinList;
 
-    private static final int PAGE_START = 0;
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
-    private int TOTAL_PAGES = 3;
+    private static final int PAGE_START = 1;
     private int currentPage = PAGE_START;
     private int TOTAL_ITEM_EACH_LOAD = 10;
 
@@ -105,36 +107,24 @@ public class CabinsFragment extends Fragment {
         cabinList = new ArrayList<>();
         recyclerView = view.findViewById(R.id.recycler);
         GridLayoutManager layoutManager = new GridLayoutManager(activity, 2);
-        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
-//            @Override
-//            protected void loadMoreItems() {
-//                isLoading = true;
-//                currentPage += 1;
-//                loadNextPage();
-//            }
-//
-//            @Override
-//            public int getTotalPageCount() {
-//                return 0;
-//            }
-//
-//            @Override
-//            public boolean isLastPage() {
-//                return isLastPage;
-//            }
-//
-//            @Override
-//            public boolean isLoading() {
-//                return isLoading;
-//            }
-//        });
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                switch (adapter.getItemViewType(position)) {
+                    case FOOTER_VIEW:
+                        return 2;
+                    default:
+                        return 1;
+                }
 
-        //loadFirstPage();
+            }
+        });
+        recyclerView.setLayoutManager(layoutManager);
+        loadFirstPage();
 
         setFilter(view);
 
-//        for(int i=0;i<20;i++) {
+//        for(int i=0;i<53;i++) {
 //            LocationModel locationModel = new LocationModel("46.75817243758575", "23.581339692866802");
 //
 //            Cabin cabin = new Cabin();
@@ -143,7 +133,7 @@ public class CabinsFragment extends Fragment {
 //            cabin.setLocation(new Gson().toJson(locationModel));
 //            cabin.setPhone("722369851");
 //            cabin.setEmail("lacabana@lacabana.com");
-//            cabin.setPrice("15" +String.valueOf(i) +" Lei");
+//            cabin.setPrice("1" +String.valueOf(i));
 //            cabin.setRating(3);
 //            cabin.setThumbPhotoUrl("");
 //            cabin.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec eros porta, dapibus lectus sit amet, ultricies diam. Sed egestas vestibulum porttitor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus at ex lacinia, sodales risus sed, vehicula nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas nec lorem scelerisque, aliquet sem eu, porttitor ligula. Quisque euismod nec lorem sit amet consectetur. Mauris non egestas mi, ut sollicitudin odio. Aliquam tristique ante eget rutrum dapibus. Donec quis volutpat neque, a iaculis metus. Morbi cursus elit ac nulla aliquet sagittis.");
@@ -161,15 +151,6 @@ public class CabinsFragment extends Fragment {
         }
     }
 
-    private void loadNextPage() {
-        if (cabinOperations != null) {
-            cabinOperations.loadMoreData(TOTAL_ITEM_EACH_LOAD, currentPage);
-        }
-
-        //isLoading = false;
-
-    }
-
     private void loadMoreData() {
         currentPage++;
         if (cabinOperations != null) {
@@ -177,22 +158,51 @@ public class CabinsFragment extends Fragment {
         }
     }
 
-    private void setRecyclerView(List<Cabin> list) {
-        if (list != null) {
-            cabinList = list;
-            if (adapter != null) {
-                adapter.notifyDataSetChanged();
-            } else {
-                adapter = new CabinsSquareAdapter(activity, cabinList);
-                recyclerView.setAdapter(adapter);
+    private void filterByPrice() {
+        List<Cabin> filtredList = new ArrayList<>();
+        if (cabinList != null) {
+            for (Cabin cabin : cabinList) {
+                if (Integer.parseInt(cabin.getPrice()) <= price) {
+                    filtredList.add(cabin);
+                }
             }
+            if (filtredList.size()!=0) {
+                cabinList = filtredList;
+            } else {
+                Toast.makeText(activity, "Cabins not found with this price", Toast.LENGTH_SHORT).show();
+            }
+
+            setRecyclerView();
         }
+    }
+
+    private void setRecyclerView() {
+
+        if (adapter != null) {
+            adapter.updateReceiptsList(cabinList);
+        } else {
+            OnMoreEvent listener = new OnMoreEvent() {
+                @Override
+                public void onLoadMore() {
+                    loadMoreData();
+                }
+            };
+            adapter = new CabinsSquareAdapter(activity, cabinList, listener);
+            recyclerView.setAdapter(adapter);
+
+        }
+
     }
 
     @Subscribe
     public void onGetCabins(OnGetCabinEvent event) {
         if (event.getCabins() != null) {
-            setRecyclerView(event.getCabins());
+            cabinList = event.getCabins();
+            if (isPriceSelected) {
+                filterByPrice();
+            } else {
+                setRecyclerView();
+            }
         } else {
             Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();
         }
@@ -274,6 +284,7 @@ public class CabinsFragment extends Fragment {
             @Override
             public void onToggle(boolean on) {
                 isPriceSelected = on;
+
             }
         });
 
@@ -292,8 +303,19 @@ public class CabinsFragment extends Fragment {
             public void onClick(View v) {
                 collapse(filterLayout);
                 //filter with
-                float price = slidrPrice.getCurrentValue();
-                float distance = slidrDistance.getCurrentValue();
+                price = (int) slidrPrice.getCurrentValue();
+                distance = (int) slidrDistance.getCurrentValue();
+                if (isPriceSelected) {
+                    filterByPrice();
+                }
+                if (isDistanceSelected) {
+
+                }
+
+                if (!isPriceSelected && !isDistanceSelected) {
+                    currentPage = 1;
+                    loadFirstPage();
+                }
             }
         });
 

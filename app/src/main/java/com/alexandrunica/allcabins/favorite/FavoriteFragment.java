@@ -22,6 +22,7 @@ import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.favorite.adapter.FavoriteAdapter;
 import com.alexandrunica.allcabins.favorite.event.OnFavDone;
+import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
@@ -105,9 +106,9 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void addUserFav() {
-
-        if (databaseService.getUser() != null) {
-            HashMap<String, String> mapList = databaseService.getUser().getFavoriteList();
+        User user = databaseService.getUser();
+        if (user != null) {
+            HashMap<String, String> mapList = user.getFavoriteList();
             if (mapList != null) {
                 list.clear();
                 for (Map.Entry<String, String> entry : mapList.entrySet()) {

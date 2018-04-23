@@ -81,13 +81,10 @@ public class CabinOperations extends FirebaseOperation {
         });
     }
 
-    public void getPaginationCabins() {
-
-    }
 
     public void loadMoreData(int totalItemEachLoad, int currentPage) {
         final ArrayList<Cabin> cabins = new ArrayList<>();
-        mRef.limitToFirst(totalItemEachLoad).startAt(currentPage * totalItemEachLoad).orderByChild("name").addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.orderByChild("name").limitToFirst(totalItemEachLoad * currentPage).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChildren()) {

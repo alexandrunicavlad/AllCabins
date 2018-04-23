@@ -20,8 +20,12 @@ import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -38,7 +42,7 @@ public class ProfileFragment extends Fragment {
         ProfileFragment profileFragment = new ProfileFragment();
         if (user != null) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable("user", user);
+            bundle.putString("user", new Gson().toJson(user));
             profileFragment.setArguments(bundle);
         }
         return profileFragment;
@@ -64,9 +68,9 @@ public class ProfileFragment extends Fragment {
         View view = (ViewGroup) inflater.inflate(
                 R.layout.profile_fragment, container, false);
 
-        if (getArguments()!= null) {
-            User user = (User) getArguments().getSerializable("user");
-
+        if (getArguments() != null) {
+            User user = new Gson().fromJson(getArguments().getString("user"), new TypeToken<User>() {
+            }.getType());
             TextView logout = view.findViewById(R.id.logout_account);
 
             logout.setOnClickListener(new View.OnClickListener() {

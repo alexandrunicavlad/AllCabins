@@ -28,6 +28,7 @@ import com.alexandrunica.allcabins.cabins.model.ShortCabin;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.map.adapter.CustomInfoWindowMap;
+import com.alexandrunica.allcabins.map.event.OnGetCabinByIdEvent;
 import com.alexandrunica.allcabins.map.event.OnGetShortCabinEvent;
 import com.alexandrunica.allcabins.map.model.Cluster;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
@@ -146,7 +147,8 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
 //                        .title(cabin.getId()));
 //                marker.setTag(cabin);
                 //marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin));
-                Cluster offsetItem = new Cluster(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()));
+                Cluster offsetItem = new Cluster(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()), cabin.getId(), "");
+
                 mClusterManager.addItem(offsetItem);
             }
         }
@@ -193,8 +195,8 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
 
     @Override
     public boolean onClusterItemClick(ClusterItem clusterItem) {
-        String a = "21";
-        return false;
+        cabinOperations.getCabin(clusterItem.getTitle());
+        return true;
     }
 
     @Override
@@ -239,7 +241,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(romanianBounds.getCenter(), 6));
         googleMap.setMinZoomPreference(6);
         googleMap.setLatLngBoundsForCameraTarget(romanianBounds);
-       // googleMap.setOnMarkerClickListener(this);
+        // googleMap.setOnMarkerClickListener(this);
         googleMap.setTrafficEnabled(false);
 
 //        ImageView locationBtn = getView().findViewById(R.id.initial_location_btn);
@@ -282,6 +284,17 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         if (currentLocation != null) {
             setCurrentMarker();
         }
+    }
+
+    @Subscribe
+    public void onGetCabin(OnGetCabinByIdEvent event) {
+        if (event.getCabin() != null) {
+            initInfoBottom(event.getCabin());
+            expand(infoLayout);
+        } else {
+
+        }
+
     }
 
     @Subscribe

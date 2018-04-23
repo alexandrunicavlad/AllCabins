@@ -10,6 +10,7 @@ import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.ShortCabin;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.favorite.event.OnFavDone;
+import com.alexandrunica.allcabins.map.event.OnGetCabinByIdEvent;
 import com.alexandrunica.allcabins.map.event.OnGetShortCabinEvent;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
@@ -79,6 +80,25 @@ public class CabinOperations extends FirebaseOperation {
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("Debug", "Error retrieving data: " + databaseError.getMessage());
                 bus.post(new OnGetShortCabinEvent(cabins));
+            }
+        });
+    }
+
+    public void getCabin(String id) {
+        mRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Cabin cabin = dataSnapshot.getValue(Cabin.class);
+                if (cabin!=null) {
+                    bus.post(new OnGetCabinByIdEvent(cabin));
+                } else {
+                    bus.post(new OnGetCabinByIdEvent(null));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                bus.post(new OnGetCabinByIdEvent(null));
             }
         });
     }

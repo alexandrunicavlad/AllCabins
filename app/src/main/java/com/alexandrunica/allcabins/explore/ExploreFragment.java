@@ -41,7 +41,7 @@ public class ExploreFragment extends Fragment {
     protected GeoDataClient mGeoDataClient;
     private PlaceAutocompleteAdapter mAdapter;
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
-            new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
+            new LatLng(46.7712, 23.6236), new LatLng(46.7712, 23.6236));
 
     public static ExploreFragment newInstance() {
         ExploreFragment exploreFramgnet = new ExploreFragment();

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -19,10 +21,14 @@ import android.widget.ToggleButton;
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.CabinInfoFragment;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Nica on 4/3/2018.
@@ -75,12 +81,25 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
             }
         });
 
+        holder.priceView.setText(cabin.getPrice());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = ((Activity) context).getFragmentManager().beginTransaction();
                 DialogFragment newFragment = CabinInfoFragment.newInstance(cabin);
                 newFragment.show(ft, "dialog");
+            }
+        });
+
+        holder.locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocationModel locationModel = new Gson().fromJson(cabin.getLocation(), new TypeToken<LocationModel>() {
+                }.getType());
+                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                context.startActivity(intent);
             }
         });
 

@@ -14,7 +14,9 @@ public class Cabin implements Serializable {
     private String name;
     private String address;
     private String location;
-    private String region;
+    private String state;
+    private String city;
+    private String country;
     public String phone;
     public String email;
     public String price;
@@ -31,12 +33,14 @@ public class Cabin implements Serializable {
     public Cabin() {
     }
 
-    public Cabin(String id, String name, String address, String location, String region, String phone, String email, String price, float rating, String thumbPhotoUrl, String description, String facilities, String idAdded, HashMap<String, String> uploadedPictures, HashMap<String, String> reviews, HashMap<String, String> pictures) {
+    public Cabin(String id, String name, String address, String location, String state, String city, String country, String phone, String email, String price, float rating, String thumbPhotoUrl, String description, String facilities, String idAdded, HashMap<String, String> uploadedPictures, HashMap<String, String> reviews, HashMap<String, String> pictures) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.location = location;
-        this.region = region;
+        this.state = state;
+        this.city = city;
+        this.country = country;
         this.phone = phone;
         this.email = email;
         this.price = price;
@@ -82,12 +86,28 @@ public class Cabin implements Serializable {
         this.location = location;
     }
 
-    public String getRegion() {
-        return region;
+    public String getState() {
+        return state;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getPhone() {

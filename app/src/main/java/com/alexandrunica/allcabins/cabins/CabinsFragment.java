@@ -3,6 +3,8 @@ package com.alexandrunica.allcabins.cabins;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,8 +40,10 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.zcw.togglebutton.ToggleButton;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -124,13 +128,24 @@ public class CabinsFragment extends Fragment {
 
         setFilter(view);
 
-//        for(int i=0;i<18;i++) {
+//        for(int i=0;i<32;i++) {
 //            LocationModel locationModel = new LocationModel("46." + String.valueOf(i) + "17243758575", "23." + String.valueOf(i) + "339692866802");
 //
 //            Cabin cabin = new Cabin();
 //            cabin.setName("La Cabana" + String.valueOf(i));
-//            cabin.setAddress("");
-//            cabin.setRegion("Cluj");
+//            Geocoder geocoder;
+//            List<Address> addresses;
+//            geocoder = new Geocoder(activity, Locale.getDefault());
+//
+//            try {
+//                addresses = geocoder.getFromLocation(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+//                cabin.setAddress(addresses.get(0).getAddressLine(0));
+//                cabin.setCity(addresses.get(0).getLocality());
+//                cabin.setState(addresses.get(0).getAdminArea());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
 //            cabin.setLocation(new Gson().toJson(locationModel));
 //            cabin.setPhone("722369851");
 //            cabin.setEmail("lacabana@lacabana.com");

@@ -55,4 +55,5 @@
     <color name="yellow_color">#ceca0c</color>
     <color name="red_color">#cc0000</color>
     <color name="gray_info">#32394B</color>
+    <color name="black_semi_transparent">#B2000000</color>
 </resources>

@@ -49,6 +49,7 @@ public class CabinOperations extends FirebaseOperation {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Cabin cabin = dataSnapshot.getValue(Cabin.class);
                 if (cabin != null) {
+                    cabin.setId(dataSnapshot.getKey());
                     bus.post(new OnFavDone(cabin));
                 } else {
                     bus.post(new OnFavDone(null));

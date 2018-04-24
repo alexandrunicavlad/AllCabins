@@ -137,22 +137,14 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
     }
 
     public void setMarkers() {
-
         for (ShortCabin cabin : cabins) {
             if (cabin.getLocation() != null && !cabin.getLocation().isEmpty()) {
                 LocationModel locationModel = new Gson().fromJson(cabin.getLocation(), new TypeToken<LocationModel>() {
                 }.getType());
-                //LatLng cabinLoc = new LatLng(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()));
-//                Marker marker = googleMap.addMarker(new MarkerOptions().position(cabinLoc)
-//                        .title(cabin.getId()));
-//                marker.setTag(cabin);
-                //marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin));
                 Cluster offsetItem = new Cluster(Double.parseDouble(locationModel.getLatitude()), Double.parseDouble(locationModel.getLongitude()), cabin.getId(), "");
-
                 mClusterManager.addItem(offsetItem);
             }
         }
-        mClusterManager.cluster();
     }
 
     private void setCurrentMarker() {

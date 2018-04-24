@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -182,17 +182,51 @@
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
-
-    <android.support.design.widget.FloatingActionButton
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/cabin_add_fav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="15dp"
-        android:src="@drawable/ic_favorite"
-        android:tint="@color/white"
-        app:fabSize="normal"
+        fab:fab_addButtonColorNormal="@color/colorAccent"
+        fab:fab_addButtonColorPressed="@color/colorAccent"
+        fab:fab_addButtonPlusIconColor="@color/white"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        fab:fab_addButtonSize="normal"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_labelsPosition="left">
 
-        />
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_title="Add to favorite"
+            fab:fab_icon="@drawable/ic_favorite_white"
+            fab:fab_size="mini"
+            fab:fab_colorPressed="@color/colorAccent"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_title="Write a review"
+            fab:fab_size="mini"
+            fab:fab_icon="@drawable/ic_thumbs"
+            fab:fab_colorPressed="@color/colorAccent"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_title="Upload photos"
+            fab:fab_size="mini"
+            fab:fab_icon="@drawable/ic_fupload"
+            fab:fab_colorPressed="@color/colorAccent"/>
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 </RelativeLayout>

@@ -2,9 +2,10 @@ package com.alexandrunica.allcabins.cabins;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.SharedPreferences;
 import android.media.Rating;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,17 @@ import android.widget.TextView;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.service.firebase.FirebaseService;
+import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 public class CabinInfoFragment extends DialogFragment {
 
     public TextView priceView, nameView, addressView, descriptionView, facilitiesView, ratingView;
     public ImageView mainImage, phoneButton, locationButton, closeButton;
     public RatingBar rating;
-    public FloatingActionButton add;
+    public FloatingActionsMenu add;
 
     public static CabinInfoFragment newInstance(Cabin cabin) {
         CabinInfoFragment f = new CabinInfoFragment();
@@ -56,15 +61,15 @@ public class CabinInfoFragment extends DialogFragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            Cabin cabin = (Cabin) args.getSerializable("cabin");
+            final Cabin cabin = (Cabin) args.getSerializable("cabin");
             if (cabin != null) {
                 addressView.setText(cabin.getAddress());
                 nameView.setText(cabin.getName());
-                priceView.setText(cabin.getPrice()+"/Noapte");
+                priceView.setText(cabin.getPrice() + "/Noapte");
                 descriptionView.setText(cabin.getDescription());
                 facilitiesView.setText(cabin.getFacilities());
                 rating.setRating(cabin.getRating());
-                ratingView.setText(String.valueOf(cabin.getRating())+"/5");
+                ratingView.setText(String.valueOf(cabin.getRating()) + "/5");
                 phoneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -79,23 +84,44 @@ public class CabinInfoFragment extends DialogFragment {
                     }
                 });
 
-                add.setOnClickListener(new View.OnClickListener() {
+
+                FloatingActionButton save = (FloatingActionButton) v.findViewById(R.id.action_a);
+                FloatingActionButton writeReview = (FloatingActionButton) v.findViewById(R.id.action_b);
+                FloatingActionButton uploadPhoto = (FloatingActionButton) v.findViewById(R.id.action_c);
+
+                save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        final ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, getActivity());
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        final String id = preferences.getString("uid", "");
+                        profileOperations.addFavorite(id, cabin.getId());
+                        add.collapse();
                     }
                 });
+
+                writeReview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        add.collapse();
+                    }
+                });
+
+                uploadPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        add.collapse();
+                    }
+                });
+
             }
         }
-
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
-
-
         return v;
     }
 

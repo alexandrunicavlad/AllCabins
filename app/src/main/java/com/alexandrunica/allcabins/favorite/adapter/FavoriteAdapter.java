@@ -20,8 +20,15 @@ public class FavoriteAdapter extends CabinAdapter {
     }
 
     @Override
-    public void onBindViewHolder(CabinHolder holder, int position) {
+    public void onBindViewHolder(CabinHolder holder, final int position) {
         super.onBindViewHolder(holder, position);
         holder.heartButton.setVisibility(View.GONE);
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeAt(position);
+
+            }
+        });
     }
 }

@@ -50,7 +50,17 @@
         android:textOn=""
         android:textOff=""
         android:text=""
+        android:visibility="gone"
         android:id="@+id/cabin_heart"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
+        android:visibility="visible"
+        android:src="@drawable/ic_delete"
+        android:id="@+id/cabin_delete"/>
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"

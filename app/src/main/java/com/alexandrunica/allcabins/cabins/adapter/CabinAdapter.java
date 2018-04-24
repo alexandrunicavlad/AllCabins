@@ -94,7 +94,7 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
 
     public static class CabinHolder extends RecyclerView.ViewHolder {
         public TextView priceView, nameView, addressView;
-        public ImageView mainImage, phoneButton, locationButton;
+        public ImageView mainImage, phoneButton, locationButton, deleteButton;
         public ToggleButton heartButton;
 
         public CabinHolder(View view) {
@@ -106,9 +106,20 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
             phoneButton = view.findViewById(R.id.cabin_phone);
             heartButton = view.findViewById(R.id.cabin_heart);
             locationButton = view.findViewById(R.id.cabin_location);
+            deleteButton = view.findViewById(R.id.cabin_delete);
         }
 
 
+    }
+
+    public void removeAt(int position) {
+        final ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, context);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final String id = preferences.getString("uid", "");
+        profileOperations.removeFavorite(id, cabinList.get(position).getId());
+        cabinList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, cabinList.size());
     }
 }
 

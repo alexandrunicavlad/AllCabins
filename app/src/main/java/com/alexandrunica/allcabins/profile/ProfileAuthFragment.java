@@ -62,7 +62,7 @@ public class ProfileAuthFragment extends Fragment {
         String id = preferences.getString("uid", "");
         Fragment fragment;
         if (!id.equals("")) {
-            User user = null;
+            User user = databaseService.getUser();
             if (user != null) {
                 fragment = ProfileFragment.newInstance(user);
             } else {

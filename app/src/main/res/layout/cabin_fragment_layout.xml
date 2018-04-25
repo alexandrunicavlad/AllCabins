@@ -188,8 +188,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        fab:fab_addButtonColorNormal="@color/colorAccent"
-        fab:fab_addButtonColorPressed="@color/colorAccent"
+        fab:fab_addButtonColorNormal="@color/seekbar_color"
+        fab:fab_addButtonColorPressed="@color/seekbar_color"
         fab:fab_addButtonPlusIconColor="@color/white"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
@@ -201,31 +201,31 @@
             android:id="@+id/action_a"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorNormal="@color/seekbar_color"
             fab:fab_title="Add to favorite"
             fab:fab_icon="@drawable/ic_favorite_white"
             fab:fab_size="mini"
-            fab:fab_colorPressed="@color/colorAccent"/>
+            fab:fab_colorPressed="@color/seekbar_color"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorNormal="@color/seekbar_color"
             fab:fab_title="Write a review"
             fab:fab_size="mini"
             fab:fab_icon="@drawable/ic_thumbs"
-            fab:fab_colorPressed="@color/colorAccent"/>
+            fab:fab_colorPressed="@color/seekbar_color"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_c"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorNormal="@color/seekbar_color"
             fab:fab_title="Upload photos"
             fab:fab_size="mini"
             fab:fab_icon="@drawable/ic_fupload"
-            fab:fab_colorPressed="@color/colorAccent"/>
+            fab:fab_colorPressed="@color/seekbar_color"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

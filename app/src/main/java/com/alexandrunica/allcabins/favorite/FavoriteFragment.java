@@ -108,7 +108,7 @@ public class FavoriteFragment extends Fragment {
     private void addUserFav() {
         User user = databaseService.getUser();
         if (user != null) {
-            HashMap<String, String> mapList = user.getFavoriteList();
+            HashMap<String, String> mapList = user.getFavorites();
             if (mapList != null) {
                 list.clear();
                 for (Map.Entry<String, String> entry : mapList.entrySet()) {

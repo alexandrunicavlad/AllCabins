@@ -101,12 +101,12 @@ public class ProfileOperations extends FirebaseOperation {
         });
     }
 
+
     public void checkandInsertProfileExists(final User user) {
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(user.getId())) {
-
                 } else {
                     insertUser(user);
                 }

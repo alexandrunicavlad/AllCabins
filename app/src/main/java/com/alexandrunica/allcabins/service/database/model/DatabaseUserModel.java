@@ -13,5 +13,7 @@ public class DatabaseUserModel {
         public static final String COLUMN_NAME_EMAIL = "email";
         public static final String COLUMN_NAME_PHOTO = "profilePhoto";
         public static final String COLUMN_NAME_FAVORITES = "favorites";
+        public static final String COLUMN_NAME_ADDRESS = "address";
+        public static final String COLUMN_NAME_PHONE = "phone";
     }
 }

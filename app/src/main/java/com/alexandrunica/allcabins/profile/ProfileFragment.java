@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alexandrunica.allcabins.R;
@@ -28,6 +29,8 @@ import com.squareup.picasso.Picasso;
 import java.util.HashMap;
 
 import javax.inject.Inject;
+
+import static com.alexandrunica.allcabins.profile.util.PictureConverter.stringToBitMap;
 
 /**
  * Created by Nica on 4/2/2018.
@@ -69,7 +72,7 @@ public class ProfileFragment extends Fragment {
                 R.layout.profile_fragment, container, false);
 
         if (getArguments() != null) {
-            User user = new Gson().fromJson(getArguments().getString("user"), new TypeToken<User>() {
+            final User user = new Gson().fromJson(getArguments().getString("user"), new TypeToken<User>() {
             }.getType());
             TextView logout = view.findViewById(R.id.logout_account);
 
@@ -78,7 +81,7 @@ public class ProfileFragment extends Fragment {
                 public void onClick(View v) {
                     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("email", "");
+                    editor.putString("uid", "");
                     editor.apply();
                     databaseService.deleteUser();
                     bus.post(new OnOpenAccount(LoginFragment.newInstance()));
@@ -98,8 +101,16 @@ public class ProfileFragment extends Fragment {
             }
 
             if (user.getProfilePhoto() != null) {
-                Picasso.with(activity).load(user.getProfilePhoto()).into(image);
+                image.setImageBitmap(stringToBitMap(user.getProfilePhoto()));
             }
+
+            RelativeLayout editProfile = view.findViewById(R.id.profile_edit);
+            editProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bus.post(new OnOpenAccount(EditProfileFragment.newInstance(user)));
+                }
+            });
         }
 
 

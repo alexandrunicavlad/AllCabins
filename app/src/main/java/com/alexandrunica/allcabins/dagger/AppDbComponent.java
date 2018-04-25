@@ -4,6 +4,7 @@ import com.alexandrunica.allcabins.MainActivity;
 import com.alexandrunica.allcabins.cabins.CabinsFragment;
 import com.alexandrunica.allcabins.favorite.FavoriteFragment;
 import com.alexandrunica.allcabins.map.MapViewFragment;
+import com.alexandrunica.allcabins.profile.EditProfileFragment;
 import com.alexandrunica.allcabins.profile.ProfileAuthFragment;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
@@ -46,6 +47,8 @@ public interface AppDbComponent {
     void inject(ProfileAuthFragment profileAuthFragment);
 
     void inject(ProfileFragment profileFragment);
+
+    void inject(EditProfileFragment editProfileFragment);
 
     void inject(FavoriteFragment favoriteFragment);
 

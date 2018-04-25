@@ -19,57 +19,79 @@ public class User implements Serializable {
 
     public String profilePhoto;
 
+    public String phone;
+
+    public UserAddressModel addressModel;
+
     public HashMap<String, String> favorites;
 
     public User () {
 
     }
 
-    public User (String id, String email, String username, String profilePhoto, HashMap<String, String>  favoriteList) {
+    public User(String id, String email, String username, String profilePhoto, String phone, UserAddressModel addressModel, HashMap<String, String> favorites) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.profilePhoto = profilePhoto;
-        this.favorites = favoriteList;
+        this.phone = phone;
+        this.addressModel = addressModel;
+        this.favorites = favorites;
     }
 
-    public String getId () {
+    public String getId() {
         return id;
     }
 
-    public void setId (String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getEmail () {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail (String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getUsername () {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername (String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getProfilePhoto () {
+    public String getProfilePhoto() {
         return profilePhoto;
     }
 
-    public void setProfilePhoto (String profilePhoto) {
+    public void setProfilePhoto(String profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 
-    public HashMap<String, String>  getFavoriteList () {
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public UserAddressModel getAddressModel() {
+        return addressModel;
+    }
+
+    public void setAddressModel(UserAddressModel addressModel) {
+        this.addressModel = addressModel;
+    }
+
+    public HashMap<String, String> getFavorites() {
         return favorites;
     }
 
-    public void setFavoriteList (HashMap<String, String>  favoriteList) {
-        this.favorites = favoriteList;
+    public void setFavorites(HashMap<String, String> favorites) {
+        this.favorites = favorites;
     }
 }

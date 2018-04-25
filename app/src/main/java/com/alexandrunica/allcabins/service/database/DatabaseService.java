@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.model.User;
+import com.alexandrunica.allcabins.profile.model.UserAddressModel;
 import com.alexandrunica.allcabins.service.database.model.DatabaseUserModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -35,6 +36,8 @@ public class DatabaseService extends SQLiteOpenHelper {
                     DatabaseUserModel.UserEntity.COLUMN_NAME_NAME + " TEXT," +
                     DatabaseUserModel.UserEntity.COLUMN_NAME_EMAIL + " TEXT," +
                     DatabaseUserModel.UserEntity.COLUMN_NAME_PHOTO + " TEXT," +
+                    DatabaseUserModel.UserEntity.COLUMN_NAME_PHONE + " TEXT," +
+                    DatabaseUserModel.UserEntity.COLUMN_NAME_ADDRESS + " TEXT," +
                     DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
@@ -114,7 +117,9 @@ public class DatabaseService extends SQLiteOpenHelper {
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_NAME, user.getUsername());
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_EMAIL, user.getEmail());
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_PHOTO, user.getProfilePhoto());
-            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES, new Gson().toJson(user.getFavoriteList()));
+            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_PHONE, user.getPhone());
+            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_ADDRESS, new Gson().toJson(user.getAddressModel()));
+            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES, new Gson().toJson(user.getFavorites()));
             long newRowId = mDb.insert(DatabaseUserModel.UserEntity.TABLE_NAME, null, values);
         } catch (Exception e) {
             //Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -134,7 +139,9 @@ public class DatabaseService extends SQLiteOpenHelper {
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_NAME, user.getUsername());
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_EMAIL, user.getEmail());
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_PHOTO, user.getProfilePhoto());
-            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES, new Gson().toJson(user.getFavoriteList()));
+            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_PHONE, user.getPhone());
+            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_ADDRESS, new Gson().toJson(user.getAddressModel()));
+            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES, new Gson().toJson(user.getFavorites()));
             long newRowId = mDb.update(DatabaseUserModel.UserEntity.TABLE_NAME, values, DatabaseUserModel.UserEntity.COLUMN_NAME_ID + "= ?", new String[]{user.getId()});
 
         } catch (Exception e) {
@@ -196,8 +203,11 @@ public class DatabaseService extends SQLiteOpenHelper {
                     String email = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseUserModel.UserEntity.COLUMN_NAME_EMAIL));
                     String photo = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseUserModel.UserEntity.COLUMN_NAME_PHOTO));
                     String favorites = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES));
+                    String address = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseUserModel.UserEntity.COLUMN_NAME_ADDRESS));
+                    String phone = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseUserModel.UserEntity.COLUMN_NAME_PHONE));
                     HashMap<String, String> fav = new Gson().fromJson(favorites, new TypeToken<HashMap<String, String>>(){}.getType());
-                    User user = new User(idField, email,  name, photo, fav);
+                    UserAddressModel addressModel = new Gson().fromJson(address, new TypeToken<UserAddressModel>(){}.getType());
+                    User user = new User(idField, email,  name, photo, phone, addressModel, fav);
                     return user;
                 } catch (Exception e) {
                     //Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();

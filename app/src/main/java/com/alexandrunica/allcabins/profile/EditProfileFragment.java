@@ -57,13 +57,8 @@ public class EditProfileFragment extends Fragment {
     @Inject
     DatabaseService databaseService;
 
-    public static EditProfileFragment newInstance(User user) {
+    public static EditProfileFragment newInstance() {
         EditProfileFragment editProfileFragment = new EditProfileFragment();
-        if (user != null) {
-            Bundle bundle = new Bundle();
-            bundle.putString("user", new Gson().toJson(user));
-            editProfileFragment.setArguments(bundle);
-        }
         return editProfileFragment;
     }
 
@@ -81,13 +76,9 @@ public class EditProfileFragment extends Fragment {
             container, @Nullable Bundle savedInstanceState) {
         View view = (ViewGroup) inflater.inflate(
                 R.layout.edit_profile_fragment, container, false);
-
-        if (getArguments() != null) {
-            user = new Gson().fromJson(getArguments().getString("user"), new TypeToken<User>() {
-            }.getType());
+        user = databaseService.getUser();
+        if (user != null) {
             TextView save = view.findViewById(R.id.profile_edit_submit);
-
-
             final AutoCompleteTextView nameText = view.findViewById(R.id.profile_edit_name);
             final AutoCompleteTextView streetText = view.findViewById(R.id.profile_edit_address);
             final AutoCompleteTextView cityText = view.findViewById(R.id.profile_edit_city);
@@ -181,7 +172,6 @@ public class EditProfileFragment extends Fragment {
             image.setImageBitmap(imageBitmap);
         }
     }
-
 
 
     @Override

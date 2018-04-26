@@ -9,6 +9,7 @@ import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.ShortCabin;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.explore.event.OnGetFiltredCabinEvent;
 import com.alexandrunica.allcabins.favorite.event.OnFavDone;
 import com.alexandrunica.allcabins.map.event.OnGetCabinByIdEvent;
 import com.alexandrunica.allcabins.map.event.OnGetShortCabinEvent;
@@ -17,6 +18,7 @@ import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -90,7 +92,7 @@ public class CabinOperations extends FirebaseOperation {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Cabin cabin = dataSnapshot.getValue(Cabin.class);
-                if (cabin!=null) {
+                if (cabin != null) {
                     bus.post(new OnGetCabinByIdEvent(cabin));
                 } else {
                     bus.post(new OnGetCabinByIdEvent(null));
@@ -100,6 +102,27 @@ public class CabinOperations extends FirebaseOperation {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 bus.post(new OnGetCabinByIdEvent(null));
+            }
+        });
+    }
+
+    public void getFiltredCabin(final String city) {
+        final ArrayList<Cabin> cabins = new ArrayList<>();
+        //mRef.child("city").equalTo(city).addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.orderByChild("city").equalTo(city).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Cabin currentCabin = postSnapshot.getValue(Cabin.class);
+                    currentCabin.setId(postSnapshot.getKey());
+                    cabins.add(currentCabin);
+                }
+                bus.post(new OnGetFiltredCabinEvent(cabins, city));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

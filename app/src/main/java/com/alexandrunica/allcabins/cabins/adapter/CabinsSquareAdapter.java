@@ -31,6 +31,7 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<Cabin> cabinList;
     private Context context;
     private OnMoreEvent listener;
+    private boolean isFiltred = false;
 
 
     public CabinsSquareAdapter(Context context, List<Cabin> cabinList, OnMoreEvent listener) {
@@ -96,8 +97,14 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 });
             } else if (vh instanceof FooterViewHolder) {
+
                 FooterViewHolder holder = (FooterViewHolder) vh;
                 holder.progressBar.setVisibility(View.GONE);
+                if (isFiltred) {
+                    holder.itemView.setVisibility(View.GONE);
+                } else {
+                    holder.itemView.setVisibility(View.VISIBLE);
+                }
             }
 
 
@@ -141,6 +148,10 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         cabinList.clear();
         cabinList.addAll(newlist);
         this.notifyDataSetChanged();
+    }
+
+    public void setFooter(boolean footerState) {
+        isFiltred = footerState;
     }
 
     public class CabinSquareHolder extends RecyclerView.ViewHolder {

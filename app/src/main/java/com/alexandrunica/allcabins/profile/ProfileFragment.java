@@ -108,7 +108,7 @@ public class ProfileFragment extends Fragment {
             editProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bus.post(new OnOpenAccount(EditProfileFragment.newInstance(user)));
+                    bus.post(new OnOpenAccount(EditProfileFragment.newInstance()));
                 }
             });
         }

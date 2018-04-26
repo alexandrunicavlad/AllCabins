@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +16,23 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import com.alexandrunica.allcabins.MainActivity;
 import com.alexandrunica.allcabins.R;
+import com.alexandrunica.allcabins.dagger.AppDbComponent;
+import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.explore.adapter.PlaceAutocompleteAdapter;
+import com.alexandrunica.allcabins.explore.event.OnExploreClickListener;
+import com.alexandrunica.allcabins.service.database.DatabaseService;
+import com.alexandrunica.allcabins.service.firebase.CabinOperations;
+import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.squareup.otto.Bus;
+
+import javax.inject.Inject;
 
 /**
  * Created by Nica on 4/2/2018.
@@ -37,6 +45,7 @@ public class ExploreFragment extends Fragment {
     private AutoCompleteTextView mAutocompleteView;
     private ImageView cancel;
     private RelativeLayout mainLayout;
+    private CabinOperations cabinOperations;
 
     protected GeoDataClient mGeoDataClient;
     private PlaceAutocompleteAdapter mAdapter;
@@ -48,6 +57,20 @@ public class ExploreFragment extends Fragment {
         return exploreFramgnet;
     }
 
+    @Inject
+    Bus bus;
+
+    @Inject
+    DatabaseService databaseService;
+
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        DaggerDbApplication app = (DaggerDbApplication) activity.getApplicationContext();
+        AppDbComponent appDbComponent = app.getAppDbComponent();
+        appDbComponent.inject(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,6 +80,9 @@ public class ExploreFragment extends Fragment {
             Window w = activity.getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+
+        cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, activity);
+
         mGeoDataClient = Places.getGeoDataClient(activity, null);
         toolbar = activity.findViewById(R.id.toolbar);
         toolbar.setVisibility(View.GONE);
@@ -77,6 +103,7 @@ public class ExploreFragment extends Fragment {
                             cancel.setVisibility(View.GONE);
                             moveCenter();
                             hideKeyboard();
+                            cabinOperations.loadMoreData(10, 1);
                         }
                     });
                 } else {
@@ -86,7 +113,16 @@ public class ExploreFragment extends Fragment {
                 }
             }
         });
-        mAdapter = new PlaceAutocompleteAdapter(activity, mGeoDataClient, BOUNDS_GREATER_SYDNEY, null);
+        OnExploreClickListener listener = new OnExploreClickListener() {
+            @Override
+            public void onItemClick(String s) {
+                cabinOperations.getFiltredCabin(s);
+                hideKeyboard();
+                moveCenter();
+                ((MainActivity) activity).changeViewpager(1);
+            }
+        };
+        mAdapter = new PlaceAutocompleteAdapter(activity, mGeoDataClient, BOUNDS_GREATER_SYDNEY, null,listener);
         mAutocompleteView.setAdapter(mAdapter);
 
         return view;
@@ -118,6 +154,18 @@ public class ExploreFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.activity = (Activity) context;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        bus.register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        bus.unregister(this);
     }
 }
 

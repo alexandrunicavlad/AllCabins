@@ -2,15 +2,10 @@ package com.alexandrunica.allcabins.cabins;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,31 +14,26 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alexandrunica.allcabins.R;
-import com.alexandrunica.allcabins.cabins.adapter.CabinAdapter;
 import com.alexandrunica.allcabins.cabins.adapter.CabinsSquareAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.events.OnMoreEvent;
-import com.alexandrunica.allcabins.cabins.helper.PaginationScrollListener;
-import com.alexandrunica.allcabins.cabins.helper.RecyclerEventOnScollListener;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
-import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.explore.event.OnGetFiltredCabinEvent;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.widget.Slidr;
-import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.zcw.togglebutton.ToggleButton;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -64,11 +54,13 @@ public class CabinsFragment extends Fragment {
     private int price;
     private int distance;
     private ImageView toolbarFilter;
+    private TextView toolbarTitle;
     private LinearLayout filterLayout;
     private RecyclerView recyclerView;
     private CabinsSquareAdapter adapter;
     private CabinOperations cabinOperations;
     private List<Cabin> cabinList;
+    private boolean isFiltred = false;
 
     private static final int PAGE_START = 1;
     private int currentPage = PAGE_START;
@@ -96,6 +88,7 @@ public class CabinsFragment extends Fragment {
 
         filterLayout = view.findViewById(R.id.filter_layout);
         toolbarFilter = activity.findViewById(R.id.toolbar_filter);
+        toolbarTitle = activity.findViewById(R.id.toolbar_title);
         toolbarFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +175,7 @@ public class CabinsFragment extends Fragment {
                     filtredList.add(cabin);
                 }
             }
-            if (filtredList.size()!=0) {
+            if (filtredList.size() != 0) {
                 cabinList = filtredList;
             } else {
                 Toast.makeText(activity, "Cabins not found with this price", Toast.LENGTH_SHORT).show();
@@ -196,6 +189,7 @@ public class CabinsFragment extends Fragment {
 
         if (adapter != null) {
             adapter.updateReceiptsList(cabinList);
+            adapter.setFooter(isFiltred);
         } else {
             OnMoreEvent listener = new OnMoreEvent() {
                 @Override
@@ -205,20 +199,44 @@ public class CabinsFragment extends Fragment {
             };
             adapter = new CabinsSquareAdapter(activity, cabinList, listener);
             recyclerView.setAdapter(adapter);
-
         }
 
+    }
+
+    private void updateUI(String city) {
+        if (isFiltred) {
+            toolbarTitle.setText("Near " + city.toUpperCase());
+            toolbarFilter.setVisibility(View.GONE);
+        } else {
+            toolbarTitle.setText("Recomended");
+            toolbarFilter.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Subscribe
+    public void onGetCabinsFiltred(OnGetFiltredCabinEvent event) {
+        if (event.getCabins() != null) {
+            isFiltred = true;
+            cabinList = event.getCabins();
+            setRecyclerView();
+            updateUI(event.getCity());
+        } else {
+            Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Subscribe
     public void onGetCabins(OnGetCabinEvent event) {
         if (event.getCabins() != null) {
+            isFiltred = false;
             cabinList = event.getCabins();
             if (isPriceSelected) {
                 filterByPrice();
             } else {
                 setRecyclerView();
             }
+
+            updateUI("");
         } else {
             Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();
         }

@@ -206,13 +206,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 hideStatus();
                 break;
             case 1:
-//                toolbarTitle.setText("Recomended");
-//                toolbarFilter.setVisibility(View.VISIBLE);
                 showStatus();
                 break;
             case 2:
                 toolbarTitle.setText("Map");
                 toolbarFilter.setVisibility(View.GONE);
+                toolbar.setVisibility(View.GONE);
                 showStatus();
                 break;
             case 3:

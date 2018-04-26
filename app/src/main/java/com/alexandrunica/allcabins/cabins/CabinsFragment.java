@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,11 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alexandrunica.allcabins.MainActivity;
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.adapter.CabinsSquareAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
@@ -60,6 +63,8 @@ public class CabinsFragment extends Fragment {
     private CabinsSquareAdapter adapter;
     private CabinOperations cabinOperations;
     private List<Cabin> cabinList;
+    private RelativeLayout sorryLayout;
+    private Toolbar toolbar;
     private boolean isFiltred = false;
 
     private static final int PAGE_START = 1;
@@ -87,6 +92,7 @@ public class CabinsFragment extends Fragment {
                 R.layout.cabins_layout, container, false);
 
         filterLayout = view.findViewById(R.id.filter_layout);
+        toolbar = activity.findViewById(R.id.toolbar);
         toolbarFilter = activity.findViewById(R.id.toolbar_filter);
         toolbarTitle = activity.findViewById(R.id.toolbar_title);
         toolbarFilter.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +120,14 @@ public class CabinsFragment extends Fragment {
                         return 1;
                 }
 
+            }
+        });
+        sorryLayout = view.findViewById(R.id.sorry_main_layout);
+        TextView startExplore = view.findViewById(R.id.explore_submit);
+        startExplore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) activity).changeViewpager(0);
             }
         });
         recyclerView.setLayoutManager(layoutManager);
@@ -186,7 +200,8 @@ public class CabinsFragment extends Fragment {
     }
 
     private void setRecyclerView() {
-
+        sorryLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         if (adapter != null) {
             adapter.updateReceiptsList(cabinList);
             adapter.setFooter(isFiltred);
@@ -204,6 +219,9 @@ public class CabinsFragment extends Fragment {
     }
 
     private void updateUI(String city) {
+        toolbarTitle.setVisibility(View.VISIBLE);
+        toolbarFilter.setVisibility(View.VISIBLE);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
         if (isFiltred) {
             toolbarTitle.setText("Near " + city.toUpperCase());
             toolbarFilter.setVisibility(View.GONE);
@@ -213,21 +231,29 @@ public class CabinsFragment extends Fragment {
         }
     }
 
+    private void updateToolbar() {
+        toolbarTitle.setVisibility(View.GONE);
+        toolbarFilter.setVisibility(View.GONE);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.black));
+    }
+
     @Subscribe
     public void onGetCabinsFiltred(OnGetFiltredCabinEvent event) {
-        if (event.getCabins() != null) {
+        if (event.getCabins() != null && event.getCabins().size() != 0) {
             isFiltred = true;
             cabinList = event.getCabins();
             setRecyclerView();
             updateUI(event.getCity());
         } else {
-            Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();
+            updateToolbar();
+            recyclerView.setVisibility(View.GONE);
+            sorryLayout.setVisibility(View.VISIBLE);
         }
     }
 
     @Subscribe
     public void onGetCabins(OnGetCabinEvent event) {
-        if (event.getCabins() != null) {
+        if (event.getCabins() != null && event.getCabins().size() != 0) {
             isFiltred = false;
             cabinList = event.getCabins();
             if (isPriceSelected) {
@@ -238,7 +264,9 @@ public class CabinsFragment extends Fragment {
 
             updateUI("");
         } else {
-            Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();
+            updateToolbar();
+            recyclerView.setVisibility(View.GONE);
+            sorryLayout.setVisibility(View.VISIBLE);
         }
     }
 

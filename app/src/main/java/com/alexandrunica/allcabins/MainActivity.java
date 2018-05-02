@@ -209,20 +209,20 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 showStatus();
                 break;
             case 2:
-                toolbarTitle.setText("Map");
+                //toolbarTitle.setText("Map");
                 toolbarFilter.setVisibility(View.GONE);
                 toolbar.setVisibility(View.GONE);
                 showStatus();
                 break;
             case 3:
-                toolbarTitle.setText("Favorite");
+                //toolbarTitle.setText("Favorite");
                 toolbarFilter.setVisibility(View.GONE);
                 toolbar.setVisibility(View.GONE);
                 showStatus();
                 break;
             case 4:
                 toolbar.setVisibility(View.GONE);
-                toolbarTitle.setText("Profile");
+                //toolbarTitle.setText("Profile");
                 toolbarFilter.setVisibility(View.GONE);
                 showStatus();
                 break;

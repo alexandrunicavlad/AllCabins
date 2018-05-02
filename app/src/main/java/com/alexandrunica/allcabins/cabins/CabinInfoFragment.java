@@ -65,7 +65,7 @@ public class CabinInfoFragment extends DialogFragment {
             if (cabin != null) {
                 addressView.setText(cabin.getAddress());
                 nameView.setText(cabin.getName());
-                priceView.setText(cabin.getPrice() + "/Noapte");
+                priceView.setText(cabin.getPrice() + " RON/Noapte");
                 descriptionView.setText(cabin.getDescription());
                 facilitiesView.setText(cabin.getFacilities());
                 rating.setRating(cabin.getRating());

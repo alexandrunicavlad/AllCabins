@@ -1,10 +1,20 @@
 package com.alexandrunica.allcabins.map;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.Image;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -21,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alexandrunica.allcabins.R;
+import com.alexandrunica.allcabins.cabins.CabinInfoFragment;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.LocationModel;
@@ -30,10 +41,12 @@ import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.map.adapter.CustomInfoWindowMap;
 import com.alexandrunica.allcabins.map.event.OnGetCabinByIdEvent;
 import com.alexandrunica.allcabins.map.event.OnGetShortCabinEvent;
+import com.alexandrunica.allcabins.map.helper.LocationHelper;
 import com.alexandrunica.allcabins.map.model.Cluster;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,10 +55,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.clustering.ClusterItem;
@@ -91,6 +106,8 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
     private ImageView locateButton;
 
     private CabinOperations cabinOperations;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationModel locationModel;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -115,14 +132,26 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         locateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (infoLayout.getVisibility() == View.VISIBLE) {
-                    collapse(infoLayout);
-                } else {
-                    expand(infoLayout);
+                if (locationModel != null) {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locationModel.getDoubleLatitude(),locationModel.getDoubleLongitude()), 13));
+
+                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                            .target(new LatLng(locationModel.getDoubleLatitude(),locationModel.getDoubleLongitude()))
+                            .zoom(9)                   // Sets the zoom
+                            .bearing(0)                // Sets the orientation of the camera to east
+                            .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                            .build();                   // Creates a CameraPosition from the builder
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
             }
         });
         cabins = new ArrayList<>();
+
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            getLocation();
+        }
 
         return view;
     }
@@ -136,6 +165,21 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLocation();
+                } else {
+
+                }
+                return;
+            }
+        }
+    }
+
     public void setMarkers() {
         for (ShortCabin cabin : cabins) {
             if (cabin.getLocation() != null && !cabin.getLocation().isEmpty()) {
@@ -145,6 +189,23 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
                 mClusterManager.addItem(offsetItem);
             }
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getLocation() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(activity, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    locationModel = new LocationModel(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("last_location", new Gson().toJson(locationModel));
+                    editor.apply();
+                }
+            }
+        });
     }
 
     private void setCurrentMarker() {
@@ -200,7 +261,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         return true;
     }
 
-    private void initInfoBottom(Cabin cabin) {
+    private void initInfoBottom(final Cabin cabin) {
         ImageView infoBottomImage = infoLayout.findViewById(R.id.bottom_image);
         ImageView infoBottomClose = infoLayout.findViewById(R.id.bottom_close);
         TextView infoBottomName = infoLayout.findViewById(R.id.bottom_name);
@@ -208,13 +269,45 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         TextView infoBottomPrice = infoLayout.findViewById(R.id.bottom_price);
         TextView infoBottomDistance = infoLayout.findViewById(R.id.bottom_distance);
 
+        infoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
+                DialogFragment newFragment = CabinInfoFragment.newInstance(cabin);
+                newFragment.show(ft, "dialog");
+                collapse(infoLayout);
+            }
+        });
+
         if (cabin.getThumbPhotoUrl() != null && !cabin.getThumbPhotoUrl().isEmpty()) {
             Picasso.with(getContext()).load(cabin.getThumbPhotoUrl()).into(infoBottomImage);
         }
 
+        String distanceFinal = "";
+        if (cabin.getLocation() != null && !cabin.getLocation().equals("")) {
+            LocationModel cabinLocation = new Gson().fromJson(cabin.getLocation(), LocationModel.class);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+            String lastLocation = preferences.getString("last_location", "");
+            if (lastLocation != null && !lastLocation.equals("")) {
+                LocationModel currentLocation = new Gson().fromJson(lastLocation, LocationModel.class);
+                if (currentLocation != null && cabinLocation != null) {
+                    LocationHelper locationHelper = new LocationHelper(activity);
+                    //float distance = locationHelper.calcRoute(currentLocation, cabinLocation) / 1000;
+                    double distanceD = locationHelper.calculationByDistance(currentLocation, cabinLocation);
+                    distanceFinal = String.valueOf((int) distanceD);
+                }
+            }
+        }
+        if (!distanceFinal.equals("")) {
+            infoBottomDistance.setText(distanceFinal + " KM");
+            infoBottomDistance.setVisibility(View.VISIBLE);
+        } else {
+            infoBottomDistance.setVisibility(View.GONE);
+        }
+
         infoBottomName.setText(cabin.getName());
         infoBottomAddress.setText(cabin.getAddress());
-        infoBottomPrice.setText(cabin.getPrice() + "/Night");
+        infoBottomPrice.setText(cabin.getPrice() +" RON/Night");
 
         infoBottomClose.setOnClickListener(new View.OnClickListener() {
             @Override

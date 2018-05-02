@@ -25,4 +25,12 @@ public class LocationModel {
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
+
+    public double getDoubleLatitude() {
+        return Double.parseDouble(latitude);
+    }
+
+    public double getDoubleLongitude() {
+        return Double.parseDouble(longitude);
+    }
 }

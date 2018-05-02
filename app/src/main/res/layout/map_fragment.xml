@@ -24,9 +24,8 @@
         android:layout_height="50dp"
         android:layout_gravity="end|top"
         android:layout_margin="15dp"
-        android:tint="@color/close_color"
-        android:padding="5dp"
-        android:src="@drawable/ic_location" />
+
+        android:src="@mipmap/ic_recenter" />
 
     <include
         layout="@layout/info_cabin_bottom"

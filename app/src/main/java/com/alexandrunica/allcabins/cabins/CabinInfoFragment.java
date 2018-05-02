@@ -3,6 +3,8 @@ package com.alexandrunica.allcabins.cabins;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.Rating;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,6 +21,9 @@ import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
+import java.io.IOException;
+import java.util.List;
 
 public class CabinInfoFragment extends DialogFragment {
 
@@ -70,6 +75,7 @@ public class CabinInfoFragment extends DialogFragment {
                 facilitiesView.setText(cabin.getFacilities());
                 rating.setRating(cabin.getRating());
                 ratingView.setText(String.valueOf(cabin.getRating()) + "/5");
+
                 phoneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

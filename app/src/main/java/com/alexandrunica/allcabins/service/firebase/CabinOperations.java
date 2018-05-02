@@ -14,6 +14,7 @@ import com.alexandrunica.allcabins.favorite.event.OnFavDone;
 import com.alexandrunica.allcabins.map.event.OnGetCabinByIdEvent;
 import com.alexandrunica.allcabins.map.event.OnGetShortCabinEvent;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
+import com.alexandrunica.allcabins.profile.event.OnInsertEvent;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -156,9 +157,9 @@ public class CabinOperations extends FirebaseOperation {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("Debug", "Insert successful");
+                    bus.post(new OnInsertEvent(true));
                 } else {
-                    Log.d("Debug", "Error completing task");
+                    bus.post(new OnInsertEvent(false));
                 }
             }
         });

@@ -2,6 +2,7 @@ package com.alexandrunica.allcabins.profile;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.profile.activities.HostActivity;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.model.User;
@@ -109,6 +111,14 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     bus.post(new OnOpenAccount(EditProfileFragment.newInstance()));
+                }
+            });
+
+            RelativeLayout hostProfile = view.findViewById(R.id.profile_host);
+            hostProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(activity, HostActivity.class));
                 }
             });
         }

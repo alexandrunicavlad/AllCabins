@@ -21,6 +21,7 @@ import com.alexandrunica.allcabins.cabins.events.OnMoreEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -87,6 +88,17 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         }
                     }
                 });
+
+                if (cabin.getThumbPhotoUrl() != null && !cabin.getThumbPhotoUrl().equals("")) {
+                    holder.noImage.setVisibility(View.GONE);
+                    holder.mainImage.setVisibility(View.VISIBLE);
+                    Picasso.with(context).load(cabin.getThumbPhotoUrl())
+                            .skipMemoryCache()
+                            .fit()
+                            .into(holder.mainImage);
+                } else {
+                    holder.noImage.setVisibility(View.VISIBLE);
+                }
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -156,12 +168,13 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class CabinSquareHolder extends RecyclerView.ViewHolder {
         public TextView priceView, nameView, phoneButton;
-        public ImageView mainImage;
+        public ImageView mainImage, noImage;
         public ToggleButton heartButton;
 
         public CabinSquareHolder(View view) {
             super(view);
             priceView = view.findViewById(R.id.cabin_price);
+            noImage = view.findViewById(R.id.cabin_no_image);
             nameView = view.findViewById(R.id.cabin_name);
             mainImage = view.findViewById(R.id.cabin_image);
             phoneButton = view.findViewById(R.id.cabin_phone);

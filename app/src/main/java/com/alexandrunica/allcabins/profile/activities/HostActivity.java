@@ -1,10 +1,23 @@
 package com.alexandrunica.allcabins.profile.activities;
 
+import android.Manifest;
+import android.content.ClipData;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
@@ -28,11 +41,21 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,10 +64,17 @@ import javax.inject.Inject;
 public class HostActivity extends AppCompatActivity {
 
     private int itemCounter = 1;
-    private int PLACE_PICKER_REQUEST = 1;
-    private LinearLayout detailsAddressLayout;
+    private final static int PLACE_PICKER_REQUEST = 1;
+    private final static int REQUEST_PERMISSION_READ_EXTERNAL = 2;
+    private final static int REQUEST_CODE_BROWSE_PICTURE = 3;
+    private LinearLayout detailsAddressLayout, photosLayout;
     private AutoCompleteTextView address, city, state, description, facilities, name;
     private Cabin cabin;
+    private ImageView photo;
+    private List<Uri> userSelectedImageUriList = null;
+    private StorageReference mStorage;
+    private TextView count;
+    private Slidr slidrPrice;
 
     @Inject
     DatabaseService databaseService;
@@ -63,6 +93,8 @@ public class HostActivity extends AppCompatActivity {
         appDbComponent.inject(this);
         cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, this);
         cabin = new Cabin();
+        userSelectedImageUriList = new ArrayList<>();
+        mStorage = FirebaseStorage.getInstance().getReference();
 
         detailsAddressLayout = findViewById(R.id.host_details_address);
         address = findViewById(R.id.host_address);
@@ -71,32 +103,39 @@ public class HostActivity extends AppCompatActivity {
         description = findViewById(R.id.host_description);
         facilities = findViewById(R.id.host_facilities);
         name = findViewById(R.id.host_name);
+        photo = findViewById(R.id.host_add_image);
+        photosLayout = findViewById(R.id.host_images);
 
         TextView save = findViewById(R.id.host_submit);
         ImageView minus = findViewById(R.id.item_minus);
         ImageView plus = findViewById(R.id.item_plus);
-        final TextView count = findViewById(R.id.item_count);
-        final Slidr slidrPrice = findViewById(R.id.slidr_price);
+        count = findViewById(R.id.item_count);
+        slidrPrice = findViewById(R.id.slidr_price);
         TextView location = findViewById(R.id.host_location);
+
+        photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int readExternalStoragePermission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (readExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
+                    String requirePermission[] = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                    ActivityCompat.requestPermissions(HostActivity.this, requirePermission, REQUEST_PERMISSION_READ_EXTERNAL);
+                } else {
+                    openPictureGallery();
+                }
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_GALLERY);
+            }
+        });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cabin.setState(state.getText().toString());
-                cabin.setCity(city.getText().toString());
-                cabin.setAddress(address.getText().toString());
-                cabin.setGuests(count.getText().toString());
-                cabin.setPrice(String.valueOf(slidrPrice.getCurrentValue()));
-                cabin.setDescription(description.getText().toString());
-                cabin.setFacilities(facilities.getText().toString());
-                cabin.setName(name.getText().toString());
-                User user = databaseService.getUser();
-                if (user != null) {
-                    cabin.setPhone(user.getPhone());
-                    cabin.setEmail(user.getEmail());
-                    cabin.setIdAdded(user.getId());
-                }
-                cabinOperations.insertCabin(cabin);
+                uploadPhoto(name.getText().toString());
             }
         });
 
@@ -138,6 +177,32 @@ public class HostActivity extends AppCompatActivity {
         });
     }
 
+    private void saveAllInfo() {
+        cabin.setState(state.getText().toString());
+        cabin.setCity(city.getText().toString());
+        cabin.setAddress(address.getText().toString());
+        cabin.setGuests(count.getText().toString());
+        cabin.setPrice(String.valueOf(slidrPrice.getCurrentValue()));
+        cabin.setDescription(description.getText().toString());
+        cabin.setFacilities(facilities.getText().toString());
+        cabin.setName(name.getText().toString());
+        User user = databaseService.getUser();
+        if (user != null) {
+            cabin.setPhone(user.getPhone());
+            cabin.setEmail(user.getEmail());
+            cabin.setIdAdded(user.getId());
+        }
+        cabinOperations.insertCabin(cabin);
+    }
+
+    private void openPictureGallery() {
+        Intent openAlbumIntent = new Intent();
+        openAlbumIntent.setType("image/*");
+        openAlbumIntent.setAction(Intent.ACTION_GET_CONTENT);
+        openAlbumIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(openAlbumIntent, REQUEST_CODE_BROWSE_PICTURE);
+    }
+
     @Subscribe
     public void onCabinInserted(OnInsertEvent event) {
         if (event.isSucces()) {
@@ -169,8 +234,74 @@ public class HostActivity extends AppCompatActivity {
                 Place place = PlacePicker.getPlace(data, this);
                 getDetailsFromCordinate(place.getLatLng());
             }
+        } else if (requestCode == REQUEST_CODE_BROWSE_PICTURE) {
+            if (resultCode == RESULT_OK) {
+                if (data.getClipData() != null) {
+                    int count = data.getClipData().getItemCount(); //evaluate the count before the for loop --- otherwise, the count is evaluated every loop.
+                    for (int i = 0; i < count; i++) {
+
+                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                        if (imageUri != null) {
+                            userSelectedImageUriList.add(imageUri);
+                        }
+                    }
+
+                } else if (data.getData() != null) {
+                    Uri imagePath = data.getData();
+                    userSelectedImageUriList.add(imagePath);
+                }
+                showThumbPhoto();
+            }
         }
     }
+
+    private void showThumbPhoto() {
+        photosLayout.removeAllViews();
+        if (userSelectedImageUriList != null) {
+            for (Uri selectedImageUri : userSelectedImageUriList) {
+                int imageSize = (int) (60 * getResources().getDisplayMetrics().density);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(imageSize, imageSize, 1f);
+                lp.setMargins(8, 8, 8, 8);
+                ImageView img = new ImageView(this);
+                img.setLayoutParams(lp);
+                Picasso.with(this).load(selectedImageUri)
+                        .skipMemoryCache()
+                        .into(img);
+
+                photosLayout.addView(img);
+            }
+        }
+    }
+
+    private void uploadPhoto(String name) {
+        final HashMap<String, String> uploaded =new HashMap<>();
+        for (final Uri selectedImageUri : userSelectedImageUriList) {
+            StorageReference fileToUpload = mStorage.child("Images").child(name).child(selectedImageUri.getLastPathSegment());
+            fileToUpload.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    uploaded.put(selectedImageUri.getLastPathSegment(), downloadUrl.toString());
+                    if (uploaded.size() == userSelectedImageUriList.size() ) {
+                        cabin.setPictures(uploaded);
+                        cabin.setThumbPhotoUrl(uploaded.entrySet().iterator().next().getValue());
+                        saveAllInfo();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    uploaded.put(selectedImageUri.getLastPathSegment(), "");
+                    if (uploaded.size() == userSelectedImageUriList.size() ) {
+                        cabin.setPictures(uploaded);
+                        cabin.setThumbPhotoUrl(uploaded.entrySet().iterator().next().getValue());
+                        saveAllInfo();
+                    }
+                }
+            });
+        }
+    }
+
 
     private void getDetailsFromCordinate(LatLng latLng) {
         Geocoder geocoder;
@@ -205,6 +336,21 @@ public class HostActivity extends AppCompatActivity {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_PERMISSION_READ_EXTERNAL) {
+            if (grantResults.length > 0) {
+                int grantResult = grantResults[0];
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                    openPictureGallery();
+                } else {
+                    Toast.makeText(getApplicationContext(), "You denied read external storage permission.", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 }

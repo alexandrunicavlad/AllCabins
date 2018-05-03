@@ -51,51 +51,50 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textColor="@color/black"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:text="Name"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <AutoCompleteTextView
                     android:id="@+id/host_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Location"
-                    android:textColor="@color/black"
                     android:layout_marginBottom="3dp"
                     android:layout_marginTop="10dp"
+                    android:text="Location"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/host_location"
+                    style="@style/Base.V7.Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Base.V7.Widget.AppCompat.EditText"
                     android:layout_marginEnd="20dp"
                     android:text="Select location"
-                    android:textColor="@color/gray_info"
-                    android:id="@+id/host_location"/>
+                    android:textColor="@color/gray_info" />
 
                 <LinearLayout
+                    android:id="@+id/host_details_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:id="@+id/host_details_address"
                     android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Address"
-                        android:textColor="@color/black"
                         android:layout_marginBottom="3dp"
                         android:layout_marginTop="10dp"
+                        android:text="Address"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <AutoCompleteTextView
@@ -107,10 +106,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="City"
-                        android:textColor="@color/black"
                         android:layout_marginBottom="3dp"
                         android:layout_marginTop="10dp"
+                        android:text="City"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <AutoCompleteTextView
@@ -122,10 +121,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="State"
-                        android:textColor="@color/black"
                         android:layout_marginBottom="3dp"
                         android:layout_marginTop="10dp"
+                        android:text="State"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <AutoCompleteTextView
@@ -139,10 +138,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Guests"
-                    android:textColor="@color/black"
                     android:layout_marginBottom="6dp"
                     android:layout_marginTop="10dp"
+                    android:text="Guests"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <LinearLayout
@@ -179,46 +178,60 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Photos"
-                    android:textColor="@color/black"
                     android:layout_marginBottom="6dp"
                     android:layout_marginTop="10dp"
+                    android:text="Photos"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/host_images"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+                    </ScrollView>
 
                     <ImageView
+                        android:id="@+id/host_add_image"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:id="@+id/host_add_image"
-                        android:src="@drawable/ic_add_photo"/>
+
+                        android:src="@drawable/ic_add_photo" />
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Price"
-                    android:textColor="@color/black"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:text="Price"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <com.alexandrunica.allcabins.widget.Slidr
+                    android:id="@+id/slidr_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:id="@+id/slidr_price" />
+                    android:layout_marginEnd="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Description"
-                    android:textColor="@color/black"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:text="Description"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <AutoCompleteTextView
@@ -230,29 +243,29 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Facilities"
-                    android:textColor="@color/black"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:text="Facilities"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <AutoCompleteTextView
                     android:id="@+id/host_facilities"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    />
+                    android:layout_marginEnd="20dp" />
 
 
             </LinearLayout>
+
             <TextView
                 android:id="@+id/host_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/location_button_layout"
                 android:background="@drawable/border_info"
                 android:gravity="center"
                 android:padding="10dp"
-                android:layout_below="@id/location_button_layout"
                 android:text="Save"
                 android:textColor="@color/white"
                 android:textSize="18sp" />

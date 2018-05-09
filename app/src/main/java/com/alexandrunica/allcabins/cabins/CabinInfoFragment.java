@@ -51,7 +51,6 @@ public class CabinInfoFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.cabin_fragment_layout, container, false);
-        mainImage = v.findViewById(R.id.cabin_info_image);
         priceView = v.findViewById(R.id.cabin_info_price);
         phoneButton = v.findViewById(R.id.cabin_info_phone);
         closeButton = v.findViewById(R.id.cabin_close);
@@ -70,7 +69,7 @@ public class CabinInfoFragment extends DialogFragment {
             if (cabin != null) {
                 addressView.setText(cabin.getAddress());
                 nameView.setText(cabin.getName());
-                priceView.setText(cabin.getPrice() + " RON/Noapte");
+                //priceView.setText(cabin.getPrice() + " RON/Noapte");
                 descriptionView.setText(cabin.getDescription());
                 facilitiesView.setText(cabin.getFacilities());
                 rating.setRating(cabin.getRating());

@@ -25,7 +25,6 @@
         android:id="@+id/cabin_price"
         android:textColor="@color/close_color"
         android:layout_centerHorizontal="true"
-        android:text="130 LEI/Noapte"
         android:background="#D9FFFFFF"
         android:padding="5dp"
         android:layout_alignBottom="@id/cabin_image"/>
@@ -91,7 +90,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/cabin_name"
             android:textSize="22sp"
-            android:text="CABANA VISCOL"
             android:textStyle="bold"
             android:gravity="center"
             android:textColor="@color/black"/>
@@ -100,7 +98,6 @@
             android:layout_height="match_parent"
             android:id="@+id/cabin_address"
             android:textSize="20sp"
-            android:text="STR. PRINCIAPA"
             android:gravity="center"
             android:textColor="@color/unselected_tab"/>
     </LinearLayout>

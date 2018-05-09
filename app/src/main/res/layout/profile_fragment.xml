@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <LinearLayout
@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Edit Profile"
+                    android:text="@string/edit_profile"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -103,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Notifications"
+                    android:text="@string/notification"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Invite friends"
+                    android:text="@string/invite_friends"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -162,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Become a host"
+                    android:text="@string/become_host"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -193,7 +193,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Settings"
+                    android:text="@string/settings"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -223,7 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Give us feedback"
+                    android:text="@string/feedback"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -249,7 +249,7 @@
             android:background="@drawable/border_white"
             android:gravity="center"
             android:padding="10dp"
-            android:text="Log Out"
+            android:text="@string/logout"
             android:textColor="@color/white"
             android:textSize="18sp" />
 

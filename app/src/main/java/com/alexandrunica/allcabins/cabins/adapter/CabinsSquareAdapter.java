@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +18,15 @@ import android.widget.ToggleButton;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.CabinInfoFragment;
+import com.alexandrunica.allcabins.cabins.activities.CabinInfoAcitivty;
 import com.alexandrunica.allcabins.cabins.events.OnMoreEvent;
+import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -68,7 +72,8 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 final Cabin cabin = cabinList.get(position);
                 holder.nameView.setText(cabin.getName());
-                holder.priceView.setText(cabin.getPrice() + "/Noapte");
+                CurrencyConverter currencyConverter = new CurrencyConverter(context);
+                holder.priceView.setText(currencyConverter.convertCurrency(cabin.getPrice()) + " " + currencyConverter.addCurrency()+ "/" + context.getResources().getString(R.string.night));
                 holder.phoneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -103,9 +108,12 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FragmentTransaction ft = ((Activity) context).getFragmentManager().beginTransaction();
-                        DialogFragment newFragment = CabinInfoFragment.newInstance(cabin);
-                        newFragment.show(ft, "dialog");
+//                        FragmentTransaction ft = ((Activity) context).getFragmentManager().beginTransaction();
+//                        DialogFragment newFragment = CabinInfoFragment.newInstance(cabin);
+//                        newFragment.show(ft, "dialog");
+                        Intent intent = new Intent(context, CabinInfoAcitivty.class);
+                        intent.putExtra("cabin", (Serializable) cabin);
+                        context.startActivity(intent);
                     }
                 });
             } else if (vh instanceof FooterViewHolder) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:fab="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,18 +12,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/cabin_info_image"
+            <RelativeLayout
+                android:id="@+id/image_layout"
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
-                android:background="@color/unselected_tab" />
+                android:layout_height="200dp"
+                android:background="@color/unselected_tab">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/image_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/cabin_no_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_above="@id/cabin_info_price"
-                android:layout_alignTop="@id/cabin_info_image"
+                android:layout_alignTop="@id/image_layout"
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_no_image"
                 android:tint="@color/close_color" />
@@ -32,11 +39,10 @@
                 android:id="@+id/cabin_info_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/cabin_info_image"
+                android:layout_alignBottom="@id/image_layout"
                 android:layout_centerHorizontal="true"
                 android:background="#D9FFFFFF"
                 android:padding="5dp"
-                android:text="130 LEI/Noapte"
                 android:textColor="@color/close_color"
                 android:textSize="20sp" />
 
@@ -44,7 +50,7 @@
                 android:id="@+id/cabin_info_phone"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_below="@id/cabin_info_image"
+                android:layout_below="@id/image_layout"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="-25dp"
                 android:background="@drawable/round_background"
@@ -65,7 +71,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/cabin_info_image"
+                android:layout_below="@id/image_layout"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="-25dp"
                 android:background="@drawable/round_background"
@@ -78,7 +84,7 @@
                 android:id="@+id/cabin_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cabin_info_image"
+                android:layout_below="@id/image_layout"
                 android:layout_toEndOf="@id/cabin_info_phone"
                 android:layout_toStartOf="@id/cabin_info_location"
                 android:gravity="center"
@@ -92,7 +98,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="CABANA VISCOL"
                     android:textColor="@color/black"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -102,7 +107,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="STR. PRINCIAPA"
                     android:textColor="@color/unselected_tab"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -118,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Description"
+                    android:text="@string/description"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -140,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Facilities"
+                    android:text="@string/facilities"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -162,7 +166,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="Rating"
+                    android:text="@string/rating"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -182,17 +186,18 @@
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
+
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/cabin_add_fav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         fab:fab_addButtonColorNormal="@color/seekbar_color"
         fab:fab_addButtonColorPressed="@color/seekbar_color"
         fab:fab_addButtonPlusIconColor="@color/white"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
         fab:fab_addButtonSize="normal"
         fab:fab_labelStyle="@style/menu_labels_style"
         fab:fab_labelsPosition="left">
@@ -202,30 +207,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/seekbar_color"
-            fab:fab_title="Add to favorite"
+            fab:fab_colorPressed="@color/seekbar_color"
             fab:fab_icon="@drawable/ic_favorite_white"
             fab:fab_size="mini"
-            fab:fab_colorPressed="@color/seekbar_color"/>
+            fab:fab_title="@string/add_fav" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/seekbar_color"
-            fab:fab_title="Write a review"
-            fab:fab_size="mini"
+            fab:fab_colorPressed="@color/seekbar_color"
             fab:fab_icon="@drawable/ic_thumbs"
-            fab:fab_colorPressed="@color/seekbar_color"/>
+            fab:fab_size="mini"
+            fab:fab_title="@string/write_rew" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/action_c"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/seekbar_color"
-            fab:fab_title="Upload photos"
-            fab:fab_size="mini"
+            fab:fab_colorPressed="@color/seekbar_color"
             fab:fab_icon="@drawable/ic_fupload"
-            fab:fab_colorPressed="@color/seekbar_color"/>
+            fab:fab_size="mini"
+            fab:fab_title="@string/upload" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

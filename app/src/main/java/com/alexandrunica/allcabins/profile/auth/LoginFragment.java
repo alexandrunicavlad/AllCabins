@@ -152,11 +152,11 @@ public class LoginFragment extends Fragment {
                 String email = loginEmail.getText().toString();
                 String password = loginPassword.getText().toString();
                 if (email.equals("")) {
-                    loginEmail.setError("Field required");
+                    loginEmail.setError(getResources().getString(R.string.login_field));
                     cancel = true;
                 }
                 if (password.equals("")) {
-                    loginPassword.setError("Field required");
+                    loginPassword.setError(getResources().getString(R.string.login_field));
                     cancel = true;
                 }
                 if (cancel) {
@@ -206,20 +206,20 @@ public class LoginFragment extends Fragment {
                 String confirmPassword = registerConfirmPassword.getText().toString();
 
                 if (confirmPassword.equals("")) {
-                    registerConfirmPassword.setError("Field required");
+                    registerConfirmPassword.setError(getResources().getString(R.string.login_field));
                     cancel = true;
                 }
 
                 if (password.equals("")) {
-                    registerPassword.setError("Field required");
+                    registerPassword.setError(getResources().getString(R.string.login_field));
                     cancel = true;
                 }
                 if (email.equals("")) {
-                    registerEmail.setError("Field required");
+                    registerEmail.setError(getResources().getString(R.string.login_field));
                     cancel = true;
                 }
                 if (name.equals("")) {
-                    registerName.setError("Field required");
+                    registerName.setError(getResources().getString(R.string.login_field));
                     cancel = true;
                 }
                 if (cancel) {
@@ -251,7 +251,7 @@ public class LoginFragment extends Fragment {
                 boolean cancel = false;
                 String email = forgotEmail.getText().toString();
                 if (email.equals("")) {
-                    forgotEmail.setError("Field required");
+                    forgotEmail.setError(getResources().getString(R.string.login_field));
                     cancel = true;
                 }
                 if (cancel) {
@@ -352,9 +352,9 @@ public class LoginFragment extends Fragment {
             //openAccount();
         } else {
             if (event.isExistEmail()) {
-                Toast.makeText(activity, "User exists", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, getResources().getString(R.string.register_exist), Toast.LENGTH_SHORT).show();
             } else
-                Toast.makeText(activity, "Error to register", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, getResources().getString(R.string.register_err), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="FILTERS"
+            android:text="@string/filtres"
             android:textSize="22sp"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="DISTANCE"
+            android:text="@string/distance"
             android:textSize="22sp" />
 
     </RelativeLayout>
@@ -83,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="PRICE"
+            android:text="@string/price_up"
             android:textSize="22sp" />
     </RelativeLayout>
     <com.alexandrunica.allcabins.widget.Slidr

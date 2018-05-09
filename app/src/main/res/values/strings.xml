@@ -6,4 +6,90 @@
     <string name="api_key">AIzaSyA9qvXpgIj5pxpCTRDwnJeaQnuAjH61yvI</string>
     <string name="facebook_app_id">395423620936727</string>
     <string name="fb_login_protocol_scheme">fb395423620936727</string>
+
+    <!-- Cabin -->
+    <string name="night">Night</string>
+    <string name="description">Description</string>
+    <string name="facilities">Facilities</string>
+    <string name="rating">Rating</string>
+    <string name="add_fav">Add to favorite</string>
+    <string name="write_rew">Write a review</string>
+    <string name="upload">Upload photos</string>
+    <string name="err_message">Cabins not found with this price</string>
+    <string name="near">Near </string>
+    <string name="recomended">Recommended</string>
+    <string name="sorry">Sorry!</string>
+    <string name="err_not_found">There are no cabins available for this destination. </string>
+    <string name="start_exploring">Start exploring</string>
+
+    <!-- Explore -->
+    <string name="hi_there">HI THERE!</string>
+    <string name="where_to">WHERE TO?</string>
+
+    <!-- Favorites -->
+    <string name="favorite">Favorites</string>
+    <string name="favorite_message">When you see something you like, tap on the heart and save it to favorite.</string>
+
+    <!-- Map -->
+    <string name="err_map">Unable to get cabins</string>
+
+    <!-- Profile -->
+    <string name="err_add">Failed to add</string>
+    <string name="err_perm">You denied read external storage permission.</string>
+    <string name="host_title">Become a host with AllCabins</string>
+    <string name="host_name">Name</string>
+    <string name="host_location">Location</string>
+    <string name="host_select">Select location</string>
+    <string name="host_address">Address</string>
+    <string name="host_city">City</string>
+    <string name="host_state">State</string>
+    <string name="host_guest">Guests</string>
+    <string name="host_photo">Photos</string>
+    <string name="host_price">Price</string>
+    <string name="save">Save</string>
+    <string name="setting_title">Set your app</string>
+    <string name="setting_currency">Currency</string>
+    <string name="setting_language">Language</string>
+    <string name="login_field">Field required</string>
+    <string name="register_exist">User exists</string>
+    <string name="register_err">Error to register</string>
+    <string name="login">Log In</string>
+    <string name="login_title">Welcome to All Cabins</string>
+    <string name="login_facebook">Continue with Facebook</string>
+    <string name="login_create">Create Account</string>
+    <string name="forgot">Forgot passsword?</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="forgot_hint">Enter your email to reset your password</string>
+    <string name="submit">Submit</string>
+    <string name="edit_photo">Edit photo</string>
+    <string name="street_address">Street address</string>
+    <string name="mobile_phone">Mobile phone</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="notification">Notifications</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="become_host">Become a host</string>
+    <string name="settings">Settings</string>
+    <string name="feedback">Give us feedback</string>
+    <string name="logout">Log Out</string>
+    <string name="no_data">No data</string>
+    <string name="explore">Explore</string>
+    <string name="cabins">Cabins</string>
+    <string name="map">Map</string>
+    <string name="favorites">Favorite</string>
+    <string name="profile">Profile</string>
+
+    <string name="call_now">Call Now</string>
+    <string name="filtres">FILTERS</string>
+    <string name="distance">DISTANCE</string>
+    <string name="price_up">PRICE</string>
+    <string name="load_cabins">Load more cabins</string>
+    <string name="usd">3.9</string>
+    <string name="eur">4.6</string>
+    <string name="gbp">5.3</string>
+    <string name="ron">1</string>
+
 </resources>

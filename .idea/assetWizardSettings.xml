@@ -92,8 +92,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_add_photo" />
-                            <entry key="sourceFile" value="C:\Users\alexa\Downloads\if_location-01_186394.svg" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="eur" />
+                            <entry key="sourceFile" value="C:\Users\alexa\Downloads\if_82_Ensign_Flag_Nation_union_2634509.svg" />
                           </map>
                         </option>
                       </PersistentState>

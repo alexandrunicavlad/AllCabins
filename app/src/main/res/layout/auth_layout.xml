@@ -27,8 +27,8 @@
                 android:id="@+id/login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="Log In"
+                android:layout_alignParentEnd="true"
+                android:text="@string/login"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -39,7 +39,7 @@
                 android:layout_above="@id/button_layout"
 
                 android:gravity="center_vertical"
-                android:text="Welcome to All Cabins"
+                android:text="@string/login_title"
                 android:textColor="@color/white"
                 android:textSize="30sp" />
 
@@ -58,7 +58,7 @@
                     android:drawableLeft="@drawable/ic_facebook"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="Continue with Facebook"
+                    android:text="@string/login_facebook"
                     android:textColor="@color/seekbar_color"
                     android:textSize="18sp" />
 
@@ -69,7 +69,7 @@
                     android:background="@drawable/border_white"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="Create Account"
+                    android:text="@string/login_create"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -98,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="Forgot passsword?"
+                android:text="@string/forgot"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -107,7 +107,7 @@
                 android:layout_height="match_parent"
                 android:layout_above="@id/login_button_layout"
                 android:gravity="center_vertical"
-                android:text="Log In"
+                android:text="@string/login"
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -126,7 +126,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/border_background_white"
                     android:drawableLeft="@drawable/ic_email"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:padding="10dp" />
 
@@ -137,7 +137,7 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/border_background_white"
                     android:drawableLeft="@drawable/ic_password"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:padding="10dp" />
 
@@ -152,7 +152,7 @@
                 android:background="@drawable/border_white"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Log In"
+                android:text="@string/login"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </RelativeLayout>
@@ -179,7 +179,7 @@
                 android:layout_height="match_parent"
                 android:layout_above="@id/register_button_layout"
                 android:gravity="center_vertical"
-                android:text="Create Account"
+                android:text="@string/login_create"
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -199,7 +199,7 @@
                     android:background="@drawable/border_background_white"
                     android:drawableLeft="@drawable/ic_name"
                     android:gravity="center_vertical"
-                    android:hint="Name"
+                    android:hint="@string/name"
                     android:inputType="textEmailAddress"
                     android:padding="10dp" />
 
@@ -210,46 +210,44 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/border_background_white"
                     android:drawableLeft="@drawable/ic_email"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:padding="10dp" />
 
+                <AutoCompleteTextView
+                    android:id="@+id/register_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/border_background_white"
+                    android:drawableLeft="@drawable/ic_password"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:padding="10dp" />
 
+                <AutoCompleteTextView
+                    android:id="@+id/register_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/border_background_white"
+                    android:drawableLeft="@drawable/ic_password"
+                    android:hint="@string/confirm_password"
+                    android:inputType="textPassword"
+                    android:padding="10dp" />
             </LinearLayout>
 
-            <AutoCompleteTextView
-                android:id="@+id/register_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/register_button_layout"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/border_background_white"
-                android:drawableLeft="@drawable/ic_password"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:padding="10dp" />
 
-            <AutoCompleteTextView
-                android:id="@+id/register_confirm_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/register_password"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/border_background_white"
-                android:drawableLeft="@drawable/ic_password"
-                android:hint="Confirm Password"
-                android:inputType="textPassword"
-                android:padding="10dp" />
 
             <TextView
                 android:id="@+id/register_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/register_confirm_password"
+                android:layout_below="@id/register_button_layout"
                 android:background="@drawable/border_white"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Register"
+                android:text="@string/register"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </RelativeLayout>
@@ -276,7 +274,7 @@
                 android:layout_height="match_parent"
                 android:layout_above="@id/forgot_button_layout"
                 android:gravity="center_vertical"
-                android:text="Forgot Password?"
+                android:text="@string/forgot"
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -294,7 +292,7 @@
                     android:layout_marginBottom="20dp"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
-                    android:text="Enter your email to reset your password"
+                    android:text="@string/forgot_hint"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -305,7 +303,7 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/border_background_white"
                     android:drawableLeft="@drawable/ic_email"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:padding="10dp" />
 
@@ -320,7 +318,7 @@
                 android:background="@drawable/border_white"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Submit"
+                android:text="@string/submit"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </RelativeLayout>

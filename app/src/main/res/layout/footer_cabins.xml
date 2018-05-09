@@ -16,7 +16,7 @@
         android:background="@drawable/border_white"
         android:gravity="center"
         android:padding="10dp"
-        android:text="Load more cabins"
+        android:text="@string/load_cabins"
         android:textColor="@color/white"
         android:textSize="18sp" />
 

@@ -24,6 +24,7 @@ import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.adapter.CabinsSquareAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.events.OnMoreEvent;
+import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
@@ -185,14 +186,15 @@ public class CabinsFragment extends Fragment {
         List<Cabin> filtredList = new ArrayList<>();
         if (cabinList != null) {
             for (Cabin cabin : cabinList) {
-                if (Integer.parseInt(cabin.getPrice()) <= price) {
+                CurrencyConverter currencyConverter = new CurrencyConverter(activity);
+                if (Integer.parseInt(currencyConverter.convertCurrency(cabin.getPrice())) <= price) {
                     filtredList.add(cabin);
                 }
             }
             if (filtredList.size() != 0) {
                 cabinList = filtredList;
             } else {
-                Toast.makeText(activity, "Cabins not found with this price", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, getResources().getString(R.string.err_message), Toast.LENGTH_SHORT).show();
             }
 
             setRecyclerView();
@@ -223,10 +225,10 @@ public class CabinsFragment extends Fragment {
         toolbarFilter.setVisibility(View.VISIBLE);
         toolbar.setBackgroundColor(getResources().getColor(R.color.white));
         if (isFiltred) {
-            toolbarTitle.setText("Near " + city.toUpperCase());
+            toolbarTitle.setText(getResources().getString(R.string.near) + city.toUpperCase());
             toolbarFilter.setVisibility(View.GONE);
         } else {
-            toolbarTitle.setText("Recomended");
+            toolbarTitle.setText(getResources().getString(R.string.recomended));
             toolbarFilter.setVisibility(View.VISIBLE);
         }
     }

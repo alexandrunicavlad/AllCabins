@@ -33,7 +33,7 @@ public class CustomInfoWindowMap implements GoogleMap.InfoWindowAdapter {
         TextView price = view.findViewById(R.id.marker_price);
 
         name.setText(cabin.getName());
-        price.setText(cabin.getPrice());
+        //price.setText(cabin.getPrice());
         return view;
     }
 }

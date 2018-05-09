@@ -56,7 +56,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="CABANA VISCOL"
                 android:textColor="@color/black"
                 android:textSize="22sp"
                 android:gravity="center"
@@ -68,7 +67,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:padding="5dp"
-                android:text="130 LEI/Noapte"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -81,7 +79,7 @@
                 android:background="@drawable/border_color"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Call Now"
+                android:text="@string/call_now"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 

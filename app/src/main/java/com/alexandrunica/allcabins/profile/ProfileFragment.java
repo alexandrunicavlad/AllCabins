@@ -19,6 +19,7 @@ import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.activities.HostActivity;
+import com.alexandrunica.allcabins.profile.activities.SettingsActivity;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.model.User;
@@ -119,6 +120,14 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(activity, HostActivity.class));
+                }
+            });
+
+            RelativeLayout settingsProfile = view.findViewById(R.id.profile_settings);
+            settingsProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(activity, SettingsActivity.class));
                 }
             });
         }

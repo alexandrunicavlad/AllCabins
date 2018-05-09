@@ -20,6 +20,8 @@ import android.widget.ToggleButton;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.CabinInfoFragment;
+import com.alexandrunica.allcabins.cabins.activities.CabinInfoAcitivty;
+import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
@@ -27,6 +29,7 @@ import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
@@ -80,15 +83,17 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
                 }
             }
         });
-
-        holder.priceView.setText(cabin.getPrice());
-
+        CurrencyConverter currencyConverter = new CurrencyConverter(context);
+        holder.priceView.setText(currencyConverter.convertCurrency(cabin.getPrice()) + " " + currencyConverter.addCurrency()+ "/" + context.getResources().getString(R.string.night));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction ft = ((Activity) context).getFragmentManager().beginTransaction();
-                DialogFragment newFragment = CabinInfoFragment.newInstance(cabin);
-                newFragment.show(ft, "dialog");
+//                FragmentTransaction ft = ((Activity) context).getFragmentManager().beginTransaction();
+//                DialogFragment newFragment = CabinInfoFragment.newInstance(cabin);
+//                newFragment.show(ft, "dialog");
+                Intent intent = new Intent(context, CabinInfoAcitivty.class);
+                intent.putExtra("cabin",(Serializable)cabin);
+                context.startActivity(intent);
             }
         });
 

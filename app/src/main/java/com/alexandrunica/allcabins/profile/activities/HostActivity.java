@@ -113,6 +113,14 @@ public class HostActivity extends AppCompatActivity {
         slidrPrice = findViewById(R.id.slidr_price);
         TextView location = findViewById(R.id.host_location);
 
+        ImageView back = findViewById(R.id.host_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,7 +216,7 @@ public class HostActivity extends AppCompatActivity {
         if (event.isSucces()) {
             finish();
         } else {
-            Toast.makeText(this, "Failed to add", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.err_add), Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -332,7 +340,6 @@ public class HostActivity extends AppCompatActivity {
             if (addresses.size() > 0) {
                 double latitude = addresses.get(0).getLatitude();
                 double longitude = addresses.get(0).getLongitude();
-                String a = "@1";
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -348,7 +355,7 @@ public class HostActivity extends AppCompatActivity {
                 if (grantResult == PackageManager.PERMISSION_GRANTED) {
                     openPictureGallery();
                 } else {
-                    Toast.makeText(getApplicationContext(), "You denied read external storage permission.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.err_perm), Toast.LENGTH_LONG).show();
                 }
             }
         }

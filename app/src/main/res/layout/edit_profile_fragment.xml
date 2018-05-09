@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
     <RelativeLayout
@@ -49,7 +49,7 @@
             android:paddingEnd="20dp"
             android:layout_margin="10dp"
           android:layout_centerHorizontal="true"
-            android:text="Edit photo"
+            android:text="@string/edit_photo"
             android:layout_below="@id/profile_image"
             android:textColor="@color/white"
             android:textSize="18sp" />
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:hint="Street address"
+                android:hint="@string/street_address"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:backgroundTint="@color/white" />
@@ -111,7 +111,7 @@
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/white"
                 android:layout_marginStart="10dp"
-                android:hint="City"
+                android:hint="@string/host_city"
                 android:textColorHint="@color/white"
                 android:backgroundTint="@color/white" />
             <AutoCompleteTextView
@@ -119,7 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:hint="State"
+                android:hint="@string/host_state"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:layout_marginStart="10dp"
@@ -145,7 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:hint="Mobile phone"
+            android:hint="@string/mobile_phone"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:layout_marginStart="10dp"
@@ -160,7 +160,7 @@
         android:gravity="center"
         android:padding="10dp"
         android:layout_margin="15dp"
-        android:text="Save"
+        android:text="@string/save"
         android:textColor="@color/white"
         android:textSize="18sp" />
 

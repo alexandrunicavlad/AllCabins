@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -32,7 +33,9 @@ import android.widget.Toast;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.CabinInfoFragment;
+import com.alexandrunica.allcabins.cabins.activities.CabinInfoAcitivty;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
+import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.cabins.model.ShortCabin;
@@ -69,6 +72,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -272,15 +276,20 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         infoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
-                DialogFragment newFragment = CabinInfoFragment.newInstance(cabin);
-                newFragment.show(ft, "dialog");
+//                FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
+//                DialogFragment newFragment = CabinInfoFragment.newInstance(cabin);
+//                newFragment.show(ft, "dialog");
                 collapse(infoLayout);
+                Intent intent = new Intent(activity, CabinInfoAcitivty.class);
+                intent.putExtra("cabin",(Serializable)cabin);
+                activity.startActivity(intent);
             }
         });
 
         if (cabin.getThumbPhotoUrl() != null && !cabin.getThumbPhotoUrl().isEmpty()) {
-            Picasso.with(getContext()).load(cabin.getThumbPhotoUrl()).into(infoBottomImage);
+            Picasso.with(activity).load(cabin.getThumbPhotoUrl()).fit().into(infoBottomImage);
+        } else {
+            Picasso.with(activity).load(R.drawable.main_image);
         }
 
         String distanceFinal = "";
@@ -307,7 +316,8 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
 
         infoBottomName.setText(cabin.getName());
         infoBottomAddress.setText(cabin.getAddress());
-        infoBottomPrice.setText(cabin.getPrice() +" RON/Night");
+        CurrencyConverter currencyConverter = new CurrencyConverter(activity);
+        infoBottomPrice.setText(currencyConverter.convertCurrency(cabin.getPrice()) + " " + currencyConverter.addCurrency()+ "/" + getResources().getString(R.string.night));
 
         infoBottomClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -329,15 +339,6 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         // googleMap.setOnMarkerClickListener(this);
         googleMap.setTrafficEnabled(false);
 
-//        ImageView locationBtn = getView().findViewById(R.id.initial_location_btn);
-//        locationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(romanianBounds.getCenter(), 6));
-//
-//            }
-//        });
-
     }
 
     public boolean onMarkerClick(final Marker marker) {
@@ -348,14 +349,6 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         }
         return true;
     }
-
-
-//    private void calcDistance(Marker marker) {
-//        Resort resort = (Resort) resorts.get(marker.getTitle());
-//        new CalcDistanceResorts(activity, currentLocation).execute(resort);
-//
-//    }
-
 
     @Override
     public void onAttach(Context context) {
@@ -390,7 +383,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
                 startCluster();
             }
         } else {
-            Toast.makeText(activity, "Unable to get cabins", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, getResources().getString(R.string.err_map) , Toast.LENGTH_SHORT).show();
         }
     }
 

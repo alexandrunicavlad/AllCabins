@@ -28,8 +28,7 @@
             android:id="@+id/bottom_name"
             android:textColor="@color/black"
             android:textSize="18sp"
-            android:padding="5dp"
-            android:text="Cabana BERCea"/>
+            android:padding="5dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,8 +36,7 @@
             android:textColor="@color/unselected_tab"
             android:textSize="16sp"
             android:padding="5dp"
-            android:layout_below="@id/bottom_name"
-            android:text="RACHITELE"/>
+            android:layout_below="@id/bottom_name" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,8 +46,7 @@
             android:textSize="18sp"
             android:padding="5dp"
             android:textStyle="bold"
-            android:layout_below="@id/bottom_address"
-            android:text="120 LEI/NIGHT"/>
+            android:layout_below="@id/bottom_address" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -59,7 +56,6 @@
             android:textSize="16sp"
             android:padding="5dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:text="21.5 KM"/>
+            android:layout_alignParentBottom="true" />
     </RelativeLayout>
 </RelativeLayout>

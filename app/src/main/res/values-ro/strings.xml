@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">AllCabins</string>
+    <string name="sharePreference">allPreference</string>
+    <string name="empty_string" />
+    <string name="no_internet_message">Nu există conexiune la internet.</string>
+    <string name="api_key">AIzaSyA9qvXpgIj5pxpCTRDwnJeaQnuAjH61yvI</string>
+    <string name="facebook_app_id">395423620936727</string>
+    <string name="fb_login_protocol_scheme">fb395423620936727</string>
+
+    <!-- Cabin -->
+    <string name="night">Noapte</string>
+    <string name="description">Descriere</string>
+    <string name="facilities">Facilitati</string>
+    <string name="rating">Rating</string>
+    <string name="add_fav">Adauga la favorite</string>
+    <string name="write_rew">Scrie o recenzie</string>
+    <string name="upload">Incarca imagini</string>
+    <string name="err_message">Nu au fost gasite cabane la acest pret.</string>
+    <string name="near">In apropiere de </string>
+    <string name="recomended">Recomandate</string>
+    <string name="sorry">Ne cerem scuze!</string>
+    <string name="err_not_found">Nu au fost gasite cabane cu aceasta destinatie.</string>
+    <string name="start_exploring">Incepeti sa explorati</string>
+
+    <!-- Explore -->
+    <string name="hi_there">BUNĂ!</string>
+    <string name="where_to">UNDE?></string>
+
+    <!-- Favorites -->
+    <string name="favorite">Favorite</string>
+    <string name="favorite_message">Când vedeți ceva ce vă place, atingeți inima și salvați-l la preferat.</string>
+
+    <!-- Map -->
+    <string name="err_map">Imposibil de a obține cabine</string>
+
+    <!-- Profile -->
+    <string name="err_add">Nu sa reușit adăugarea</string>
+    <string name="err_perm">Ai refuzat să citești permisiunea de stocare externă.</string>
+    <string name="host_title">Deveniți o gazdă cu AllCabins</string>
+    <string name="host_name">Nume</string>
+    <string name="host_location">Locație</string>
+    <string name="host_select">Selectare Locație</string>
+    <string name="host_address">Adresa</string>
+    <string name="host_city">Oraș</string>
+    <string name="host_state">Județ</string>
+    <string name="host_guest">Vizitatori</string>
+    <string name="host_photo">Fotografii</string>
+    <string name="host_price">Preț</string>
+    <string name="save">Salvează</string>
+    <string name="setting_title">Setați aplicația</string>
+    <string name="setting_currency">Valută</string>
+    <string name="setting_language">Limba</string>
+    <string name="login_field">Câmp obligatoriu</string>
+    <string name="register_exist">Utilizatorul există</string>
+    <string name="register_err">Eroare la înregistrare</string>
+    <string name="login">Logare</string>
+    <string name="login_title">Bine ați venit la All Cabins</string>
+    <string name="login_facebook">Continuați cu Facebook</string>
+    <string name="login_create">Creează cont</string>
+    <string name="forgot">Ai uitat parola?</string>
+    <string name="email">Email</string>
+    <string name="password">Parolă</string>
+    <string name="name">Nume</string>
+    <string name="confirm_password">Confirmă Parola</string>
+    <string name="register">Inregistreaza-te</string>
+    <string name="forgot_hint">Introduceți adresa de e-mail pentru resetarea parolei</string>
+    <string name="submit">Trimite</string>
+    <string name="edit_photo">Editează poza</string>
+    <string name="street_address">Adresa străzii</string>
+    <string name="mobile_phone">Număr de telefon </string>
+    <string name="edit_profile">Editează profilul</string>
+    <string name="notification">Notificări</string>
+    <string name="invite_friends">Invită prieteni</string>
+    <string name="become_host">Deveniți o gazdă</string>
+    <string name="settings">Setări</string>
+    <string name="feedback">Oferiți-ne feedback</string>
+    <string name="logout">Deconectați-vă</string>
+    <string name="no_data">Nu există date</string>
+    <string name="explore">Explore</string>
+    <string name="cabins">Cabins</string>
+    <string name="map">Map</string>
+    <string name="favorites">Favorite</string>
+    <string name="profile">Profile</string>
+
+    <string name="call_now">Call Now</string>
+    <string name="filtres">FILTERS</string>
+    <string name="distance">DISTANCE</string>
+    <string name="price_up">PRICE</string>
+    <string name="load_cabins">Încărcați mai multe cabane</string>
+    <string name="usd">3.9</string>
+    <string name="eur">4.6</string>
+    <string name="gbp">5.3</string>
+    <string name="ron">1</string>
+
+</resources>

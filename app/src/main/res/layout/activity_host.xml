@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -34,7 +34,7 @@
                 android:layout_below="@id/host_back"
                 android:layout_marginTop="15dp"
                 android:gravity="center_vertical"
-                android:text="Become a host with AllCabins"
+                android:text="@string/host_title"
                 android:textColor="@color/black"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="Name"
+                    android:text="@string/host_name"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="3dp"
                     android:layout_marginTop="10dp"
-                    android:text="Location"
+                    android:text="@string/host_location"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -78,7 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:text="Select location"
+                    android:text="@string/host_select"
                     android:textColor="@color/gray_info" />
 
                 <LinearLayout
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:layout_marginTop="10dp"
-                        android:text="Address"
+                        android:text="@string/host_address"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -108,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:layout_marginTop="10dp"
-                        android:text="City"
+                        android:text="@string/host_city"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -123,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:layout_marginTop="10dp"
-                        android:text="State"
+                        android:text="@string/host_state"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:layout_marginTop="10dp"
-                    android:text="Guests"
+                    android:text="@string/host_guest"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -180,7 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:layout_marginTop="10dp"
-                    android:text="Photos"
+                    android:text="@string/host_photo"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -215,7 +215,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="Price"
+                    android:text="@string/host_price"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -230,7 +230,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="Description"
+                    android:text="@string/description"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -245,7 +245,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="Facilities"
+                    android:text="@string/facilities"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -266,7 +266,7 @@
                 android:background="@drawable/border_info"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="Save"
+                android:text="@string/save"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 

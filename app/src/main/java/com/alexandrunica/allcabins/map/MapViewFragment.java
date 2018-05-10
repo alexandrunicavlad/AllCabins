@@ -137,10 +137,10 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
             @Override
             public void onClick(View v) {
                 if (locationModel != null) {
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locationModel.getDoubleLatitude(),locationModel.getDoubleLongitude()), 13));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locationModel.getDoubleLatitude(), locationModel.getDoubleLongitude()), 13));
 
                     CameraPosition cameraPosition = new CameraPosition.Builder()
-                            .target(new LatLng(locationModel.getDoubleLatitude(),locationModel.getDoubleLongitude()))
+                            .target(new LatLng(locationModel.getDoubleLatitude(), locationModel.getDoubleLongitude()))
                             .zoom(9)                   // Sets the zoom
                             .bearing(0)                // Sets the orientation of the camera to east
                             .tilt(40)                   // Sets the tilt of the camera to 30 degrees
@@ -281,7 +281,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
 //                newFragment.show(ft, "dialog");
                 collapse(infoLayout);
                 Intent intent = new Intent(activity, CabinInfoAcitivty.class);
-                intent.putExtra("cabin",(Serializable)cabin);
+                intent.putExtra("cabin", cabin.getId());
                 activity.startActivity(intent);
             }
         });
@@ -317,7 +317,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
         infoBottomName.setText(cabin.getName());
         infoBottomAddress.setText(cabin.getAddress());
         CurrencyConverter currencyConverter = new CurrencyConverter(activity);
-        infoBottomPrice.setText(currencyConverter.convertCurrency(cabin.getPrice()) + " " + currencyConverter.addCurrency()+ "/" + getResources().getString(R.string.night));
+        infoBottomPrice.setText(currencyConverter.convertCurrency(cabin.getPrice()) + " " + currencyConverter.addCurrency() + "/" + getResources().getString(R.string.night));
 
         infoBottomClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -383,7 +383,7 @@ public class MapViewFragment extends Fragment implements GoogleApiClient.Connect
                 startCluster();
             }
         } else {
-            Toast.makeText(activity, getResources().getString(R.string.err_map) , Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, getResources().getString(R.string.err_map), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -65,6 +65,8 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="register">Register</string>
     <string name="forgot_hint">Enter your email to reset your password</string>
+    <string name="rating_hint">Any other feedback</string>
+    <string name="anonim">Anonymous</string>
     <string name="submit">Submit</string>
     <string name="edit_photo">Edit photo</string>
     <string name="street_address">Street address</string>

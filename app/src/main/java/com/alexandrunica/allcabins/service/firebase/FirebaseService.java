@@ -8,6 +8,7 @@ import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
+import static com.alexandrunica.allcabins.service.firebase.FirebaseService.TableNames.CABINS_REVIEWS_TABLE;
 import static com.alexandrunica.allcabins.service.firebase.FirebaseService.TableNames.CABINS_TABLE;
 import static com.alexandrunica.allcabins.service.firebase.FirebaseService.TableNames.USERS_TABLE;
 
@@ -42,6 +43,9 @@ public class FirebaseService {
 
             case USERS_TABLE:
                 return new ProfileOperations(context);
+
+            case CABINS_REVIEWS_TABLE:
+                return new ReviewOperations(context);
             default:
                 return null;
         }

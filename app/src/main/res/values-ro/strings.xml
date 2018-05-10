@@ -61,12 +61,14 @@
     <string name="forgot">Ai uitat parola?</string>
     <string name="email">Email</string>
     <string name="password">Parolă</string>
+    <string name="anonim">Anonim</string>
     <string name="name">Nume</string>
     <string name="confirm_password">Confirmă Parola</string>
     <string name="register">Inregistreaza-te</string>
     <string name="forgot_hint">Introduceți adresa de e-mail pentru resetarea parolei</string>
     <string name="submit">Trimite</string>
     <string name="edit_photo">Editează poza</string>
+    <string name="rating_hint">Orice alt feedback</string>
     <string name="street_address">Adresa străzii</string>
     <string name="mobile_phone">Număr de telefon </string>
     <string name="edit_profile">Editează profilul</string>

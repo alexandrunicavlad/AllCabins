@@ -2,6 +2,7 @@ package com.alexandrunica.allcabins.dagger;
 
 import com.alexandrunica.allcabins.MainActivity;
 import com.alexandrunica.allcabins.cabins.CabinsFragment;
+import com.alexandrunica.allcabins.cabins.activities.CabinInfoAcitivty;
 import com.alexandrunica.allcabins.explore.ExploreFragment;
 import com.alexandrunica.allcabins.favorite.FavoriteFragment;
 import com.alexandrunica.allcabins.map.MapViewFragment;
@@ -15,6 +16,7 @@ import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
+import com.alexandrunica.allcabins.service.firebase.ReviewOperations;
 import com.alexandrunica.allcabins.service.firebase.auth.FirebaseAuthentication;
 
 import javax.inject.Singleton;
@@ -35,6 +37,8 @@ public interface AppDbComponent {
 
     void inject(EditCabinInfoActivity editCabinInfoActivity);
 
+    void inject(CabinInfoAcitivty cabinInfoAcitivty);
+
     void inject(MapViewFragment mapViewFragment);
 
     void inject(DaggerDbApplication daggerDbApplication);
@@ -46,6 +50,8 @@ public interface AppDbComponent {
     void inject(CabinOperations cabinOperations);
 
     void inject(ProfileOperations profileOperations);
+
+    void inject(ReviewOperations ratingOperation);
 
     void inject(CabinsFragment cabinsFragment);
 

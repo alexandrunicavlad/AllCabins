@@ -92,7 +92,7 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
 //                DialogFragment newFragment = CabinInfoFragment.newInstance(cabin);
 //                newFragment.show(ft, "dialog");
                 Intent intent = new Intent(context, CabinInfoAcitivty.class);
-                intent.putExtra("cabin",(Serializable)cabin);
+                intent.putExtra("cabin",cabin.getId());
                 context.startActivity(intent);
             }
         });

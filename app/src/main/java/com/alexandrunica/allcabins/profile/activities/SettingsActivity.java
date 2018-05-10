@@ -71,7 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final String currencyFromDb = preferences.getString("currency", "");
         final String languageFromDb = preferences.getString("language", "");
-        currency.post(new Runnable() {
+        currency.postDelayed(new Runnable() {
             @Override
             public void run() {
 
@@ -95,34 +95,26 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        }, 100);
 
-        language.post(new Runnable() {
+        language.postDelayed(new Runnable() {
             @Override
             public void run() {
-
-
                 if (languageFromDb != null && !languageFromDb.equals("")) {
                     switch (languageFromDb) {
-                        case "Romanian":
+                        case "ro":
                             language.setSelection(0, true);
                             break;
-                        case "English":
-                            currency.setSelection(1, true);
+                        case "en":
+                            language.setSelection(1, true);
                             break;
                         default:
-                            currency.setSelection(1, true);
+                            language.setSelection(1, true);
 
                     }
                 }
             }
-        });
-
-
-
-
-
-
+        }, 100);
     }
 
     public void setLocale(String lang) {

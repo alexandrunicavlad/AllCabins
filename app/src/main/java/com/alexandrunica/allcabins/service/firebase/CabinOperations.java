@@ -94,6 +94,7 @@ public class CabinOperations extends FirebaseOperation {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Cabin cabin = dataSnapshot.getValue(Cabin.class);
                 if (cabin != null) {
+                    cabin.setId(dataSnapshot.getKey());
                     bus.post(new OnGetCabinByIdEvent(cabin));
                 } else {
                     bus.post(new OnGetCabinByIdEvent(null));
@@ -128,7 +129,6 @@ public class CabinOperations extends FirebaseOperation {
         });
     }
 
-
     public void loadMoreData(int totalItemEachLoad, int currentPage) {
         final ArrayList<Cabin> cabins = new ArrayList<>();
         mRef.orderByChild("name").limitToFirst(totalItemEachLoad * currentPage).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -151,15 +151,21 @@ public class CabinOperations extends FirebaseOperation {
         });
     }
 
-    public void insertCabin(Cabin cabin) {
-        String resortReviewID = mRef.push().getKey();
+    public void insertCabin(final Cabin cabin) {
+        String resortReviewID;
+        if (cabin.getId() == null) {
+            resortReviewID = mRef.push().getKey();
+        } else {
+            resortReviewID = cabin.getId();
+        }
+        cabin.setId(null);
         mRef.child(resortReviewID).setValue(cabin).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    bus.post(new OnInsertEvent(true));
+                    bus.post(new OnInsertEvent(true, cabin));
                 } else {
-                    bus.post(new OnInsertEvent(false));
+                    bus.post(new OnInsertEvent(false, cabin));
                 }
             }
         });

@@ -37,6 +37,7 @@
     <string name="err_add">Failed to add</string>
     <string name="err_perm">You denied read external storage permission.</string>
     <string name="host_title">Become a host with AllCabins</string>
+    <string name="manage_title">Change %1$s!</string>
     <string name="host_name">Name</string>
     <string name="host_location">Location</string>
     <string name="host_select">Select location</string>
@@ -72,6 +73,7 @@
     <string name="notification">Notifications</string>
     <string name="invite_friends">Invite friends</string>
     <string name="become_host">Become a host</string>
+    <string name="manage_host">Manage your cabins</string>
     <string name="settings">Settings</string>
     <string name="feedback">Give us feedback</string>
     <string name="logout">Log Out</string>

@@ -25,11 +25,13 @@ public class User implements Serializable {
 
     public HashMap<String, String> favorites;
 
+    public HashMap<String, String> cabins;
+
     public User () {
 
     }
 
-    public User(String id, String email, String username, String profilePhoto, String phone, UserAddressModel addressModel, HashMap<String, String> favorites) {
+    public User(String id, String email, String username, String profilePhoto, String phone, UserAddressModel addressModel, HashMap<String, String> favorites, HashMap<String, String> cabins) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -37,6 +39,7 @@ public class User implements Serializable {
         this.phone = phone;
         this.addressModel = addressModel;
         this.favorites = favorites;
+        this.cabins = cabins;
     }
 
     public String getId() {
@@ -93,5 +96,13 @@ public class User implements Serializable {
 
     public void setFavorites(HashMap<String, String> favorites) {
         this.favorites = favorites;
+    }
+
+    public HashMap<String, String> getCabins() {
+        return cabins;
+    }
+
+    public void setCabins(HashMap<String, String> cabins) {
+        this.cabins = cabins;
     }
 }

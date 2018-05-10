@@ -1,7 +1,9 @@
 package com.alexandrunica.allcabins.profile;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.profile.activities.EditCabinInfoActivity;
 import com.alexandrunica.allcabins.profile.activities.HostActivity;
 import com.alexandrunica.allcabins.profile.activities.SettingsActivity;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
@@ -27,9 +30,11 @@ import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Bus;
-import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -130,10 +135,50 @@ public class ProfileFragment extends Fragment {
                     startActivity(new Intent(activity, SettingsActivity.class));
                 }
             });
+
+            RelativeLayout manageProfile = view.findViewById(R.id.profile_manage_host);
+            if (user.getCabins()!=null) {
+                manageProfile.setVisibility(View.VISIBLE);
+            } else {
+                manageProfile.setVisibility(View.GONE);
+            }
+            manageProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (user.getCabins().size() > 1) {
+                        final List<String> listItems = new ArrayList<String>();
+                        for(Map.Entry<String, String> entry : user.getCabins().entrySet()) {
+                            String key = entry.getKey();
+                            String value = entry.getValue();
+                            listItems.add(key);
+                        }
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setTitle("Pick a cabin");
+                        builder.setItems(listItems.toArray(new CharSequence[listItems.size()]), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String cabinIDD = user.getCabins().get(listItems.get(which));
+                                startEdit(user.getCabins().get(listItems.get(which)));
+                            }
+                        });
+                        builder.show();
+                    } else {
+                        Map.Entry<String,String> entry = user.getCabins().entrySet().iterator().next();
+                        String value = entry.getValue();
+                        startEdit(value);
+                    }
+                }
+            });
         }
 
 
         return view;
+    }
+
+    private void startEdit(String id) {
+        Intent intent = new Intent(activity, EditCabinInfoActivity.class);
+        intent.putExtra("cabin", id);
+        startActivity(intent);
     }
 
     @Override

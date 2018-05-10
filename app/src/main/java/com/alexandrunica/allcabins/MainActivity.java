@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -44,6 +47,7 @@ import com.squareup.otto.Subscribe;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -87,6 +91,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         } catch (NoSuchAlgorithmException e) {
 
         }
+
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final String languageFromDb = preferences.getString("language", "");
+        if (languageFromDb!= null && !languageFromDb.equals("")) {
+            if (languageFromDb.equals("en")) {
+                setLocale("en");
+            } else {
+                setLocale("ro");
+            }
+        }
+
         FirebaseApp.initializeApp(this);
 
 
@@ -119,6 +134,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 .enableAutoManage(this, this)
                 .build();
         sync();
+    }
+
+    public void setLocale(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
     }
 
     private void sync() {

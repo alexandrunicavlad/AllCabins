@@ -88,12 +88,13 @@ public class ProfileOperations extends FirebaseOperation {
         });
     }
 
-    public void insertUser(User user) {
+    public void insertUser(final User user) {
         mRef.child(user.getId()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Log.d("Debug", "Insert successful");
+                    getUser(user.getId());
                 } else {
                     Log.d("Debug", "Error completing task");
                 }
@@ -121,6 +122,19 @@ public class ProfileOperations extends FirebaseOperation {
 
     public void addFavorite(String id, String cabinId) {
         mRef.child(id).child("favorites").child(cabinId).setValue(cabinId).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d("Debug", "Insert successful");
+                } else {
+                    Log.d("Debug", "Error completing task");
+                }
+            }
+        });
+    }
+
+    public void addCabin(String id, Cabin cabin) {
+        mRef.child(id).child("cabins").child(cabin.getName()).setValue(cabin.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {

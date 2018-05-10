@@ -15,5 +15,6 @@ public class DatabaseUserModel {
         public static final String COLUMN_NAME_FAVORITES = "favorites";
         public static final String COLUMN_NAME_ADDRESS = "address";
         public static final String COLUMN_NAME_PHONE = "phone";
+        public static final String COLUMN_NAME_CABINS = "cabins";
     }
 }

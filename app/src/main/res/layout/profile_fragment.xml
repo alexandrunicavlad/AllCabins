@@ -154,6 +154,45 @@
                 android:background="@color/white" />
 
             <RelativeLayout
+                android:id="@+id/profile_manage_host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/manage_layout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="@string/manage_host"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_manage"
+                        android:tint="@color/white" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:layout_below="@id/manage_layout"
+                    android:background="@color/white" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
                 android:id="@+id/profile_host"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

@@ -82,7 +82,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_add_a_photo_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_edit_location_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -92,8 +92,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="eur" />
+                            <entry key="outputName" value="ic_manage" />
                             <entry key="sourceFile" value="C:\Users\alexa\Downloads\if_82_Ensign_Flag_Nation_union_2634509.svg" />
                           </map>
                         </option>

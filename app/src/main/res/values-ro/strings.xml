@@ -24,7 +24,7 @@
 
     <!-- Explore -->
     <string name="hi_there">BUNĂ!</string>
-    <string name="where_to">UNDE?></string>
+    <string name="where_to">UNDE?</string>
 
     <!-- Favorites -->
     <string name="favorite">Favorite</string>
@@ -37,6 +37,7 @@
     <string name="err_add">Nu sa reușit adăugarea</string>
     <string name="err_perm">Ai refuzat să citești permisiunea de stocare externă.</string>
     <string name="host_title">Deveniți o gazdă cu AllCabins</string>
+    <string name="manage_title">Schimbă %1$s!</string>
     <string name="host_name">Nume</string>
     <string name="host_location">Locație</string>
     <string name="host_select">Selectare Locație</string>
@@ -72,6 +73,7 @@
     <string name="notification">Notificări</string>
     <string name="invite_friends">Invită prieteni</string>
     <string name="become_host">Deveniți o gazdă</string>
+    <string name="manage_host">Gestionați cabanele</string>
     <string name="settings">Setări</string>
     <string name="feedback">Oferiți-ne feedback</string>
     <string name="logout">Deconectați-vă</string>
@@ -82,10 +84,10 @@
     <string name="favorites">Favorite</string>
     <string name="profile">Profile</string>
 
-    <string name="call_now">Call Now</string>
-    <string name="filtres">FILTERS</string>
-    <string name="distance">DISTANCE</string>
-    <string name="price_up">PRICE</string>
+    <string name="call_now">Sunați</string>
+    <string name="filtres">FILTRE</string>
+    <string name="distance">DISTANȚA</string>
+    <string name="price_up">PREȚ</string>
     <string name="load_cabins">Încărcați mai multe cabane</string>
     <string name="usd">3.9</string>
     <string name="eur">4.6</string>

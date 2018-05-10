@@ -102,12 +102,18 @@ public class CabinInfoAcitivty extends AppCompatActivity {
                 FloatingActionButton writeReview = (FloatingActionButton) findViewById(R.id.action_b);
                 FloatingActionButton uploadPhoto = (FloatingActionButton) findViewById(R.id.action_c);
 
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CabinInfoAcitivty.this);
+                final String id = preferences.getString("uid", "");
+
+                if (id != null && !id.equals("")) {
+                    save.setVisibility(View.VISIBLE);
+                } else {
+                    save.setVisibility(View.GONE);
+                }
                 save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         final ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, CabinInfoAcitivty.this);
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CabinInfoAcitivty.this);
-                        final String id = preferences.getString("uid", "");
                         profileOperations.addFavorite(id, cabin.getId());
                         add.collapse();
                     }

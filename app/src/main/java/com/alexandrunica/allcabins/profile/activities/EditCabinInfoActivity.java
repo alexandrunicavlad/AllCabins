@@ -1,29 +1,23 @@
 package com.alexandrunica.allcabins.profile.activities;
 
 import android.Manifest;
-import android.content.ClipData;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +26,7 @@ import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.map.event.OnGetCabinByIdEvent;
 import com.alexandrunica.allcabins.profile.event.OnInsertEvent;
 import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
@@ -54,9 +49,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,20 +57,22 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-public class HostActivity extends AppCompatActivity {
+public class EditCabinInfoActivity extends AppCompatActivity {
+
 
     private int itemCounter = 1;
     private final static int PLACE_PICKER_REQUEST = 1;
     private final static int REQUEST_PERMISSION_READ_EXTERNAL = 2;
     private final static int REQUEST_CODE_BROWSE_PICTURE = 3;
     private LinearLayout detailsAddressLayout, photosLayout;
-    private AutoCompleteTextView address, city, state, description, facilities, name;
+    private AutoCompleteTextView address, city, state, description, facilities, name, phone, email;
     private Cabin cabin;
     private ImageView photo;
     private List<Uri> userSelectedImageUriList = null;
     private StorageReference mStorage;
-    private TextView count;
+    private TextView count, title;
     private Slidr slidrPrice;
+    private RelativeLayout editLayout, progressLayout;
 
     @Inject
     DatabaseService databaseService;
@@ -91,7 +86,7 @@ public class HostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_host);
+        setContentView(R.layout.activity_edit_cabin_info);
         DaggerDbApplication app = ((DaggerDbApplication) this.getApplicationContext());
         AppDbComponent appDbComponent = app.getAppDbComponent();
         appDbComponent.inject(this);
@@ -101,6 +96,10 @@ public class HostActivity extends AppCompatActivity {
         userSelectedImageUriList = new ArrayList<>();
         mStorage = FirebaseStorage.getInstance().getReference();
 
+        String id = getIntent().getStringExtra("cabin");
+        cabinOperations.getCabin(id);
+
+        title = findViewById(R.id.host_title);
         detailsAddressLayout = findViewById(R.id.host_details_address);
         address = findViewById(R.id.host_address);
         city = findViewById(R.id.host_city);
@@ -108,8 +107,13 @@ public class HostActivity extends AppCompatActivity {
         description = findViewById(R.id.host_description);
         facilities = findViewById(R.id.host_facilities);
         name = findViewById(R.id.host_name);
+        phone = findViewById(R.id.host_phone);
+        email = findViewById(R.id.host_email);
         photo = findViewById(R.id.host_add_image);
         photosLayout = findViewById(R.id.host_images);
+
+        progressLayout = findViewById(R.id.progress_layout);
+        editLayout = findViewById(R.id.host_main_layout);
 
         TextView save = findViewById(R.id.host_submit);
         ImageView minus = findViewById(R.id.item_minus);
@@ -133,7 +137,7 @@ public class HostActivity extends AppCompatActivity {
                 int readExternalStoragePermission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
                 if (readExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
                     String requirePermission[] = {Manifest.permission.READ_EXTERNAL_STORAGE};
-                    ActivityCompat.requestPermissions(HostActivity.this, requirePermission, REQUEST_PERMISSION_READ_EXTERNAL);
+                    ActivityCompat.requestPermissions(EditCabinInfoActivity.this, requirePermission, REQUEST_PERMISSION_READ_EXTERNAL);
                 } else {
                     openPictureGallery();
                 }
@@ -152,23 +156,9 @@ public class HostActivity extends AppCompatActivity {
             }
         });
 
-        location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                    startActivityForResult(builder.build(HostActivity.this), PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         slidrPrice.setMax(300);
         slidrPrice.setKm(false);
-        slidrPrice.setCurrentValue(50);
 
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +180,37 @@ public class HostActivity extends AppCompatActivity {
         });
     }
 
+    private void updateUI() {
+
+        name.setText(cabin.getName());
+        title.setText(getResources().getString(R.string.manage_title, cabin.getName()));
+        address.setText(cabin.getAddress());
+        city.setText(cabin.getCity());
+        email.setText(cabin.getEmail());
+        phone.setText(cabin.getPhone());
+        state.setText(cabin.getState());
+        count.setText(cabin.getGuests());
+        itemCounter = Integer.parseInt(cabin.getGuests());
+        slidrPrice.setCurrentValue(Float.valueOf(cabin.getPrice()));
+        description.setText(cabin.getDescription());
+        facilities.setText(cabin.getFacilities());
+        progressLayout.setVisibility(View.GONE);
+        editLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Subscribe
+    public void onGetCabin(OnGetCabinByIdEvent event) {
+        if (event.getCabin() != null) {
+            cabin = event.getCabin();
+            updateUI();
+        } else {
+
+        }
+
+    }
+
+
+
     private void saveAllInfo() {
         cabin.setState(state.getText().toString());
         cabin.setCity(city.getText().toString());
@@ -199,12 +220,8 @@ public class HostActivity extends AppCompatActivity {
         cabin.setDescription(description.getText().toString());
         cabin.setFacilities(facilities.getText().toString());
         cabin.setName(name.getText().toString());
-        User user = databaseService.getUser();
-        if (user != null) {
-            cabin.setPhone(user.getPhone());
-            cabin.setEmail(user.getEmail());
-            cabin.setIdAdded(user.getId());
-        }
+        cabin.setPhone(phone.getText().toString());
+        cabin.setEmail(email.getText().toString());
         cabinOperations.insertCabin(cabin);
     }
 
@@ -291,30 +308,34 @@ public class HostActivity extends AppCompatActivity {
 
     private void uploadPhoto(String name) {
         final HashMap<String, String> uploaded = new HashMap<>();
-        for (final Uri selectedImageUri : userSelectedImageUriList) {
-            StorageReference fileToUpload = mStorage.child("Images").child(name).child(selectedImageUri.getLastPathSegment());
-            fileToUpload.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    uploaded.put(selectedImageUri.getLastPathSegment(), downloadUrl.toString());
-                    if (uploaded.size() == userSelectedImageUriList.size()) {
-                        cabin.setPictures(uploaded);
-                        cabin.setThumbPhotoUrl(uploaded.entrySet().iterator().next().getValue());
-                        saveAllInfo();
+        if (userSelectedImageUriList.size() !=0) {
+            for (final Uri selectedImageUri : userSelectedImageUriList) {
+                StorageReference fileToUpload = mStorage.child("Images").child(name).child(selectedImageUri.getLastPathSegment());
+                fileToUpload.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        uploaded.put(selectedImageUri.getLastPathSegment(), downloadUrl.toString());
+                        if (uploaded.size() == userSelectedImageUriList.size()) {
+                            cabin.setPictures(uploaded);
+                            cabin.setThumbPhotoUrl(uploaded.entrySet().iterator().next().getValue());
+                            saveAllInfo();
+                        }
                     }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    uploaded.put(selectedImageUri.getLastPathSegment(), "");
-                    if (uploaded.size() == userSelectedImageUriList.size()) {
-                        cabin.setPictures(uploaded);
-                        cabin.setThumbPhotoUrl(uploaded.entrySet().iterator().next().getValue());
-                        saveAllInfo();
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        uploaded.put(selectedImageUri.getLastPathSegment(), "");
+                        if (uploaded.size() == userSelectedImageUriList.size()) {
+                            cabin.setPictures(uploaded);
+                            cabin.setThumbPhotoUrl(uploaded.entrySet().iterator().next().getValue());
+                            saveAllInfo();
+                        }
                     }
-                }
-            });
+                });
+            }
+        } else {
+            saveAllInfo();
         }
     }
 

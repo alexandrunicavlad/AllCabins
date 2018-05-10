@@ -348,7 +348,7 @@ public class LoginFragment extends Fragment {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("uid", id);
             editor.apply();
-            profileOperations.getUser(id);
+
             //openAccount();
         } else {
             if (event.isExistEmail()) {

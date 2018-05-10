@@ -38,6 +38,7 @@ public class DatabaseService extends SQLiteOpenHelper {
                     DatabaseUserModel.UserEntity.COLUMN_NAME_PHOTO + " TEXT," +
                     DatabaseUserModel.UserEntity.COLUMN_NAME_PHONE + " TEXT," +
                     DatabaseUserModel.UserEntity.COLUMN_NAME_ADDRESS + " TEXT," +
+                    DatabaseUserModel.UserEntity.COLUMN_NAME_CABINS + " TEXT," +
                     DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
@@ -119,6 +120,7 @@ public class DatabaseService extends SQLiteOpenHelper {
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_PHOTO, user.getProfilePhoto());
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_PHONE, user.getPhone());
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_ADDRESS, new Gson().toJson(user.getAddressModel()));
+            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_CABINS, new Gson().toJson(user.getCabins()));
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES, new Gson().toJson(user.getFavorites()));
             long newRowId = mDb.insert(DatabaseUserModel.UserEntity.TABLE_NAME, null, values);
         } catch (Exception e) {
@@ -141,6 +143,7 @@ public class DatabaseService extends SQLiteOpenHelper {
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_PHOTO, user.getProfilePhoto());
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_PHONE, user.getPhone());
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_ADDRESS, new Gson().toJson(user.getAddressModel()));
+            values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_CABINS, new Gson().toJson(user.getCabins()));
             values.put(DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES, new Gson().toJson(user.getFavorites()));
             long newRowId = mDb.update(DatabaseUserModel.UserEntity.TABLE_NAME, values, DatabaseUserModel.UserEntity.COLUMN_NAME_ID + "= ?", new String[]{user.getId()});
 
@@ -205,9 +208,11 @@ public class DatabaseService extends SQLiteOpenHelper {
                     String favorites = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseUserModel.UserEntity.COLUMN_NAME_FAVORITES));
                     String address = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseUserModel.UserEntity.COLUMN_NAME_ADDRESS));
                     String phone = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseUserModel.UserEntity.COLUMN_NAME_PHONE));
+                    String cabins = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseUserModel.UserEntity.COLUMN_NAME_CABINS));
                     HashMap<String, String> fav = new Gson().fromJson(favorites, new TypeToken<HashMap<String, String>>(){}.getType());
+                    HashMap<String, String> cab = new Gson().fromJson(cabins, new TypeToken<HashMap<String, String>>(){}.getType());
                     UserAddressModel addressModel = new Gson().fromJson(address, new TypeToken<UserAddressModel>(){}.getType());
-                    User user = new User(idField, email,  name, photo, phone, addressModel, fav);
+                    User user = new User(idField, email,  name, photo, phone, addressModel, fav, cab);
                     return user;
                 } catch (Exception e) {
                     //Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();

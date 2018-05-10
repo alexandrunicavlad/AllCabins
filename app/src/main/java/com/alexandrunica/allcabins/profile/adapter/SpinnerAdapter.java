@@ -26,7 +26,7 @@ public class SpinnerAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return mCounting[position];
     }
 
     @Override

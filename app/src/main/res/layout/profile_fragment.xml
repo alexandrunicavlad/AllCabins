@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/profile_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,55 +8,54 @@
     android:scrollbars="none">
 
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/profile_top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="220dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/profile_background"
+        android:orientation="vertical">
 
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_profile"
+            app:civ_border_color="#FFFFFFFF"
+            app:civ_border_width="2dp" />
 
-        <LinearLayout
-            android:id="@+id/profile_top"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/profile_background"
-            android:orientation="vertical">
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
 
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/ic_profile"
-                app:civ_border_color="#FFFFFFFF"
-                app:civ_border_width="2dp" />
+        <TextView
+            android:id="@+id/profile_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/profile_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:padding="10dp"
-                android:textColor="@color/white"
-                android:textSize="30sp" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/profile_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:padding="10dp"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/logout_account"
+        android:layout_below="@id/profile_top">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/logout_account"
-            android:layout_below="@id/profile_top"
+
             android:orientation="vertical"
             android:paddingBottom="10dp"
             android:paddingEnd="15dp"
@@ -160,9 +159,9 @@
                 android:visibility="gone">
 
                 <RelativeLayout
+                    android:id="@+id/manage_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/manage_layout">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -185,8 +184,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_margin="10dp"
                     android:layout_below="@id/manage_layout"
+                    android:layout_margin="10dp"
                     android:background="@color/white" />
 
             </RelativeLayout>
@@ -277,21 +276,18 @@
             </RelativeLayout>
 
         </LinearLayout>
+    </ScrollView>
 
-
-        <TextView
-            android:id="@+id/logout_account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/border_white"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/logout"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
-    </RelativeLayout>
-
-</ScrollView>
+    <TextView
+        android:id="@+id/logout_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/border_white"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/logout"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+</RelativeLayout>

@@ -110,6 +110,10 @@ public class EditProfileFragment extends Fragment {
                 image.setImageBitmap(stringToBitMap(user.getProfilePhoto()));
             }
 
+            if (user.getPhone()!=null) {
+                phoneText.setText(user.getPhone());
+            }
+
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

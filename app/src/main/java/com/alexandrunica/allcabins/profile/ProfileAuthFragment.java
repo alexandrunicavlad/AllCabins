@@ -19,6 +19,7 @@ import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -31,6 +32,8 @@ import javax.inject.Inject;
 public class ProfileAuthFragment extends Fragment {
 
     private Activity activity;
+    private GoogleSignInClient mGoogleSignInClient;
+    private static final int RC_SIGN_IN = 9001;
 
     @Inject
     Bus bus;

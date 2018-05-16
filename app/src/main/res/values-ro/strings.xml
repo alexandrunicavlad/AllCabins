@@ -57,6 +57,7 @@
     <string name="login">Logare</string>
     <string name="login_title">Bine ați venit la All Cabins</string>
     <string name="login_facebook">Continuați cu Facebook</string>
+    <string name="login_google">Continuați cu Google</string>
     <string name="login_create">Creează cont</string>
     <string name="forgot">Ai uitat parola?</string>
     <string name="email">Email</string>
@@ -91,6 +92,7 @@
     <string name="distance">DISTANȚA</string>
     <string name="price_up">PREȚ</string>
     <string name="load_cabins">Încărcați mai multe cabane</string>
+    <string name="error_string">Ne pare rău dar a apărut o eroare.</string>
     <string name="usd">3.9</string>
     <string name="eur">4.6</string>
     <string name="gbp">5.3</string>

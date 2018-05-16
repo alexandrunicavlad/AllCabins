@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -26,15 +27,26 @@ import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.event.OnLoginEvent;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.event.OnRegisterDoneEvent;
+import com.alexandrunica.allcabins.profile.event.OnSocialLoginEvent;
+import com.alexandrunica.allcabins.profile.event.OnUserExistEvent;
+import com.alexandrunica.allcabins.profile.event.OnWriteUid;
 import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.alexandrunica.allcabins.service.firebase.auth.FirebaseAuthentication;
+import com.alexandrunica.allcabins.widget.MessageDialog;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.otto.Bus;
@@ -62,6 +74,9 @@ public class LoginFragment extends Fragment {
     private Toolbar toolbar;
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+    private static final int RC_SIGN_IN = 9001;
+    private ProfileOperations profileOperations;
 
     public static LoginFragment newInstance() {
         LoginFragment loginFragment = new LoginFragment();
@@ -87,6 +102,9 @@ public class LoginFragment extends Fragment {
         final RelativeLayout loginLayout = view.findViewById(R.id.login_main_layout);
         final RelativeLayout registerLayout = view.findViewById(R.id.register_main_layout);
         final RelativeLayout forgotLayout = view.findViewById(R.id.forgot_main_layout);
+
+        profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, activity);
+        configureGoogleSignIn();
 
         final TextView loginButton = view.findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -260,38 +278,103 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
-        facebookLogin(view);
+
+        TextView facebookButton = view.findViewById(R.id.facebook_button);
+        TextView googleButton = view.findViewById(R.id.google_button);
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInGoogle();
+            }
+        });
 
         return view;
     }
 
+    private void configureGoogleSignIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(activity, gso);
+        mGoogleSignInClient.signOut().addOnCompleteListener(activity,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
+    }
+
+    private void signInGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
     @Subscribe
-    public void onUserLogin(OnLoginEvent event){
-        if(event.isLogged()){
+    public void onSocialLogin(OnSocialLoginEvent event) {
+        if (event.isLogged()) {
+            String id = authentication.getUserUid();
+            if (id == null) {
+                MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
+                return;
+            }
+            profileOperations.checkUserExists(id);
+        } else {
+            MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
+        }
+    }
+
+    @Subscribe
+    public void onUserExist(OnUserExistEvent existEvent) {
+        String id = authentication.getUserUid();
+        if (id == null) {
+            MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
+            return;
+        }
+        if (existEvent.isExist()) {
+            profileOperations.getUser(id);
+        } else {
+            FirebaseUser firebaseUser = authentication.getFirebaseUser();
+            if (firebaseUser != null) {
+                User user = new User();
+                user.setId(id);
+                user.setEmail(firebaseUser.getEmail());
+                user.setUsername(firebaseUser.getDisplayName());
+                profileOperations.checkandInsertProfileExists(user);
+            }
+        }
+    }
+
+    @Subscribe
+    public void onWriteId(OnWriteUid onWriteUid) {
+        if (onWriteUid.getId() != null && !onWriteUid.getId().equals("")) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("uid", onWriteUid.getId());
+            editor.apply();
+        }
+    }
+
+    @Subscribe
+    public void onUserLogin(OnLoginEvent event) {
+        if (event.isLogged()) {
             User user = new User();
             String id = authentication.getUserUid();
-            if(id == null){
-                //showMessage(activity.getString(R.string.ok_btn),activity.getString(R.string.error_string));
+            if (id == null) {
+                MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
                 return;
             }
             FirebaseUser userFirebase = FirebaseAuth.getInstance().getCurrentUser();
             user.setId(id);
             user.setEmail(event.getEmail());
             user.setUsername(userFirebase.getDisplayName());
-            ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, activity);
             profileOperations.checkandInsertProfileExists(user);
-
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("uid", id);
-            editor.apply();
             profileOperations.getUser(id);
-            //openAccount();
-        }
-        else{
-            //error
+        } else {
+            MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
         }
     }
+
 
     private void facebookLogin(View view) {
         mCallbackManager = CallbackManager.Factory.create();
@@ -327,7 +410,14 @@ public class LoginFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                authentication.googleLogin(account);
+            } catch (ApiException e) {
+            }
+        }
     }
 
     @Subscribe
@@ -336,7 +426,7 @@ public class LoginFragment extends Fragment {
             User user = new User();
             String id = authentication.getUserUid();
             if (id == null) {
-                //showMessage(activity.getString(R.string.ok_btn),activity.getString(R.string.error_string));
+                MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
                 return;
             }
             user.setId(id);
@@ -344,12 +434,6 @@ public class LoginFragment extends Fragment {
             user.setUsername(event.getName());
             ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, activity);
             profileOperations.checkandInsertProfileExists(user);
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("uid", id);
-            editor.apply();
-
-            //openAccount();
         } else {
             if (event.isExistEmail()) {
                 Toast.makeText(activity, getResources().getString(R.string.register_exist), Toast.LENGTH_SHORT).show();
@@ -357,10 +441,6 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(activity, getResources().getString(R.string.register_err), Toast.LENGTH_SHORT).show();
         }
     }
-
-//   private void openAccount() {
-//       bus.post(new OnOpenAccount(ProfileFragment.newInstance(user)));
-//    }
 
     @Override
     public void onStart() {

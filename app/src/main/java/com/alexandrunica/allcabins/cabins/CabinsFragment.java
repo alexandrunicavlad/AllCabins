@@ -2,7 +2,9 @@ package com.alexandrunica.allcabins.cabins;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -26,12 +28,15 @@ import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.events.OnMoreEvent;
 import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.explore.event.OnGetFiltredCabinEvent;
+import com.alexandrunica.allcabins.map.helper.LocationHelper;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.widget.Slidr;
+import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.zcw.togglebutton.ToggleButton;
@@ -201,6 +206,30 @@ public class CabinsFragment extends Fragment {
         }
     }
 
+    private void filterByDistance() {
+        List<Cabin> filtredList = new ArrayList<>();
+        if (cabinList != null) {
+            for (Cabin cabin : cabinList) {
+                CurrencyConverter currencyConverter = new CurrencyConverter(activity);
+                if (cabin.getDistance() != 0) {
+                    if ((int) cabin.getDistance() <= distance) {
+                        filtredList.add(cabin);
+                    }
+                } else {
+                    filtredList.add(cabin);
+                }
+
+            }
+            if (filtredList.size() != 0) {
+                cabinList = filtredList;
+            } else {
+                Toast.makeText(activity, getResources().getString(R.string.err_message), Toast.LENGTH_SHORT).show();
+            }
+
+            setRecyclerView();
+        }
+    }
+
     private void setRecyclerView() {
         sorryLayout.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
@@ -258,8 +287,28 @@ public class CabinsFragment extends Fragment {
         if (event.getCabins() != null && event.getCabins().size() != 0) {
             isFiltred = false;
             cabinList = event.getCabins();
+            for (Cabin cabin : cabinList) {
+                LocationModel cabinLocation = new Gson().fromJson(cabin.getLocation(), LocationModel.class);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+                String lastLocation = preferences.getString("last_location", "");
+                if (lastLocation != null && !lastLocation.equals("")) {
+                    LocationModel currentLocation = new Gson().fromJson(lastLocation, LocationModel.class);
+                    if (currentLocation != null && cabinLocation != null) {
+                        LocationHelper locationHelper = new LocationHelper(activity);
+                        //float distance = locationHelper.calcRoute(currentLocation, cabinLocation) / 1000;
+                        double distanceD = locationHelper.calculationByDistance(currentLocation, cabinLocation);
+                        cabin.setDistance(distanceD);
+                    }
+                }
+            }
+            if (isPriceSelected && isDistanceSelected) {
+                filterByPrice();
+                filterByDistance();
+            }
             if (isPriceSelected) {
                 filterByPrice();
+            } else if (isDistanceSelected) {
+                filterByDistance();
             } else {
                 setRecyclerView();
             }
@@ -373,7 +422,7 @@ public class CabinsFragment extends Fragment {
                     filterByPrice();
                 }
                 if (isDistanceSelected) {
-
+                    filterByDistance();
                 }
 
                 if (!isPriceSelected && !isDistanceSelected) {

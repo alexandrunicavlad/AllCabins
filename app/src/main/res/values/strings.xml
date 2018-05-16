@@ -8,14 +8,14 @@
     <string name="fb_login_protocol_scheme">fb395423620936727</string>
 
     <!-- Cabin -->
-    <string name="night">Night</string>
+    <string name="night">Night</string>f
     <string name="description">Description</string>
     <string name="facilities">Facilities</string>
     <string name="rating">Rating</string>
     <string name="add_fav">Add to favorite</string>
     <string name="write_rew">Write a review</string>
     <string name="upload">Upload photos</string>
-    <string name="err_message">Cabins not found with this price</string>
+    <string name="err_message">Cabins not found with this criteria.</string>
     <string name="near">Near </string>
     <string name="recomended">Recommended</string>
     <string name="sorry">Sorry!</string>
@@ -57,6 +57,7 @@
     <string name="login">Log In</string>
     <string name="login_title">Welcome to All Cabins</string>
     <string name="login_facebook">Continue with Facebook</string>
+    <string name="login_google">Continue with Google</string>
     <string name="login_create">Create Account</string>
     <string name="forgot">Forgot passsword?</string>
     <string name="email">Email</string>
@@ -85,7 +86,7 @@
     <string name="map">Map</string>
     <string name="favorites">Favorite</string>
     <string name="profile">Profile</string>
-
+    <string name="error_string">We\'re sorry, but there was an error.</string>
     <string name="call_now">Call Now</string>
     <string name="filtres">FILTERS</string>
     <string name="distance">DISTANCE</string>

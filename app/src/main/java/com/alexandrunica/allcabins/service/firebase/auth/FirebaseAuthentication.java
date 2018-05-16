@@ -9,7 +9,9 @@ import android.widget.Toast;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.event.OnLoginEvent;
 import com.alexandrunica.allcabins.profile.event.OnRegisterDoneEvent;
+import com.alexandrunica.allcabins.profile.event.OnSocialLoginEvent;
 import com.facebook.AccessToken;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.squareup.otto.Bus;
 
 import java.util.concurrent.Executor;
@@ -70,6 +73,26 @@ public class FirebaseAuthentication {
                     bus.post(new OnRegisterDoneEvent(true, user.getEmail(), user.getDisplayName()));
                 } else {
                     bus.post(new OnRegisterDoneEvent(false, "", ""));
+                }
+            }
+        });
+    }
+
+    public void googleLogin(final GoogleSignInAccount acct) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user != null) {
+                        bus.post(new OnSocialLoginEvent(true, user));
+                    } else {
+                        bus.post(new OnSocialLoginEvent(false, user));
+                    }
+                } else {
+                    bus.post(new OnSocialLoginEvent(false, null));
+
                 }
             }
         });
@@ -132,6 +155,14 @@ public class FirebaseAuthentication {
                 }
             });
         }
+    }
+
+    public FirebaseUser getFirebaseUser() {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user == null)
+            return null;
+        else
+            return user;
     }
 
     public String getUserUid() {

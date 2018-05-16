@@ -9,6 +9,8 @@ import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
+import com.alexandrunica.allcabins.profile.event.OnUserExistEvent;
+import com.alexandrunica.allcabins.profile.event.OnWriteUid;
 import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -77,6 +79,7 @@ public class ProfileOperations extends FirebaseOperation {
                 } else {
                     databaseService.writeUser(user);
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(user)));
+                    bus.post(new OnWriteUid(user.getId()));
                 }
             }
 
@@ -148,6 +151,24 @@ public class ProfileOperations extends FirebaseOperation {
 
     public void removeFavorite(String id, String cabinId) {
         mRef.child(id).child("favorites").child(cabinId).removeValue();
+    }
+
+    public void checkUserExists(final String userID) {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(userID)) {
+                    bus.post(new OnUserExistEvent(true));
+                } else {
+                    bus.post(new OnUserExistEvent(false));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("Debug", "Error retrieving data: " + databaseError.getMessage());
+            }
+        });
     }
 }
 

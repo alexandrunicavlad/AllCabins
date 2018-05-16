@@ -60,6 +60,20 @@
                     android:padding="10dp"
                     android:text="@string/login_facebook"
                     android:textColor="@color/seekbar_color"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/google_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/border_background_white"
+                    android:drawableStart="@drawable/googleg_standard_color_18"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/login_google"
+                    android:textColor="@color/seekbar_color"
                     android:textSize="18sp" />
 
                 <TextView

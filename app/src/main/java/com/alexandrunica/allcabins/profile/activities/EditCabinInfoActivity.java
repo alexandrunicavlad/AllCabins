@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.cabins.model.CabinInfoModel;
 import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
@@ -60,7 +61,7 @@ import javax.inject.Inject;
 public class EditCabinInfoActivity extends AppCompatActivity {
 
 
-    private int itemCounter = 1;
+    private int itemCounter, itemCounterBath, itemCounterBed, itemCounterRoom = 1;
     private final static int PLACE_PICKER_REQUEST = 1;
     private final static int REQUEST_PERMISSION_READ_EXTERNAL = 2;
     private final static int REQUEST_CODE_BROWSE_PICTURE = 3;
@@ -70,7 +71,7 @@ public class EditCabinInfoActivity extends AppCompatActivity {
     private ImageView photo;
     private List<Uri> userSelectedImageUriList = null;
     private StorageReference mStorage;
-    private TextView count, title;
+    private TextView countGuests, countBedrooms, countBed, countBath, title;
     private Slidr slidrPrice;
     private RelativeLayout editLayout, progressLayout;
 
@@ -116,9 +117,18 @@ public class EditCabinInfoActivity extends AppCompatActivity {
         editLayout = findViewById(R.id.host_main_layout);
 
         TextView save = findViewById(R.id.host_submit);
-        ImageView minus = findViewById(R.id.item_minus);
-        ImageView plus = findViewById(R.id.item_plus);
-        count = findViewById(R.id.item_count);
+        ImageView minusGuests = findViewById(R.id.item_minus);
+        ImageView plusGuests = findViewById(R.id.item_plus);
+        ImageView minusBed = findViewById(R.id.item_minus_bed);
+        ImageView plusBed = findViewById(R.id.item_plus_bed);
+        ImageView minusBath = findViewById(R.id.item_minus_bath);
+        ImageView plusBath = findViewById(R.id.item_plus_bed_bath);
+        ImageView minusBedrooms = findViewById(R.id.item_minus_bedroom);
+        ImageView plusBedrooms = findViewById(R.id.item_plus_bedroom);
+        countGuests = findViewById(R.id.item_count);
+        countBed = findViewById(R.id.item_count_bed);
+        countBath = findViewById(R.id.item_count_bed_bath);
+        countBedrooms = findViewById(R.id.item_count_bed_room);
         slidrPrice = findViewById(R.id.slidr_price);
         TextView location = findViewById(R.id.host_location);
 
@@ -160,22 +170,75 @@ public class EditCabinInfoActivity extends AppCompatActivity {
         slidrPrice.setMax(300);
         slidrPrice.setKm(false);
 
-        plus.setOnClickListener(new View.OnClickListener() {
+        plusGuests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 itemCounter += 1;
-                count.setText(String.valueOf(itemCounter));
+                countGuests.setText(String.valueOf(itemCounter));
             }
         });
 
-        minus.setOnClickListener(new View.OnClickListener() {
+        minusGuests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (itemCounter >= 2) {
                     itemCounter -= 1;
-                    count.setText(String.valueOf(itemCounter));
+                    countGuests.setText(String.valueOf(itemCounter));
                 }
+            }
+        });
 
+        plusBath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemCounterBath += 1;
+                countBath.setText(String.valueOf(itemCounterBath));
+            }
+        });
+
+        minusBath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (itemCounterBath >= 2) {
+                    itemCounterBath -= 1;
+                    countBath.setText(String.valueOf(itemCounterBath));
+                }
+            }
+        });
+
+        plusBed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemCounterBed += 1;
+                countBed.setText(String.valueOf(itemCounterBed));
+            }
+        });
+
+        minusBed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (itemCounterBed >= 2) {
+                    itemCounterBed -= 1;
+                    countBed.setText(String.valueOf(itemCounterBed));
+                }
+            }
+        });
+
+        plusBedrooms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemCounterRoom += 1;
+                countBedrooms.setText(String.valueOf(itemCounterRoom));
+            }
+        });
+
+        minusBedrooms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (itemCounterRoom >= 2) {
+                    itemCounterRoom -= 1;
+                    countBedrooms.setText(String.valueOf(itemCounterRoom));
+                }
             }
         });
     }
@@ -189,8 +252,18 @@ public class EditCabinInfoActivity extends AppCompatActivity {
         email.setText(cabin.getEmail());
         phone.setText(cabin.getPhone());
         state.setText(cabin.getState());
-        count.setText(cabin.getGuests());
-        itemCounter = Integer.parseInt(cabin.getGuests());
+        CabinInfoModel cabinInfoModel = new Gson().fromJson(cabin.getCabinInfo(), CabinInfoModel.class);
+        if (cabinInfoModel != null) {
+            countGuests.setText(cabinInfoModel.getGuests());
+            countBath.setText(cabinInfoModel.getBath());
+            countBed.setText(cabinInfoModel.getBeds());
+            countBedrooms.setText(cabinInfoModel.getBedrooms());
+            itemCounter = Integer.parseInt(cabinInfoModel.getGuests());
+            itemCounterBath = Integer.parseInt(cabinInfoModel.getBath());
+            itemCounterBed = Integer.parseInt(cabinInfoModel.getBeds());
+            itemCounterRoom = Integer.parseInt(cabinInfoModel.getBedrooms());
+        }
+
         slidrPrice.setCurrentValue(Float.valueOf(cabin.getPrice()));
         description.setText(cabin.getDescription());
         facilities.setText(cabin.getFacilities());
@@ -210,12 +283,12 @@ public class EditCabinInfoActivity extends AppCompatActivity {
     }
 
 
-
     private void saveAllInfo() {
         cabin.setState(state.getText().toString());
         cabin.setCity(city.getText().toString());
         cabin.setAddress(address.getText().toString());
-        cabin.setGuests(count.getText().toString());
+        CabinInfoModel cabinInfoModel = new CabinInfoModel(countGuests.getText().toString(), countBed.getText().toString(), countBedrooms.getText().toString(), countBath.getText().toString());
+        cabin.setCabinInfo(new Gson().toJson(cabinInfoModel));
         cabin.setPrice(String.valueOf(slidrPrice.getCurrentValue()));
         cabin.setDescription(description.getText().toString());
         cabin.setFacilities(facilities.getText().toString());
@@ -308,7 +381,7 @@ public class EditCabinInfoActivity extends AppCompatActivity {
 
     private void uploadPhoto(String name) {
         final HashMap<String, String> uploaded = new HashMap<>();
-        if (userSelectedImageUriList.size() !=0) {
+        if (userSelectedImageUriList.size() != 0) {
             for (final Uri selectedImageUri : userSelectedImageUriList) {
                 StorageReference fileToUpload = mStorage.child("Images").child(name).child(selectedImageUri.getLastPathSegment());
                 fileToUpload.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

@@ -5,247 +5,344 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/main_layout_cabin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main_layout_cabin"
-        android:visibility="gone">
+        android:visibility="visible">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <RelativeLayout
-                android:id="@+id/image_layout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/unselected_tab">
+                android:layout_height="match_parent">
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/image_pager"
+                <RelativeLayout
+                    android:id="@+id/image_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="200dp"
+                    android:background="@color/unselected_tab">
 
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/image_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/cabin_no_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_above="@id/cabin_info_price"
+                    android:layout_alignTop="@id/image_layout"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_no_image"
+                    android:tint="@color/close_color" />
+
+                <TextView
+                    android:id="@+id/cabin_info_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/image_layout"
+                    android:layout_centerHorizontal="true"
+                    android:background="#D9FFFFFF"
+                    android:padding="5dp"
+                    android:textColor="@color/close_color"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/cabin_info_phone"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/image_layout"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="-25dp"
+                    android:background="@drawable/round_background"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_phone"
+                    android:tint="@color/seekbar_color" />
+
+                <ImageView
+                    android:id="@+id/cabin_close"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_back" />
+
+                <ImageView
+                    android:id="@+id/cabin_info_location"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/image_layout"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="-25dp"
+                    android:background="@drawable/round_background"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_navigation"
+                    android:tint="@color/yellow_color"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/cabin_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_layout"
+                    android:layout_toEndOf="@id/cabin_info_phone"
+                    android:layout_toStartOf="@id/cabin_info_location"
+                    android:gravity="center"
+                    android:minHeight="90dp"
+                    android:orientation="vertical"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp">
+
+                    <TextView
+                        android:id="@+id/cabin_info_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/cabin_info_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/unselected_tab"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cabin_info"
+                    android:orientation="vertical"
+                    android:padding="25dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:weightSum="1">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_guests" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:id="@+id/guest_number"
+                                android:text="@string/host_guest"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_bedroom" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:text="@string/host_bedrooms"
+                                android:id="@+id/bedroom_number"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="20dp"
+                        android:weightSum="1">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_bed" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:id="@+id/bed_number"
+                                android:text="@string/host_bed"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/ic_bath" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:text="@string/host_bath"
+                                android:id="@+id/bath_number"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/description"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/cabin_info_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/unselected_tab" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/facilities"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/cabin_info_facilities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/unselected_tab" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/rating"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <RatingBar
+                        android:id="@+id/cabin_rating_star"
+                        style="@style/Base.Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp" />
+
+                    <TextView
+                        android:id="@+id/cabin_info_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
             </RelativeLayout>
+        </ScrollView>
 
-            <ImageView
-                android:id="@+id/cabin_no_image"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_above="@id/cabin_info_price"
-                android:layout_alignTop="@id/image_layout"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_no_image"
-                android:tint="@color/close_color" />
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/cabin_add_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            fab:fab_addButtonColorNormal="@color/seekbar_color"
+            fab:fab_addButtonColorPressed="@color/seekbar_color"
+            fab:fab_addButtonPlusIconColor="@color/white"
+            fab:fab_addButtonSize="normal"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            fab:fab_labelsPosition="left">
 
-            <TextView
-                android:id="@+id/cabin_info_price"
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_a"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/image_layout"
-                android:layout_centerHorizontal="true"
-                android:background="#D9FFFFFF"
-                android:padding="5dp"
-                android:textColor="@color/close_color"
-                android:textSize="20sp" />
+                fab:fab_colorNormal="@color/seekbar_color"
+                fab:fab_colorPressed="@color/seekbar_color"
+                fab:fab_icon="@drawable/ic_favorite_white"
+                fab:fab_size="mini"
+                fab:fab_title="@string/add_fav" />
 
-            <ImageView
-                android:id="@+id/cabin_info_phone"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/image_layout"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="-25dp"
-                android:background="@drawable/round_background"
-                android:padding="5dp"
-                android:src="@drawable/ic_phone"
-                android:tint="@color/seekbar_color" />
-
-            <ImageView
-                android:id="@+id/cabin_close"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:padding="5dp"
-                android:src="@drawable/ic_exit" />
-
-            <ImageView
-                android:id="@+id/cabin_info_location"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@id/image_layout"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="-25dp"
-                android:background="@drawable/round_background"
-                android:padding="5dp"
-                android:src="@drawable/ic_navigation"
-                android:tint="@color/yellow_color"
-                android:visibility="visible" />
-
-            <LinearLayout
-                android:id="@+id/cabin_info"
-                android:layout_width="match_parent"
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_b"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/image_layout"
-                android:layout_toEndOf="@id/cabin_info_phone"
-                android:layout_toStartOf="@id/cabin_info_location"
-                android:gravity="center"
-                android:minHeight="90dp"
-                android:orientation="vertical"
-                android:paddingEnd="5dp"
-                android:paddingStart="5dp">
+                fab:fab_colorNormal="@color/seekbar_color"
+                fab:fab_colorPressed="@color/seekbar_color"
+                fab:fab_icon="@drawable/ic_thumbs"
+                fab:fab_size="mini"
+                fab:fab_title="@string/write_rew" />
 
-                <TextView
-                    android:id="@+id/cabin_info_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/cabin_info_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="@color/unselected_tab"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_c"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cabin_info"
-                android:orientation="vertical"
-                android:padding="10dp">
+                fab:fab_colorNormal="@color/seekbar_color"
+                fab:fab_colorPressed="@color/seekbar_color"
+                fab:fab_icon="@drawable/ic_fupload"
+                fab:fab_size="mini"
+                fab:fab_title="@string/upload" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/description"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/cabin_info_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/unselected_tab" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/facilities"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/cabin_info_facilities"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/unselected_tab" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/rating"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <RatingBar
-                    android:id="@+id/cabin_rating_star"
-                    style="@style/Base.Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp" />
-
-                <TextView
-                    android:id="@+id/cabin_info_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-        </RelativeLayout>
-    </ScrollView>
-
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/cabin_add_fav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        fab:fab_addButtonColorNormal="@color/seekbar_color"
-        fab:fab_addButtonColorPressed="@color/seekbar_color"
-        fab:fab_addButtonPlusIconColor="@color/white"
-        fab:fab_addButtonSize="normal"
-        fab:fab_labelStyle="@style/menu_labels_style"
-        fab:fab_labelsPosition="left">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/seekbar_color"
-            fab:fab_colorPressed="@color/seekbar_color"
-            fab:fab_icon="@drawable/ic_favorite_white"
-            fab:fab_size="mini"
-            fab:fab_title="@string/add_fav" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_b"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/seekbar_color"
-            fab:fab_colorPressed="@color/seekbar_color"
-            fab:fab_icon="@drawable/ic_thumbs"
-            fab:fab_size="mini"
-            fab:fab_title="@string/write_rew" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_c"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/seekbar_color"
-            fab:fab_colorPressed="@color/seekbar_color"
-            fab:fab_icon="@drawable/ic_fupload"
-            fab:fab_size="mini"
-            fab:fab_title="@string/upload" />
-
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     </RelativeLayout>
 
     <ProgressBar
+        android:id="@+id/cabin_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/cabin_progress"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

@@ -36,6 +36,7 @@
     <!-- Profile -->
     <string name="err_add">Failed to add</string>
     <string name="err_perm">You denied read external storage permission.</string>
+    <string name="err_perm_call">You denied call phone permission.</string>
     <string name="host_title">Become a host with AllCabins</string>
     <string name="manage_title">Change %1$s!</string>
     <string name="host_name">Name</string>
@@ -45,6 +46,9 @@
     <string name="host_city">City</string>
     <string name="host_state">State</string>
     <string name="host_guest">Guests</string>
+    <string name="host_bed">Beds</string>
+    <string name="host_bedrooms">Bedrooms</string>
+    <string name="host_bath">Bath</string>
     <string name="host_photo">Photos</string>
     <string name="host_price">Price</string>
     <string name="save">Save</string>

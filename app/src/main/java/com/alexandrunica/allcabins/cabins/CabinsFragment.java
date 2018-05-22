@@ -254,7 +254,7 @@ public class CabinsFragment extends Fragment {
         toolbarFilter.setVisibility(View.VISIBLE);
         toolbar.setBackgroundColor(getResources().getColor(R.color.white));
         if (isFiltred) {
-            toolbarTitle.setText(getResources().getString(R.string.near) + city.toUpperCase());
+            toolbarTitle.setText(getResources().getString(R.string.near) + " " + city.toUpperCase());
             toolbarFilter.setVisibility(View.GONE);
         } else {
             toolbarTitle.setText(getResources().getString(R.string.recomended));

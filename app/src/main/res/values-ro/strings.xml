@@ -36,6 +36,7 @@
     <!-- Profile -->
     <string name="err_add">Nu sa reușit adăugarea</string>
     <string name="err_perm">Ai refuzat să citești permisiunea de stocare externă.</string>
+    <string name="err_perm_call">Ai refuzat să citești permisiunea de apelare număr.</string>
     <string name="host_title">Deveniți o gazdă cu AllCabins</string>
     <string name="manage_title">Schimbă %1$s!</string>
     <string name="host_name">Nume</string>
@@ -45,7 +46,10 @@
     <string name="host_city">Oraș</string>
     <string name="host_state">Județ</string>
     <string name="host_guest">Vizitatori</string>
-    <string name="host_photo">Fotografii</string>
+    <string name="host_bed">Paturi</string>
+    <string name="host_bedrooms">Camere</string>
+    <string name="host_bath">Băi</string>
+    <string name="host_photo">Fotografi</string>
     <string name="host_price">Preț</string>
     <string name="save">Salvează</string>
     <string name="setting_title">Setați aplicația</string>

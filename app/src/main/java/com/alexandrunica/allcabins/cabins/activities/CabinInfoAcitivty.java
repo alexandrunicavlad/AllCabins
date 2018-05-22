@@ -1,8 +1,14 @@
 package com.alexandrunica.allcabins.cabins.activities;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +27,8 @@ import com.alexandrunica.allcabins.cabins.adapter.ImageAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnReviewAddEvent;
 import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
+import com.alexandrunica.allcabins.cabins.model.CabinInfoModel;
+import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.cabins.model.ReviewModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
@@ -32,6 +40,7 @@ import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.alexandrunica.allcabins.service.firebase.ReviewOperations;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -45,7 +54,7 @@ import javax.inject.Inject;
 
 public class CabinInfoAcitivty extends AppCompatActivity {
 
-    public TextView priceView, nameView, addressView, descriptionView, facilitiesView, ratingView;
+    public TextView priceView, nameView, addressView, descriptionView, facilitiesView, ratingView, guestsView, rooomView, bedView, bathView;
     public ImageView mainImage, phoneButton, locationButton, closeButton;
     public RatingBar rating;
     public FloatingActionsMenu add;
@@ -87,6 +96,10 @@ public class CabinInfoAcitivty extends AppCompatActivity {
         addressView = findViewById(R.id.cabin_info_address);
         descriptionView = findViewById(R.id.cabin_info_description);
         facilitiesView = findViewById(R.id.cabin_info_facilities);
+        guestsView = findViewById(R.id.guest_number);
+        rooomView = findViewById(R.id.bedroom_number);
+        bedView = findViewById(R.id.bed_number);
+        bathView = findViewById(R.id.bath_number);
         rating = findViewById(R.id.cabin_rating_star);
         ratingView = findViewById(R.id.cabin_info_rating);
         add = findViewById(R.id.cabin_add_fav);
@@ -116,23 +129,27 @@ public class CabinInfoAcitivty extends AppCompatActivity {
             rating.setRating(cabin.getRating());
             ratingView.setText(String.valueOf(cabin.getRating()) + "/5");
 
-            if (cabin.getPhone() != null && !cabin.getPhone().equals("")) {
-
-            }
-
             phoneButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    onCall();
                 }
             });
 
             locationButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    onOpenRoute();
                 }
             });
+
+            CabinInfoModel cabinInfoModel = new Gson().fromJson(cabin.getCabinInfo(), CabinInfoModel.class);
+            if (cabinInfoModel != null) {
+                guestsView.setText(cabinInfoModel.getGuests() + " " + getResources().getString(R.string.host_guest).toLowerCase());
+                rooomView.setText(cabinInfoModel.getBedrooms() + " " + getResources().getString(R.string.host_bedrooms).toLowerCase());
+                bedView.setText(cabinInfoModel.getBeds() + " " + getResources().getString(R.string.host_bed).toLowerCase());
+                bathView.setText(cabinInfoModel.getBath() + " " + getResources().getString(R.string.host_bath).toLowerCase());
+            }
 
             if (cabin.getPictures() != null) {
                 List<String> listOfImage = new ArrayList<>();
@@ -200,6 +217,50 @@ public class CabinInfoAcitivty extends AppCompatActivity {
             updateUI();
         } else {
 
+        }
+    }
+
+    public void onOpenRoute() {
+        LocationModel location = new Gson().fromJson(cabin.getLocation(), LocationModel.class);
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?&daddr= " +
+                        location.getLatitude() + ", " + location.getLongitude()));
+        startActivity(intent);
+    }
+
+    public void onCall() {
+        if (cabin.getPhone() != null && !cabin.getPhone().equals("")) {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" +cabin.getPhone()));
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                startActivity(callIntent);
+            } else {
+                ActivityCompat.requestPermissions(CabinInfoAcitivty.this, new String[]{Manifest.permission.CALL_PHONE}, 55);
+            }
+
+        } else {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{cabin.getEmail()});
+            try {
+                startActivity(Intent.createChooser(i, "Send mail..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(CabinInfoAcitivty.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 55: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    onCall();
+                } else {
+                    Toast.makeText(CabinInfoAcitivty.this, getResources().getString(R.string.err_perm_call), Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
         }
     }
 

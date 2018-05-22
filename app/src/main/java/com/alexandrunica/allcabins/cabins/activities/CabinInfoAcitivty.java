@@ -33,6 +33,7 @@ import com.alexandrunica.allcabins.cabins.model.ReviewModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.map.event.OnGetCabinByIdEvent;
+import com.alexandrunica.allcabins.profile.event.OnInsertEvent;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
@@ -49,6 +50,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -60,6 +62,7 @@ public class CabinInfoAcitivty extends AppCompatActivity {
     public FloatingActionsMenu add;
     public RelativeLayout imageLayout, mainLayout;
     public ProgressBar progress;
+    public String id;
 
     public ViewPager viewPager;
     public Cabin cabin;
@@ -106,7 +109,7 @@ public class CabinInfoAcitivty extends AppCompatActivity {
         imageLayout = findViewById(R.id.image_layout);
         viewPager = findViewById(R.id.image_pager);
 
-        String id = getIntent().getStringExtra("cabin");
+        id = getIntent().getStringExtra("cabin");
         cabinOperations.getCabin(id);
 
 
@@ -165,6 +168,19 @@ public class CabinInfoAcitivty extends AppCompatActivity {
                 mainImage.setVisibility(View.GONE);
             } else {
                 mainImage.setVisibility(View.VISIBLE);
+            }
+
+            if (cabin.getReviews() != null) {
+                float media = 0;
+                for (Map.Entry<String, String> entry : cabin.getReviews().entrySet()) {
+                    media = media + Float.parseFloat(entry.getValue());
+                }
+                float rang = media / cabin.getReviews().size();
+                ratingView.setText(String.format("%.1f/5", rang));
+                rating.setRating(rang);
+            } else {
+                ratingView.setVisibility(View.GONE);
+                rating.setVisibility(View.GONE);
             }
 
 
@@ -231,8 +247,8 @@ public class CabinInfoAcitivty extends AppCompatActivity {
     public void onCall() {
         if (cabin.getPhone() != null && !cabin.getPhone().equals("")) {
             Intent callIntent = new Intent(Intent.ACTION_CALL);
-            callIntent.setData(Uri.parse("tel:" +cabin.getPhone()));
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            callIntent.setData(Uri.parse("tel:" + cabin.getPhone()));
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 startActivity(callIntent);
             } else {
                 ActivityCompat.requestPermissions(CabinInfoAcitivty.this, new String[]{Manifest.permission.CALL_PHONE}, 55);
@@ -299,6 +315,13 @@ public class CabinInfoAcitivty extends AppCompatActivity {
         dialog.show();
 
     }
+
+    @Subscribe
+    public void onCabinInserted(OnInsertEvent event) {
+        cabin.setId(id);
+        cabinOperations.getCabin(id);
+    }
+
 
     @Subscribe
     public void onReviewAdded(OnReviewAddEvent event) {

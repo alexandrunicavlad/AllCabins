@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
+import com.alexandrunica.allcabins.widget.MessageDialog;
 import com.alexandrunica.allcabins.widget.Slidr;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -50,6 +52,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -319,6 +322,21 @@ public class EditCabinInfoActivity extends AppCompatActivity {
         }
     }
 
+    public boolean getCameraPhotoOrientation(Uri imageUri){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(new File(imageUri.getPath()).getAbsolutePath(), options);
+        int imageHeight = options.outHeight;
+        int imageWidth = options.outWidth;
+        if (imageHeight > imageWidth) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -348,13 +366,21 @@ public class EditCabinInfoActivity extends AppCompatActivity {
 
                         Uri imageUri = data.getClipData().getItemAt(i).getUri();
                         if (imageUri != null) {
+                            if (getCameraPhotoOrientation(imageUri)) {
+                                MessageDialog.newInstance("Ok", getString(R.string.host_err_photo), this);
+                            }
                             userSelectedImageUriList.add(imageUri);
                         }
                     }
 
                 } else if (data.getData() != null) {
                     Uri imagePath = data.getData();
-                    userSelectedImageUriList.add(imagePath);
+                    if (imagePath != null) {
+                        if (getCameraPhotoOrientation(imagePath)) {
+                            MessageDialog.newInstance("Ok", getString(R.string.host_err_photo), this);
+                        }
+                        userSelectedImageUriList.add(imagePath);
+                    }
                 }
                 showThumbPhoto();
             }

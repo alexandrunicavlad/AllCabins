@@ -19,6 +19,7 @@ import android.widget.ToggleButton;
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.CabinInfoFragment;
 import com.alexandrunica.allcabins.cabins.activities.CabinInfoAcitivty;
+import com.alexandrunica.allcabins.cabins.events.OnCallClickEvent;
 import com.alexandrunica.allcabins.cabins.events.OnMoreEvent;
 import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
@@ -36,13 +37,15 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<Cabin> cabinList;
     private Context context;
     private OnMoreEvent listener;
+    private OnCallClickEvent callListener;
     private boolean isFiltred = false;
 
 
-    public CabinsSquareAdapter(Context context, List<Cabin> cabinList, OnMoreEvent listener) {
+    public CabinsSquareAdapter(Context context, List<Cabin> cabinList, OnMoreEvent listener, OnCallClickEvent callListener) {
         this.context = context;
         this.cabinList = cabinList;
         this.listener = listener;
+        this.callListener = callListener;
     }
 
     @Override
@@ -77,7 +80,7 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 holder.phoneButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //call
+                        callListener.onCall(cabin);
                     }
                 });
                 holder.heartButton.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +101,6 @@ public class CabinsSquareAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     holder.noImage.setVisibility(View.GONE);
                     holder.mainImage.setVisibility(View.VISIBLE);
                     Picasso.with(context).load(cabin.getThumbPhotoUrl())
-                            .skipMemoryCache()
                             .fit()
                             .into(holder.mainImage);
                 } else {

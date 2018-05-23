@@ -51,6 +51,7 @@
     <string name="host_bath">Băi</string>
     <string name="host_photo">Fotografi</string>
     <string name="host_price">Preț</string>
+    <string name="host_err_photo">Selectați imagini in formatul peisaj.</string>
     <string name="save">Salvează</string>
     <string name="setting_title">Setați aplicația</string>
     <string name="setting_currency">Valută</string>

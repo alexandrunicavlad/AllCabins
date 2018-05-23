@@ -338,6 +338,8 @@ public class HostActivity extends AppCompatActivity {
         }
     }
 
+    
+
     private void showThumbPhoto() {
         photosLayout.removeAllViews();
         if (userSelectedImageUriList != null) {

@@ -28,6 +28,7 @@ import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.List;
@@ -97,6 +98,17 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
             }
         });
 
+        if (cabin.getThumbPhotoUrl() != null && !cabin.getThumbPhotoUrl().equals("")) {
+            holder.noImageView.setVisibility(View.GONE);
+            holder.mainImage.setVisibility(View.VISIBLE);
+            Picasso.with(context).load(cabin.getThumbPhotoUrl())
+                    .fit()
+                    .into(holder.mainImage);
+        } else {
+            holder.noImageView.setVisibility(View.VISIBLE);
+        }
+
+
         holder.locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,13 +130,14 @@ public class CabinAdapter extends RecyclerView.Adapter<CabinAdapter.CabinHolder>
 
     public static class CabinHolder extends RecyclerView.ViewHolder {
         public TextView priceView, nameView, addressView;
-        public ImageView mainImage, phoneButton, locationButton, deleteButton;
+        public ImageView mainImage, phoneButton, locationButton, deleteButton, noImageView;
         public ToggleButton heartButton;
 
         public CabinHolder(View view) {
             super(view);
             priceView = view.findViewById(R.id.cabin_price);
             nameView = view.findViewById(R.id.cabin_name);
+            noImageView = view.findViewById(R.id.cabin_no_image);
             addressView = view.findViewById(R.id.cabin_address);
             mainImage = view.findViewById(R.id.cabin_image);
             phoneButton = view.findViewById(R.id.cabin_phone);

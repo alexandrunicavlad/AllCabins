@@ -51,6 +51,7 @@
     <string name="host_bath">Bath</string>
     <string name="host_photo">Photos</string>
     <string name="host_price">Price</string>
+    <string name="host_err_photo">Please select only landscape photos.</string>
     <string name="save">Save</string>
     <string name="setting_title">Set your app</string>
     <string name="setting_currency">Currency</string>

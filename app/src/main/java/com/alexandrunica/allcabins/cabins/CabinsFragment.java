@@ -1,11 +1,17 @@
 package com.alexandrunica.allcabins.cabins;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +29,9 @@ import android.widget.Toast;
 
 import com.alexandrunica.allcabins.MainActivity;
 import com.alexandrunica.allcabins.R;
+import com.alexandrunica.allcabins.cabins.activities.CabinInfoAcitivty;
 import com.alexandrunica.allcabins.cabins.adapter.CabinsSquareAdapter;
+import com.alexandrunica.allcabins.cabins.events.OnCallClickEvent;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.events.OnMoreEvent;
 import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
@@ -76,6 +84,7 @@ public class CabinsFragment extends Fragment {
     private static final int PAGE_START = 1;
     private int currentPage = PAGE_START;
     private int TOTAL_ITEM_EACH_LOAD = 10;
+    private Cabin cabinSelected;
 
     public static CabinsFragment newInstance() {
         CabinsFragment cabinsFragment = new CabinsFragment();
@@ -237,17 +246,62 @@ public class CabinsFragment extends Fragment {
             adapter.updateReceiptsList(cabinList);
             adapter.setFooter(isFiltred);
         } else {
+            OnCallClickEvent callListener = new OnCallClickEvent() {
+                @Override
+                public void onCall(Cabin cabin) {
+                    cabinSelected = cabin;
+                    onCallMeth();
+                }
+            };
             OnMoreEvent listener = new OnMoreEvent() {
                 @Override
                 public void onLoadMore() {
                     loadMoreData();
                 }
             };
-            adapter = new CabinsSquareAdapter(activity, cabinList, listener);
+
+            adapter = new CabinsSquareAdapter(activity, cabinList, listener,callListener);
             recyclerView.setAdapter(adapter);
         }
 
     }
+
+    public void onCallMeth() {
+        if (cabinSelected.getPhone() != null && !cabinSelected.getPhone().equals("")) {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + cabinSelected.getPhone()));
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                startActivity(callIntent);
+            } else {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, 55);
+            }
+
+        } else {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{cabinSelected.getEmail()});
+            try {
+                startActivity(Intent.createChooser(i, "Send mail..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(activity, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 55: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    onCallMeth();
+                } else {
+                    Toast.makeText(activity, getResources().getString(R.string.err_perm_call), Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
+
 
     private void updateUI(String city) {
         toolbarTitle.setVisibility(View.VISIBLE);

@@ -21,6 +21,8 @@
     <string name="sorry">Sorry!</string>
     <string name="err_not_found">There are no cabins available for this destination. </string>
     <string name="start_exploring">Start exploring</string>
+    <string name="review_message">You have already submitted a review, Thank you!</string>
+    <string name="error_dialog">error_dialog</string>
 
     <!-- Explore -->
     <string name="hi_there">HI THERE!</string>

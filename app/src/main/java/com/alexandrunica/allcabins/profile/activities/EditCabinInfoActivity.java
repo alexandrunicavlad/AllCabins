@@ -367,7 +367,7 @@ public class EditCabinInfoActivity extends AppCompatActivity {
                         Uri imageUri = data.getClipData().getItemAt(i).getUri();
                         if (imageUri != null) {
                             if (getCameraPhotoOrientation(imageUri)) {
-                                MessageDialog.newInstance("Ok", getString(R.string.host_err_photo), this);
+                                MessageDialog.newInstance("Ok", getString(R.string.host_err_photo), this).show(getFragmentManager(), getResources().getString(R.string.error_dialog));
                             }
                             userSelectedImageUriList.add(imageUri);
                         }
@@ -377,7 +377,7 @@ public class EditCabinInfoActivity extends AppCompatActivity {
                     Uri imagePath = data.getData();
                     if (imagePath != null) {
                         if (getCameraPhotoOrientation(imagePath)) {
-                            MessageDialog.newInstance("Ok", getString(R.string.host_err_photo), this);
+                            MessageDialog.newInstance("Ok", getString(R.string.host_err_photo), this).show(getFragmentManager(), getResources().getString(R.string.error_dialog));
                         }
                         userSelectedImageUriList.add(imagePath);
                     }

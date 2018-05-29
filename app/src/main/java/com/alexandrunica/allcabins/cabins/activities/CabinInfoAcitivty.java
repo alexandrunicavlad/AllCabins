@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.cabins.adapter.ImageAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnReviewAddEvent;
+import com.alexandrunica.allcabins.cabins.events.OnReviewFailEvent;
 import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.CabinInfoModel;
@@ -42,14 +43,17 @@ import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
 import com.alexandrunica.allcabins.service.firebase.ReviewOperations;
+import com.alexandrunica.allcabins.widget.MessageDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -322,13 +326,20 @@ public class CabinInfoAcitivty extends AppCompatActivity {
                 } else {
                     ratingModel.setFrom(getResources().getString(R.string.anonim));
                 }
-                reviewOperations.insertReview(ratingModel);
+                reviewOperations.getReviewFromName(ratingModel);
                 dialog.dismiss();
             }
         });
 
         dialog.show();
 
+    }
+
+    @Subscribe
+    public void onReviewFail(OnReviewFailEvent event) {
+        if (!event.isOk) {
+            MessageDialog.newInstance("Ok", getResources().getString(R.string.review_message),this).show(getFragmentManager(), getResources().getString(R.string.error_dialog));
+        }
     }
 
     @Subscribe

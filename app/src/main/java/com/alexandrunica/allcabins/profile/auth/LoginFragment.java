@@ -315,12 +315,12 @@ public class LoginFragment extends Fragment {
         if (event.isLogged()) {
             String id = authentication.getUserUid();
             if (id == null) {
-                MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
+                MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity).show(activity.getFragmentManager(), getResources().getString(R.string.error_dialog));
                 return;
             }
             profileOperations.checkUserExists(id);
         } else {
-            MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
+            MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity).show(activity.getFragmentManager(), getResources().getString(R.string.error_dialog));
         }
     }
 
@@ -328,7 +328,7 @@ public class LoginFragment extends Fragment {
     public void onUserExist(OnUserExistEvent existEvent) {
         String id = authentication.getUserUid();
         if (id == null) {
-            MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
+            MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity).show(activity.getFragmentManager(), getResources().getString(R.string.error_dialog));
             return;
         }
         if (existEvent.isExist()) {
@@ -361,7 +361,7 @@ public class LoginFragment extends Fragment {
             User user = new User();
             String id = authentication.getUserUid();
             if (id == null) {
-                MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
+                MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity).show(activity.getFragmentManager(), getResources().getString(R.string.error_dialog));
                 return;
             }
             FirebaseUser userFirebase = FirebaseAuth.getInstance().getCurrentUser();
@@ -371,7 +371,7 @@ public class LoginFragment extends Fragment {
             profileOperations.checkandInsertProfileExists(user);
             profileOperations.getUser(id);
         } else {
-            MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
+            MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity).show(activity.getFragmentManager(), getResources().getString(R.string.error_dialog));
         }
     }
 
@@ -426,7 +426,7 @@ public class LoginFragment extends Fragment {
             User user = new User();
             String id = authentication.getUserUid();
             if (id == null) {
-                MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity);
+                MessageDialog.newInstance("Ok", activity.getString(R.string.error_string), activity).show(activity.getFragmentManager(), getResources().getString(R.string.error_dialog));
                 return;
             }
             user.setId(id);

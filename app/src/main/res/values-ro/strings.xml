@@ -21,6 +21,8 @@
     <string name="sorry">Ne cerem scuze!</string>
     <string name="err_not_found">Nu au fost gasite cabane cu aceasta destinatie.</string>
     <string name="start_exploring">Incepeti sa explorati</string>
+    <string name="review_message">Deja ați trimis o recenzie, Vă mulțumim!</string>
+    <string name="error_dialog">error_dialog</string>
 
     <!-- Explore -->
     <string name="hi_there">BUNĂ!</string>

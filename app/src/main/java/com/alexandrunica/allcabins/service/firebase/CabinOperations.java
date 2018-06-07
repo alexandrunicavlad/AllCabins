@@ -152,7 +152,7 @@ public class CabinOperations extends FirebaseOperation {
     }
 
     public void insertCabin(final Cabin cabin) {
-        String resortReviewID;
+        final String resortReviewID;
         if (cabin.getId() == null) {
             resortReviewID = mRef.push().getKey();
         } else {
@@ -163,8 +163,10 @@ public class CabinOperations extends FirebaseOperation {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    cabin.setId(resortReviewID);
                     bus.post(new OnInsertEvent(true, cabin));
                 } else {
+                    cabin.setId(resortReviewID);
                     bus.post(new OnInsertEvent(false, cabin));
                 }
             }

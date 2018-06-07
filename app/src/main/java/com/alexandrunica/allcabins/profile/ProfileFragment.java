@@ -148,17 +148,20 @@ public class ProfileFragment extends Fragment {
                     if (user.getCabins().size() > 1) {
                         final List<String> listItems = new ArrayList<String>();
                         for(Map.Entry<String, String> entry : user.getCabins().entrySet()) {
-                            String key = entry.getKey();
                             String value = entry.getValue();
-                            listItems.add(key);
+                            listItems.add(value);
                         }
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                         builder.setTitle("Pick a cabin");
                         builder.setItems(listItems.toArray(new CharSequence[listItems.size()]), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String cabinIDD = user.getCabins().get(listItems.get(which));
-                                startEdit(user.getCabins().get(listItems.get(which)));
+                                for(Map.Entry<String, String> entry : user.getCabins().entrySet()) {
+                                    if (entry.getValue().equals(listItems.get(which))) {
+                                        startEdit(entry.getKey());
+                                        break;
+                                    }
+                                }
                             }
                         });
                         builder.show();

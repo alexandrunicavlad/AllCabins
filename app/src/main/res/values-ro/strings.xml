@@ -12,6 +12,10 @@
     <string name="description">Descriere</string>
     <string name="facilities">Facilitati</string>
     <string name="rating">Rating</string>
+    <plurals name="reviews">
+        <item quantity="one">recenzie</item>
+        <item quantity="other">recenzi</item>
+    </plurals>
     <string name="add_fav">Adauga la favorite</string>
     <string name="write_rew">Scrie o recenzie</string>
     <string name="upload">Incarca imagini</string>

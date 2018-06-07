@@ -371,6 +371,7 @@ public class HostActivity extends AppCompatActivity {
                         cabin.setPictures(uploaded);
                         cabin.setThumbPhotoUrl(uploaded.entrySet().iterator().next().getValue());
                         saveAllInfo();
+                        return;
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -381,10 +382,12 @@ public class HostActivity extends AppCompatActivity {
                         cabin.setPictures(uploaded);
                         cabin.setThumbPhotoUrl(uploaded.entrySet().iterator().next().getValue());
                         saveAllInfo();
+                        return;
                     }
                 }
             });
         }
+        saveAllInfo();
     }
 
 

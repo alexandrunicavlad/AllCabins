@@ -14,10 +14,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -38,6 +40,7 @@ import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.map.event.OnGetCabinByIdEvent;
 import com.alexandrunica.allcabins.profile.event.OnInsertEvent;
+import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
@@ -63,12 +66,13 @@ import javax.inject.Inject;
 
 public class CabinInfoAcitivty extends AppCompatActivity {
 
-    public TextView priceView, nameView, addressView, descriptionView, facilitiesView, ratingView, guestsView, rooomView, bedView, bathView;
+    public TextView priceView, nameView, addressView, descriptionView, facilitiesView, ratingView, guestsView, rooomView, bedView, bathView, priceBottomView, ratingBottomView;
     public ImageView mainImage, phoneButton, locationButton, closeButton;
     public RatingBar rating;
     public FloatingActionsMenu add;
     public RelativeLayout imageLayout, mainLayout;
     public ProgressBar progress;
+    public Button button;
     public String id;
 
     public ViewPager viewPager;
@@ -127,6 +131,8 @@ public class CabinInfoAcitivty extends AppCompatActivity {
         add = findViewById(R.id.cabin_add_fav);
         imageLayout = findViewById(R.id.image_layout);
         viewPager = findViewById(R.id.image_pager);
+        priceBottomView = findViewById(R.id.cabin_price_bottom);
+        ratingBottomView = findViewById(R.id.cabin_review_bottom);
 
         id = getIntent().getStringExtra("cabin");
         cabinOperations.getCabin(id);
@@ -146,6 +152,8 @@ public class CabinInfoAcitivty extends AppCompatActivity {
             nameView.setText(cabin.getName());
             CurrencyConverter currencyConverter = new CurrencyConverter(this);
             priceView.setText(currencyConverter.convertCurrency(cabin.getPrice()) + " " + currencyConverter.addCurrency() + "/" + getResources().getString(R.string.night));
+            priceBottomView.setText(Html.fromHtml("<big><b>" + currencyConverter.convertCurrency(cabin.getPrice()) + " " + currencyConverter.addCurrency() + "</b></big> per " +
+                    getResources().getString(R.string.night).toLowerCase()));
             descriptionView.setText(cabin.getDescription());
             facilitiesView.setText(cabin.getFacilities());
             rating.setRating(cabin.getRating());
@@ -157,6 +165,9 @@ public class CabinInfoAcitivty extends AppCompatActivity {
                     onCall();
                 }
             });
+
+            User user = databaseService.getUser();
+
 
             locationButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -197,9 +208,14 @@ public class CabinInfoAcitivty extends AppCompatActivity {
                 float rang = media / cabin.getReviews().size();
                 ratingView.setText(String.format("%.1f/5", rang));
                 rating.setRating(rang);
+                ratingBottomView.setText(cabin.getReviews().size() + " " + getResources().getQuantityText(R.plurals.reviews, cabin.getReviews().size()));
+                ratingBottomView.setVisibility(View.VISIBLE);
+                ratingView.setVisibility(View.VISIBLE);
+                rating.setVisibility(View.VISIBLE);
             } else {
                 ratingView.setVisibility(View.GONE);
                 rating.setVisibility(View.GONE);
+                ratingBottomView.setText("0 " + getResources().getQuantityText(R.plurals.reviews, 0));
             }
 
 
@@ -338,7 +354,7 @@ public class CabinInfoAcitivty extends AppCompatActivity {
     @Subscribe
     public void onReviewFail(OnReviewFailEvent event) {
         if (!event.isOk) {
-            MessageDialog.newInstance("Ok", getResources().getString(R.string.review_message),this).show(getFragmentManager(), getResources().getString(R.string.error_dialog));
+            MessageDialog.newInstance("Ok", getResources().getString(R.string.review_message), this).show(getFragmentManager(), getResources().getString(R.string.error_dialog));
         }
     }
 

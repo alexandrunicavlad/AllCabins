@@ -12,6 +12,10 @@
     <string name="description">Description</string>
     <string name="facilities">Facilities</string>
     <string name="rating">Rating</string>
+    <plurals name="reviews">
+        <item quantity="one">review</item>
+        <item quantity="other">reviews</item>
+    </plurals>
     <string name="add_fav">Add to favorite</string>
     <string name="write_rew">Write a review</string>
     <string name="upload">Upload photos</string>

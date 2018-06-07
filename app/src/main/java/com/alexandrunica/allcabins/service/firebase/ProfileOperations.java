@@ -137,7 +137,7 @@ public class ProfileOperations extends FirebaseOperation {
     }
 
     public void addCabin(String id, Cabin cabin) {
-        mRef.child(id).child("cabins").child(cabin.getName()).setValue(cabin.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mRef.child(id).child("cabins").child(cabin.getId()).setValue(cabin.getName()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {

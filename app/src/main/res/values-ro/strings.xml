@@ -27,6 +27,9 @@
     <string name="start_exploring">Incepeti sa explorati</string>
     <string name="review_message">Deja ați trimis o recenzie, Vă mulțumim!</string>
     <string name="error_dialog">error_dialog</string>
+    <string name="book_now">Rezervă acum</string>
+    <string name="login_book">Vă rugăm conectați-vă pentru a face o rezervare!</string>
+
 
     <!-- Explore -->
     <string name="hi_there">BUNĂ!</string>
@@ -45,6 +48,7 @@
     <string name="err_perm_call">Ai refuzat să citești permisiunea de apelare număr.</string>
     <string name="host_title">Deveniți o gazdă cu AllCabins</string>
     <string name="manage_title">Schimbă %1$s!</string>
+    <string name="manage_cabin">Gestionați cabana</string>
     <string name="host_name">Nume</string>
     <string name="host_location">Locație</string>
     <string name="host_select">Selectare Locație</string>
@@ -81,6 +85,8 @@
     <string name="submit">Trimite</string>
     <string name="edit_photo">Editează poza</string>
     <string name="rating_hint">Orice alt feedback</string>
+    <string name="book_date_time">De la %1$s până la %2$s</string>
+    <string name="book_hint">Mesaj</string>
     <string name="street_address">Adresa străzii</string>
     <string name="mobile_phone">Număr de telefon </string>
     <string name="edit_profile">Editează profilul</string>
@@ -109,4 +115,5 @@
     <string name="gbp">5.3</string>
     <string name="ron">1</string>
 
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 </resources>

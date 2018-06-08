@@ -8,6 +8,7 @@ import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
+import static com.alexandrunica.allcabins.service.firebase.FirebaseService.TableNames.CABINS_BOOK;
 import static com.alexandrunica.allcabins.service.firebase.FirebaseService.TableNames.CABINS_REVIEWS_TABLE;
 import static com.alexandrunica.allcabins.service.firebase.FirebaseService.TableNames.CABINS_TABLE;
 import static com.alexandrunica.allcabins.service.firebase.FirebaseService.TableNames.USERS_TABLE;
@@ -30,6 +31,7 @@ public class FirebaseService {
         public static final String CABINS_TABLE = "Cabins";
         public static final String CABINS_REVIEWS_TABLE = "CabinsReviews";
         public static final String CABINS_PHOTO_TABLE = "CabinsPhoto";
+        public static final String CABINS_BOOK = "Books";
     }
 
     public FirebaseService(DaggerDbApplication app) {
@@ -46,6 +48,9 @@ public class FirebaseService {
 
             case CABINS_REVIEWS_TABLE:
                 return new ReviewOperations(context);
+
+            case CABINS_BOOK:
+                return new BookOperation(context);
             default:
                 return null;
         }

@@ -19,6 +19,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.otto.Bus;
 
 import java.util.ArrayList;
@@ -78,8 +79,10 @@ public class ProfileOperations extends FirebaseOperation {
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(null)));
                 } else {
                     databaseService.writeUser(user);
+
+                    User u = databaseService.getUser();
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(user)));
-                    bus.post(new OnWriteUid(user.getId()));
+                    bus.post(new OnWriteUid(user));
                 }
             }
 
@@ -121,6 +124,10 @@ public class ProfileOperations extends FirebaseOperation {
 
             }
         });
+    }
+
+    public void saveNotificationToken(final User user) {
+        mRef.child(user.getId()).child("notification").setValue(user.getNotification());
     }
 
     public void addFavorite(String id, String cabinId) {

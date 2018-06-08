@@ -10,6 +10,8 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -32,16 +35,21 @@ import com.alexandrunica.allcabins.cabins.adapter.ImageAdapter;
 import com.alexandrunica.allcabins.cabins.events.OnReviewAddEvent;
 import com.alexandrunica.allcabins.cabins.events.OnReviewFailEvent;
 import com.alexandrunica.allcabins.cabins.helper.CurrencyConverter;
+import com.alexandrunica.allcabins.cabins.model.BookModel;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.cabins.model.CabinInfoModel;
+import com.alexandrunica.allcabins.cabins.model.DateModel;
 import com.alexandrunica.allcabins.cabins.model.LocationModel;
 import com.alexandrunica.allcabins.cabins.model.ReviewModel;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
 import com.alexandrunica.allcabins.map.event.OnGetCabinByIdEvent;
+import com.alexandrunica.allcabins.profile.activities.EditCabinInfoActivity;
+import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.profile.event.OnInsertEvent;
 import com.alexandrunica.allcabins.profile.model.User;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
+import com.alexandrunica.allcabins.service.firebase.BookOperation;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
@@ -50,6 +58,8 @@ import com.alexandrunica.allcabins.widget.MessageDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.gson.Gson;
+import com.leavjenn.smoothdaterangepicker.date.SmoothDateRangePickerFragment;
+import com.savvi.rangedatepicker.CalendarPickerView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -60,6 +70,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -79,13 +90,13 @@ public class CabinInfoAcitivty extends AppCompatActivity {
     public Cabin cabin;
     private CabinOperations cabinOperations;
     private ReviewOperations reviewOperations;
+    private BookOperation bookOperations;
 
     @Inject
     DatabaseService databaseService;
 
     @Inject
     Bus bus;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +121,7 @@ public class CabinInfoAcitivty extends AppCompatActivity {
 
         cabinOperations = (CabinOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_TABLE, this);
         reviewOperations = (ReviewOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_REVIEWS_TABLE, this);
+        bookOperations = (BookOperation) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.CABINS_BOOK, this);
 
         mainLayout = findViewById(R.id.main_layout_cabin);
         progress = findViewById(R.id.cabin_progress);
@@ -133,6 +145,7 @@ public class CabinInfoAcitivty extends AppCompatActivity {
         viewPager = findViewById(R.id.image_pager);
         priceBottomView = findViewById(R.id.cabin_price_bottom);
         ratingBottomView = findViewById(R.id.cabin_review_bottom);
+        button = findViewById(R.id.bottom_button);
 
         id = getIntent().getStringExtra("cabin");
         cabinOperations.getCabin(id);
@@ -168,6 +181,37 @@ public class CabinInfoAcitivty extends AppCompatActivity {
 
             User user = databaseService.getUser();
 
+            if (user != null) {
+
+                if (user.getCabins()!=null && user.getCabins().containsKey(cabin.getId())) {
+                    button.setText(getResources().getString(R.string.manage_cabin));
+                    add.setVisibility(View.GONE);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startEdit(cabin.getId());
+                        }
+                    });
+                } else {
+                    add.setVisibility(View.VISIBLE);
+                    button.setText(getResources().getString(R.string.book_now));
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            showBookDialog();
+                        }
+                    });
+                }
+            } else {
+                button.setText(getResources().getString(R.string.book_now));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MessageDialog.newInstance("Ok", getString(R.string.login_book), CabinInfoAcitivty.this).show(getFragmentManager(), getResources().getString(R.string.error_dialog));
+                    }
+                });
+            }
 
             locationButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -271,6 +315,12 @@ public class CabinInfoAcitivty extends AppCompatActivity {
         }
     }
 
+    private void startEdit(String id) {
+        Intent intent = new Intent(this, EditCabinInfoActivity.class);
+        intent.putExtra("cabin", id);
+        startActivity(intent);
+    }
+
     public void onOpenRoute() {
         LocationModel location = new Gson().fromJson(cabin.getLocation(), LocationModel.class);
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
@@ -314,6 +364,72 @@ public class CabinInfoAcitivty extends AppCompatActivity {
             }
         }
     }
+
+    private int getPreviousYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, -1);
+        return prevYear.get(Calendar.YEAR);
+    }
+
+    private int getNextYear() {
+        Calendar prevYear = Calendar.getInstance();
+        prevYear.add(Calendar.YEAR, +1);
+        return prevYear.get(Calendar.YEAR);
+    }
+
+
+    public void showBookDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.book_row);
+        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.90);
+        dialog.getWindow().setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+        final AutoCompleteTextView ratingEdit = dialog.findViewById(R.id.book_edit);
+        final TextView bookDate = dialog.findViewById(R.id.book_date);
+        final DateModel dateModel = new DateModel();
+
+
+        SmoothDateRangePickerFragment smoothDateRangePickerFragment = SmoothDateRangePickerFragment.newInstance(
+                new SmoothDateRangePickerFragment.OnDateRangeSetListener() {
+                    @Override
+                    public void onDateRangeSet(SmoothDateRangePickerFragment view,
+                                               int yearStart, int monthStart,
+                                               int dayStart, int yearEnd,
+                                               int monthEnd, int dayEnd) {
+
+
+                        dateModel.setStart(dayStart + "/" + (++monthStart) + "/" + yearStart);
+                        dateModel.setEnd(dayEnd + "/" + (++monthEnd) + "/" + yearEnd);
+                        bookDate.setText(getResources().getString(R.string.book_date_time, dateModel.getStart(), dateModel.getEnd()));
+
+                    }
+                });
+        smoothDateRangePickerFragment.setAccentColor(ContextCompat.getColor(this, R.color.seekbar_color));
+        smoothDateRangePickerFragment.show(getFragmentManager(), "smoothDateRangePicker");
+
+
+        TextView dialogButton = dialog.findViewById(R.id.submit);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BookModel bookModel = new BookModel();
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(CabinInfoAcitivty.this);
+                final String id = preferences.getString("uid", "");
+                bookModel.setFrom(id);
+                bookModel.setDate(new Gson().toJson(dateModel));
+                bookModel.setTo(cabin.getIdAdded());
+                bookModel.setStatus("Pending");
+                bookModel.setMessage(ratingEdit.getText().toString());
+                bookOperations.insertBook(bookModel);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
 
     public void showDialog() {
         final Dialog dialog = new Dialog(this);

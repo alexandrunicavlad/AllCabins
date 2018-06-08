@@ -27,6 +27,8 @@
     <string name="start_exploring">Start exploring</string>
     <string name="review_message">You have already submitted a review, Thank you!</string>
     <string name="error_dialog">error_dialog</string>
+    <string name="book_now">Book now</string>
+    <string name="login_book">Please login to book now!</string>
 
     <!-- Explore -->
     <string name="hi_there">HI THERE!</string>
@@ -45,6 +47,7 @@
     <string name="err_perm_call">You denied call phone permission.</string>
     <string name="host_title">Become a host with AllCabins</string>
     <string name="manage_title">Change %1$s!</string>
+    <string name="manage_cabin">Manage Cabin</string>
     <string name="host_name">Name</string>
     <string name="host_location">Location</string>
     <string name="host_select">Select location</string>
@@ -78,6 +81,8 @@
     <string name="register">Register</string>
     <string name="forgot_hint">Enter your email to reset your password</string>
     <string name="rating_hint">Any other feedback</string>
+    <string name="book_hint">Message</string>
+    <string name="book_date_time">From %1$s to %2$s</string>
     <string name="anonim">Anonymous</string>
     <string name="submit">Submit</string>
     <string name="edit_photo">Edit photo</string>
@@ -107,5 +112,7 @@
     <string name="eur">4.6</string>
     <string name="gbp">5.3</string>
     <string name="ron">1</string>
+
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
 </resources>

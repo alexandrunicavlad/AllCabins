@@ -69,7 +69,7 @@ public class ProfileAuthFragment extends Fragment {
             if (user != null) {
                 fragment = ProfileFragment.newInstance(user);
             } else {
-                fragment = ProfileFragment.newInstance(null);
+                fragment = LoginFragment.newInstance();
             }
         } else
             fragment = LoginFragment.newInstance();

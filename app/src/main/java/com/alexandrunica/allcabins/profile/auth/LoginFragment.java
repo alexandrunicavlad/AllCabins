@@ -23,9 +23,7 @@ import android.widget.Toast;
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
-import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.event.OnLoginEvent;
-import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.event.OnRegisterDoneEvent;
 import com.alexandrunica.allcabins.profile.event.OnSocialLoginEvent;
 import com.alexandrunica.allcabins.profile.event.OnUserExistEvent;
@@ -49,6 +47,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -162,7 +161,7 @@ public class LoginFragment extends Fragment {
         loginSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginEmail.setText("alexandru.nica@freshbyteinc.com");
+                loginEmail.setText("aaa@aaa.com");
                 loginPassword.setText("Nelu@123");
                 loginEmail.setError(null);
                 loginPassword.setError(null);
@@ -347,11 +346,16 @@ public class LoginFragment extends Fragment {
 
     @Subscribe
     public void onWriteId(OnWriteUid onWriteUid) {
-        if (onWriteUid.getId() != null && !onWriteUid.getId().equals("")) {
+        if (onWriteUid.getUser() != null && !onWriteUid.getUser().getId().equals("")) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("uid", onWriteUid.getId());
+            editor.putString("uid", onWriteUid.getUser().getId());
             editor.apply();
+            String token = FirebaseInstanceId.getInstance().getToken();
+            if (token != null && !token.equals(""))
+                onWriteUid.getUser().setNotification(token);
+                profileOperations.saveNotificationToken(onWriteUid.getUser());
+
         }
     }
 
@@ -368,6 +372,7 @@ public class LoginFragment extends Fragment {
             user.setId(id);
             user.setEmail(event.getEmail());
             user.setUsername(userFirebase.getDisplayName());
+
             profileOperations.checkandInsertProfileExists(user);
             profileOperations.getUser(id);
         } else {
@@ -432,6 +437,7 @@ public class LoginFragment extends Fragment {
             user.setId(id);
             user.setEmail(event.getEmail());
             user.setUsername(event.getName());
+
             ProfileOperations profileOperations = (ProfileOperations) FirebaseService.getFirebaseOperation(FirebaseService.TableNames.USERS_TABLE, activity);
             profileOperations.checkandInsertProfileExists(user);
         } else {

@@ -13,6 +13,7 @@ import com.alexandrunica.allcabins.profile.activities.EditCabinInfoActivity;
 import com.alexandrunica.allcabins.profile.activities.HostActivity;
 import com.alexandrunica.allcabins.profile.auth.LoginFragment;
 import com.alexandrunica.allcabins.service.database.DatabaseService;
+import com.alexandrunica.allcabins.service.firebase.BookOperation;
 import com.alexandrunica.allcabins.service.firebase.CabinOperations;
 import com.alexandrunica.allcabins.service.firebase.FirebaseService;
 import com.alexandrunica.allcabins.service.firebase.ProfileOperations;
@@ -68,4 +69,6 @@ public interface AppDbComponent {
     void inject(ExploreFragment exploreFragment);
 
     void inject(DatabaseService databaseService);
+
+    void inject(BookOperation bookOperation);
 }

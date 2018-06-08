@@ -1,14 +1,16 @@
 package com.alexandrunica.allcabins.profile.event;
 
+import com.alexandrunica.allcabins.profile.model.User;
+
 public class OnWriteUid
 {
-    public String id;
+    public User user;
 
-    public OnWriteUid(String id) {
-        this.id = id;
+    public OnWriteUid(User user) {
+        this.user = user;
     }
 
-    public String getId() {
-        return id;
+    public User getUser() {
+        return user;
     }
 }

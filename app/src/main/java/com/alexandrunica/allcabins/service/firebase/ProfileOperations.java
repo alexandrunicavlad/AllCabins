@@ -7,6 +7,7 @@ import android.util.Log;
 import com.alexandrunica.allcabins.cabins.events.OnGetCabinEvent;
 import com.alexandrunica.allcabins.cabins.model.Cabin;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.notification.event.OnUserGetById;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
 import com.alexandrunica.allcabins.profile.event.OnOpenAccount;
 import com.alexandrunica.allcabins.profile.event.OnUserExistEvent;
@@ -47,7 +48,8 @@ public class ProfileOperations extends FirebaseOperation {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 User user = dataSnapshot.getValue(User.class);
-                if (user != null) {
+                User currenctUser = databaseService.getUser();
+                if (user != null && currenctUser !=null && user.getId().equals(currenctUser.getId())) {
                     databaseService.updateOrAdd(user);
                 }
             }
@@ -70,12 +72,32 @@ public class ProfileOperations extends FirebaseOperation {
 
     }
 
+    public void getUserById(String id) {
+        mRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null) {
+                    bus.post(new OnUserGetById(user));
+                } else {
+                    bus.post(new OnUserGetById(null));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                bus.post(new OnUserGetById(null));
+            }
+        });
+    }
+
+
     public void getUser(String id) {
         mRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                if (user==null) {
+                if (user == null) {
                     bus.post(new OnOpenAccount(ProfileFragment.newInstance(null)));
                 } else {
                     databaseService.writeUser(user);

@@ -6,6 +6,8 @@ import com.alexandrunica.allcabins.cabins.activities.CabinInfoAcitivty;
 import com.alexandrunica.allcabins.explore.ExploreFragment;
 import com.alexandrunica.allcabins.favorite.FavoriteFragment;
 import com.alexandrunica.allcabins.map.MapViewFragment;
+import com.alexandrunica.allcabins.notification.Activities.NotificationActivity;
+import com.alexandrunica.allcabins.notification.Activities.NotificationListActivity;
 import com.alexandrunica.allcabins.profile.EditProfileFragment;
 import com.alexandrunica.allcabins.profile.ProfileAuthFragment;
 import com.alexandrunica.allcabins.profile.ProfileFragment;
@@ -71,4 +73,8 @@ public interface AppDbComponent {
     void inject(DatabaseService databaseService);
 
     void inject(BookOperation bookOperation);
+
+    void inject(NotificationActivity notificationActivity);
+
+    void inject(NotificationListActivity notificationListActivity);
 }

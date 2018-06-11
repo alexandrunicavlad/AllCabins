@@ -41,6 +41,15 @@
     <!-- Map -->
     <string name="err_map">Unable to get cabins</string>
 
+    <!-- Notification -->
+    <string name="notification_name">Name</string>
+    <string name="notification_date_time">Booking time</string>
+    <string name="notification_date">From %1$s to: %2$s</string>
+    <string name="notification_status">Status</string>
+    <string name="notification_accept">Accept</string>
+    <string name="notification_decline">Decline</string>
+    <string name="notification_resend">Resend booking</string>
+
     <!-- Profile -->
     <string name="err_add">Failed to add</string>
     <string name="err_perm">You denied read external storage permission.</string>
@@ -112,6 +121,7 @@
     <string name="eur">4.6</string>
     <string name="gbp">5.3</string>
     <string name="ron">1</string>
+
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 

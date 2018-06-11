@@ -97,6 +97,7 @@ public class CabinInfoAcitivty extends AppCompatActivity {
 
     @Inject
     Bus bus;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,7 +180,7 @@ public class CabinInfoAcitivty extends AppCompatActivity {
                 }
             });
 
-            User user = databaseService.getUser();
+            user = databaseService.getUser();
 
             if (user != null) {
 
@@ -419,7 +420,10 @@ public class CabinInfoAcitivty extends AppCompatActivity {
                 bookModel.setFrom(id);
                 bookModel.setDate(new Gson().toJson(dateModel));
                 bookModel.setTo(cabin.getIdAdded());
+                bookModel.setCabinName(cabin.getName());
                 bookModel.setStatus("Pending");
+                bookModel.setBookName(user.getUsername());
+                bookModel.setCabin(cabin.getId());
                 bookModel.setMessage(ratingEdit.getText().toString());
                 bookOperations.insertBook(bookModel);
                 dialog.dismiss();

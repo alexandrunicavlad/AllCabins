@@ -54,10 +54,12 @@
             android:name=".profile.activities.EditCabinInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
-            android:name=".profile.activities.NotificationActivity"
+            android:name=".notification.Activities.NotificationActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:taskAffinity=""
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".service.firebase.Notification.FireBaseMessagingService">
@@ -74,12 +76,11 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher_new" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-
+        <activity android:name=".notification.Activities.NotificationListActivity"></activity>
     </application>
 
 </manifest>

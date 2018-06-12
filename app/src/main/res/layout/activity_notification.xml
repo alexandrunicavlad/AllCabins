@@ -55,6 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:id="@+id/notification_label_name"
                     android:text="@string/notification_name"
                     android:textColor="@color/black"
                     android:textSize="16sp" />

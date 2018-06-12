@@ -85,32 +85,41 @@ public class NotificationActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         mainLayout.setVisibility(View.VISIBLE);
         TextView name = findViewById(R.id.notification_name);
+        TextView labelName = findViewById(R.id.notification_label_name);
         TextView date = findViewById(R.id.notification_time);
         TextView status = findViewById(R.id.notification_status);
         TextView message = findViewById(R.id.notification_message);
+        TextView title = findViewById(R.id.host_title);
         Button accept = findViewById(R.id.accept_button);
         Button decline = findViewById(R.id.refuse_button);
         Button resend = findViewById(R.id.resend_button);
 
         if (type!= null && !type.equals("")) {
             if (type.equals("host")) {
-                accept.setVisibility(View.VISIBLE);
-                decline.setVisibility(View.VISIBLE);
+                if(book.getStatus().equals("Pending")) {
+                    accept.setVisibility(View.VISIBLE);
+                    decline.setVisibility(View.VISIBLE);
+
+                    accept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            book.setStatus("Confirmed");
+                            bookOperations.updateBook(book, id);
+                        }
+                    });
+                    decline.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            book.setStatus("Refused");
+                            bookOperations.updateBook(book, id);
+                        }
+                    });
+                } else {
+                    accept.setVisibility(View.GONE);
+                    decline.setVisibility(View.GONE);
+                }
                 resend.setVisibility(View.GONE);
-                accept.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        book.setStatus("Confirmed");
-                        bookOperations.updateBook(book, id);
-                    }
-                });
-                decline.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        book.setStatus("Refused");
-                        bookOperations.updateBook(book, id);
-                    }
-                });
+                labelName.setText(getResources().getString(R.string.notification_name));
             } else {
                 if (book.getStatus().equals("Pending")) {
 
@@ -122,10 +131,12 @@ public class NotificationActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    accept.setVisibility(View.GONE);
-                    decline.setVisibility(View.GONE);
+
                     resend.setVisibility(View.GONE);
                 }
+                labelName.setText(getResources().getString(R.string.notification_name_label));
+                accept.setVisibility(View.GONE);
+                decline.setVisibility(View.GONE);
             }
         }
 
@@ -136,6 +147,7 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
+        title.setText(getResources().getString(R.string.notification_title_cabin, book.getCabinName()));
         name.setText(user.getUsername());
         DateModel dateModel = new Gson().fromJson(book.getDate(), DateModel.class);
         date.setText(getResources().getString(R.string.book_date_time,dateModel.getStart(), dateModel.getEnd()));
@@ -183,7 +195,11 @@ public class NotificationActivity extends AppCompatActivity {
     public void onGetBook(OnGetBookByIdEvent event) {
         if (event.getBookModel() != null) {
             book = event.getBookModel();
-            profileOperations.getUserById(event.getBookModel().getFrom());
+            if (type.equals("host")) {
+                profileOperations.getUserById(event.getBookModel().getFrom());
+            } else {
+                profileOperations.getUserById(event.getBookModel().getTo());
+            }
         } else {
 
         }

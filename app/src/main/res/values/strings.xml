@@ -43,12 +43,16 @@
 
     <!-- Notification -->
     <string name="notification_name">Name</string>
+    <string name="notification_name_label">Cabin Manager</string>
     <string name="notification_date_time">Booking time</string>
     <string name="notification_date">From %1$s to: %2$s</string>
     <string name="notification_status">Status</string>
     <string name="notification_accept">Accept</string>
     <string name="notification_decline">Decline</string>
     <string name="notification_resend">Resend booking</string>
+    <string name="notification_trip">Your trip to %1$s</string>
+    <string name="notification_title">Booking</string>
+    <string name="notification_title_cabin">Booking request to %1$s</string>
 
     <!-- Profile -->
     <string name="err_add">Failed to add</string>

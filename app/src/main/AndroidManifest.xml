@@ -62,6 +62,11 @@
             android:taskAffinity=""
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".notification.Activities.NotificationListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <service android:name=".service.firebase.Notification.FireBaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -80,7 +85,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".notification.Activities.NotificationListActivity"></activity>
+
     </application>
 
 </manifest>

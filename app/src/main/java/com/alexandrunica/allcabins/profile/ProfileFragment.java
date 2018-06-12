@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.alexandrunica.allcabins.R;
 import com.alexandrunica.allcabins.dagger.AppDbComponent;
 import com.alexandrunica.allcabins.dagger.DaggerDbApplication;
+import com.alexandrunica.allcabins.notification.Activities.NotificationListActivity;
 import com.alexandrunica.allcabins.profile.activities.EditCabinInfoActivity;
 import com.alexandrunica.allcabins.profile.activities.HostActivity;
 import com.alexandrunica.allcabins.profile.activities.SettingsActivity;
@@ -111,6 +112,14 @@ public class ProfileFragment extends Fragment {
             if (user.getProfilePhoto() != null) {
                 image.setImageBitmap(stringToBitMap(user.getProfilePhoto()));
             }
+
+            RelativeLayout notificationProfile = view.findViewById(R.id.profile_notifications);
+            notificationProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(activity, NotificationListActivity.class));
+                }
+            });
 
             RelativeLayout editProfile = view.findViewById(R.id.profile_edit);
             editProfile.setOnClickListener(new View.OnClickListener() {
